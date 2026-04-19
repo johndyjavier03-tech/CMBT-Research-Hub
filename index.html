@@ -551,8 +551,8 @@ function doLogin() {
       if (btn) btn.disabled = false;
       return;
     }
-    const users = getUsers();
-    const user = users.find(u => u.studentNum === studentNum && u.password === password);
+     const users = await getUsers();
+     const user = users.find(u => u.student_num === studentNum && u.password === password);
     if (user) {
       currentUser = { studentNum: user.studentNum, name: user.name, course: user.course, isAdmin: false };
       setSession(currentUser);
