@@ -357,6 +357,111 @@ footer span{color:var(--gold);}
 <div class="modal-bg" id="mConfirm"><div class="modal" style="max-width:360px;text-align:center"><div style="font-size:34px;margin-bottom:8px" id="mConIcon"></div><h3 id="mConTitle"></h3><div class="ms" id="mConMsg"></div><div class="mact" style="justify-content:center"><button class="bsm o" onclick="closeModal('mConfirm')">Cancel</button><button class="bsm d" id="mConOK">Yes, Delete</button></div></div></div>
 
 <script>
+   // ==================== SUPABASE SETUP ====================
+// REPLACE WITH YOUR ACTUAL SUPABASE CREDENTIALS
+const SUPABASE_URL = 'https://ayvzivdjrihucwbsjzwr.supabase.co';  // Get from Supabase -> Project Settings -> API
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5dnppdmRqcmlodWN3YnNqendyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1MzE2OTgsImV4cCI6MjA5MjEwNzY5OH0.fgP7cmG_7KivVpBZG7VbMx8sKXojKyNgaJOd-a9XOO4';  // Get from same place
+
+let supabase = null;
+try {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('✅ Supabase connected');
+} catch(e) {
+    console.error('❌ Supabase connection failed:', e);
+    alert('Please set your SUPABASE_URL and SUPABASE_ANON_KEY');
+}
+
+// ==================== SUPABASE OPERATIONS ====================
+async function getUsers() {
+    if (!supabase) return [];
+    const { data, error } = await supabase.from('users').select('*');
+    if (error) { console.error(error); return []; }
+    return data || [];
+}
+
+async function saveUsers(users) {
+    if (!supabase) return false;
+    // Delete all and re-insert (simple approach)
+    await supabase.from('users').delete().neq('id', 0);
+    const { error } = await supabase.from('users').insert(users);
+    return !error;
+}
+
+async function getPapers() {
+    if (!supabase) return [];
+    const { data, error } = await supabase.from('papers').select('*').order('created_at', { ascending: false });
+    if (error) { console.error(error); return []; }
+    return data || [];
+}
+
+async function savePapers(papers) {
+    if (!supabase) return false;
+    await supabase.from('papers').delete().neq('id', '');
+    const { error } = await supabase.from('papers').insert(papers);
+    return !error;
+}
+
+async function addPaper(paper) {
+    if (!supabase) return false;
+    const { error } = await supabase.from('papers').insert([paper]);
+    return !error;
+}
+
+async function deletePaperFromDB(id) {
+    if (!supabase) return false;
+    const { error } = await supabase.from('papers').delete().eq('id', id);
+    return !error;
+}
+
+async function addUser(user) {
+    if (!supabase) return false;
+    const { error } = await supabase.from('users').insert([user]);
+    return !error;
+}
+
+async function findUser(studentNum, password) {
+    if (!supabase) return null;
+    const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('student_num', studentNum)
+        .eq('password', password);
+    if (error || !data || data.length === 0) return null;
+    return data[0];
+}
+
+async function userExists(studentNum) {
+    if (!supabase) return false;
+    const { data, error } = await supabase
+        .from('users')
+        .select('student_num')
+        .eq('student_num', studentNum);
+    return data && data.length > 0;
+}
+
+// Real-time subscription setup
+function setupRealtime() {
+    if (!supabase) return;
+    
+    supabase
+        .channel('papers_changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'papers' }, (payload) => {
+            console.log('📡 Real-time update:', payload);
+            loadPapers(); // Refresh automatically
+        })
+        .subscribe();
+    
+    supabase
+        .channel('users_changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, (payload) => {
+            console.log('👥 User update:', payload);
+            if (document.getElementById('page-admin')?.classList.contains('active')) {
+                renderAStudents();
+                updateAdminStats();
+            }
+        })
+        .subscribe();
+}
 // ==================== DATA STORAGE ====================
 // Using localStorage for persistence (works across page refreshes on same device)
 // For cross-device sync, data is stored locally per browser
@@ -517,90 +622,93 @@ function setLM(mode) {
   hideAlert('aLogin');
 }
 
-function doLogin() {
-  hideAlert('aLogin');
-  const btn = document.getElementById('loginBtn');
-  if (btn) btn.disabled = true;
-  
-  setTimeout(() => {
+async function doLogin() {
+    hideAlert('aLogin');
+    const btn = document.getElementById('loginBtn');
+    if (btn) btn.disabled = true;
+    
     if (loginMode === 'admin') {
-      const username = document.getElementById('lAU').value.trim();
-      const password = document.getElementById('lAP').value;
-      const adminCreds = getAdminCreds();
-      if (username === adminCreds.username && password === adminCreds.password) {
-        currentUser = { isAdmin: true, name: 'Administrator', studentNum: 'ADMIN' };
-        setSession(currentUser);
-        if (btn) btn.disabled = false;
-        go('admin');
-      } else {
-        showAlert('aLogin', 'd', 'Incorrect admin credentials.');
-        if (btn) btn.disabled = false;
-      }
-      return;
+        const username = document.getElementById('lAU').value.trim();
+        const password = document.getElementById('lAP').value;
+        const adminCreds = getAdminCreds();
+        if (username === adminCreds.username && password === adminCreds.password) {
+            currentUser = { isAdmin: true, name: 'Administrator', studentNum: 'ADMIN' };
+            setSession(currentUser);
+            if (btn) btn.disabled = false;
+            go('admin');
+        } else {
+            showAlert('aLogin', 'd', 'Incorrect admin credentials.');
+            if (btn) btn.disabled = false;
+        }
+        return;
     }
     
     const studentNum = document.getElementById('lSN').value.trim().toUpperCase();
     const password = document.getElementById('lPW').value;
+    
     if (!studentNum || !password) {
-      showAlert('aLogin', 'd', 'Please fill in all fields.');
-      if (btn) btn.disabled = false;
-      return;
+        showAlert('aLogin', 'd', 'Please fill in all fields.');
+        if (btn) btn.disabled = false;
+        return;
     }
     if (!isValidStudentNumber(studentNum)) {
-      showAlert('aLogin', 'd', 'Invalid format. Use SUM[YEAR]-[5 digits]');
-      if (btn) btn.disabled = false;
-      return;
+        showAlert('aLogin', 'd', 'Invalid format. Use SUM[YEAR]-[5 digits]');
+        if (btn) btn.disabled = false;
+        return;
     }
-     const users = await getUsers();
-     const user = users.find(u => u.student_num === studentNum && u.password === password);
+    
+    const user = await findUser(studentNum, password);
     if (user) {
-      currentUser = { studentNum: user.studentNum, name: user.name, course: user.course, isAdmin: false };
-      setSession(currentUser);
-      if (btn) btn.disabled = false;
-      go('browse');
+        currentUser = { studentNum: user.student_num, name: user.name, course: user.course, isAdmin: false };
+        setSession(currentUser);
+        if (btn) btn.disabled = false;
+        go('browse');
     } else {
-      showAlert('aLogin', 'd', 'Incorrect student number or password.');
-      if (btn) btn.disabled = false;
+        showAlert('aLogin', 'd', 'Incorrect student number or password.');
+        if (btn) btn.disabled = false;
     }
-  }, 100);
 }
 
-function doSignup() {
-  hideAlert('aSignup');
-  const name = document.getElementById('sName').value.trim();
-  const studentNum = document.getElementById('sSN').value.trim().toUpperCase();
-  const course = document.getElementById('sCourse').value;
-  const password = document.getElementById('sPW').value;
-  const confirmPassword = document.getElementById('sPW2').value;
-  
-  if (!name) { showAlert('aSignup', 'd', 'Please enter your full name.'); return; }
-  if (!studentNum) { showAlert('aSignup', 'd', 'Please enter your student number.'); return; }
-  if (!isValidStudentNumber(studentNum)) { showAlert('aSignup', 'd', 'Invalid student number. Format: SUM[YEAR]-[5 digits]'); return; }
-  if (!course) { showAlert('aSignup', 'd', 'Please select your course.'); return; }
-  if (!password) { showAlert('aSignup', 'd', 'Please enter a password.'); return; }
-  if (password.length < 6) { showAlert('aSignup', 'd', 'Password must be at least 6 characters.'); return; }
-  if (password !== confirmPassword) { showAlert('aSignup', 'd', 'Passwords do not match.'); return; }
-  
-  const users = getUsers();
-  if (users.find(u => u.studentNum === studentNum)) {
-    showAlert('aSignup', 'd', 'This student number is already registered.');
-    return;
-  }
-  
-  const newUser = { studentNum: studentNum, name: name, course: course, password: password, joined: new Date().toISOString() };
-  users.push(newUser);
-  if (saveUsers(users)) {
-    currentUser = { studentNum: studentNum, name: name, course: course, isAdmin: false };
-    setSession(currentUser);
-    showAlert('aSignup', 's', 'Account created successfully! Redirecting...');
-    setTimeout(() => go('browse'), 1000);
-  } else {
-    showAlert('aSignup', 'd', 'Failed to save. Please try again.');
-  }
+async function doSignup() {
+    hideAlert('aSignup');
+    const name = document.getElementById('sName').value.trim();
+    const studentNum = document.getElementById('sSN').value.trim().toUpperCase();
+    const course = document.getElementById('sCourse').value;
+    const password = document.getElementById('sPW').value;
+    const confirmPassword = document.getElementById('sPW2').value;
+    
+    if (!name) { showAlert('aSignup', 'd', 'Please enter your full name.'); return; }
+    if (!studentNum) { showAlert('aSignup', 'd', 'Please enter your student number.'); return; }
+    if (!isValidStudentNumber(studentNum)) { showAlert('aSignup', 'd', 'Invalid student number. Format: SUM[YEAR]-[5 digits]'); return; }
+    if (!course) { showAlert('aSignup', 'd', 'Please select your course.'); return; }
+    if (!password) { showAlert('aSignup', 'd', 'Please enter a password.'); return; }
+    if (password.length < 6) { showAlert('aSignup', 'd', 'Password must be at least 6 characters.'); return; }
+    if (password !== confirmPassword) { showAlert('aSignup', 'd', 'Passwords do not match.'); return; }
+    
+    const exists = await userExists(studentNum);
+    if (exists) {
+        showAlert('aSignup', 'd', 'This student number is already registered.');
+        return;
+    }
+    
+    const newUser = { student_num: studentNum, name: name, course: course, password: password, joined: new Date().toISOString() };
+    const success = await addUser(newUser);
+    
+    if (success) {
+        currentUser = { studentNum: studentNum, name: name, course: course, isAdmin: false };
+        setSession(currentUser);
+        showAlert('aSignup', 's', 'Account created successfully! Redirecting...');
+        setTimeout(() => go('browse'), 1000);
+    } else {
+        showAlert('aSignup', 'd', 'Failed to save. Please try again.');
+    }
 }
 
 // ==================== PAPERS MANAGEMENT ====================
 async function loadPapers() {
+    const container = document.getElementById('browseList');
+    if (container) container.innerHTML = '<div class="loading-box"><div class="spin"></div>Loading from cloud...</div>';
+    
     allPapers = await getPapers();
     renderBrowse();
     renderStats();
@@ -735,135 +843,136 @@ function handlePDF(input) {
   reader.onload = e => { uploadedPdf = e.target.result; };
   reader.readAsDataURL(file);
 }
-function doSubmit() {
-  if (!currentUser) { go('login'); return; }
-  const title = document.getElementById('subTitle')?.value.trim();
-  const category = document.getElementById('subCat')?.value.trim();
-  if (!title) { showAlert('aSubmit', 'd', 'Please enter the research title.'); return; }
-  if (!document.getElementById('pdfFile')?.files[0]) { showAlert('aSubmit', 'd', 'Please upload a PDF file.'); return; }
-  const btn = document.getElementById('subBtn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Submitting...'; }
-  
-  const newPaper = {
-    id: 'r' + Date.now(),
-    title: title,
-    category: category || 'Uncategorized',
-    uploader: currentUser.studentNum,
-    date: new Date().toISOString().split('T')[0],
-    year: new Date().getFullYear(),
-    has_pdf: !!uploadedPdf,
-    pdf: uploadedPdf
-  };
-  
-  const papers = getPapers();
-  papers.push(newPaper);
-  if (savePapers(papers)) {
-    allPapers = papers;
-    showAlert('aSubmit', 's', 'Submitted! Your paper is now visible to all students.');
-    setTimeout(() => go('browse'), 1200);
-  } else {
-    showAlert('aSubmit', 'd', 'Save failed.');
-    if (btn) btn.disabled = false;
-  }
+async function doSubmit() {
+    if (!currentUser) { go('login'); return; }
+    const title = document.getElementById('subTitle')?.value.trim();
+    const category = document.getElementById('subCat')?.value.trim();
+    if (!title) { showAlert('aSubmit', 'd', 'Please enter the research title.'); return; }
+    if (!document.getElementById('pdfFile')?.files[0]) { showAlert('aSubmit', 'd', 'Please upload a PDF file.'); return; }
+    const btn = document.getElementById('subBtn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Submitting...'; }
+    
+    const newPaper = {
+        id: 'r' + Date.now(),
+        title: title,
+        category: category || 'Uncategorized',
+        uploader: currentUser.studentNum,
+        date: new Date().toISOString().split('T')[0],
+        year: new Date().getFullYear(),
+        has_pdf: !!uploadedPdf,
+        pdf: uploadedPdf,
+        created_at: new Date().toISOString()
+    };
+    
+    const success = await addPaper(newPaper);
+    if (success) {
+        showAlert('aSubmit', 's', 'Submitted! Your paper is now visible to all students.');
+        setTimeout(() => go('browse'), 1200);
+    } else {
+        showAlert('aSubmit', 'd', 'Save failed.');
+        if (btn) btn.disabled = false;
+    }
 }
-function deletePaper(id, confirmed) {
-  if (!confirmed) {
-    confirmAction('🗑️', 'Delete Paper', 'This permanently removes the paper from the database.', () => deletePaper(id, true));
-    return;
-  }
-  const papers = getPapers().filter(p => p.id !== id);
-  savePapers(papers);
-  allPapers = papers;
-  if (document.getElementById('page-browse')?.classList.contains('active')) { renderBrowse(); renderStats(); }
-  if (document.getElementById('page-admin')?.classList.contains('active')) { renderAPapers(); updateAdminStats(); }
+async function deletePaper(id, confirmed) {
+    if (!confirmed) {
+        confirmAction('🗑️', 'Delete Paper', 'This permanently removes the paper from the database.', () => deletePaper(id, true));
+        return;
+    }
+    await deletePaperFromDB(id);
+    allPapers = await getPapers();
+    if (document.getElementById('page-browse')?.classList.contains('active')) { renderBrowse(); renderStats(); }
+    if (document.getElementById('page-admin')?.classList.contains('active')) { renderAPapers(); updateAdminStats(); }
 }
-function clearAllPapers() {
-  savePapers([]);
-  allPapers = [];
-  if (document.getElementById('page-browse')?.classList.contains('active')) { renderBrowse(); renderStats(); }
-  if (document.getElementById('page-admin')?.classList.contains('active')) { renderAPapers(); updateAdminStats(); }
+async function clearAllPapers() {
+    if (!supabase) return;
+    await supabase.from('papers').delete().neq('id', '');
+    allPapers = await getPapers();
+    if (document.getElementById('page-browse')?.classList.contains('active')) { renderBrowse(); renderStats(); }
+    if (document.getElementById('page-admin')?.classList.contains('active')) { renderAPapers(); updateAdminStats(); }
 }
 
 // ==================== ADMIN FUNCTIONS ====================
-function loadAdminData() {
-  allPapers = getPapers();
-  updateAdminStats();
-  renderAPapers();
-  renderAStudents();
+async function loadAdminData() {
+    allPapers = await getPapers();
+    const users = await getUsers();
+    allUsers = users;
+    updateAdminStats();
+    renderAPapers();
+    renderAStudents();
 }
-function updateAdminStats() {
-  const papers = getPapers();
-  const users = getUsers();
-  const categories = [...new Set(papers.map(p => p.category).filter(Boolean))];
-  const statsDiv = document.getElementById('aStats');
-  if (statsDiv) {
-    statsDiv.innerHTML = `<div class="asc"><div class="n">${papers.length}</div><div class="l">Research Papers</div></div>
-                          <div class="asc"><div class="n">${users.length}</div><div class="l">Students</div></div>
-                          <div class="asc"><div class="n">${categories.length}</div><div class="l">Categories</div></div>
-                          <div class="asc r"><div class="n">${papers.filter(p => p.has_pdf).length}</div><div class="l">With PDF</div></div>`;
-  }
-  const overview = document.getElementById('overviewTxt');
-  if (overview) {
-    const last = papers.length ? papers[papers.length - 1] : null;
-    overview.innerHTML = `<strong>${papers.length}</strong> papers · <strong>${users.length}</strong> students · <strong>${categories.length}</strong> categories<br><br>${last ? `Latest: <em>${escapeHtml(last.title.substring(0, 60))}${last.title.length > 60 ? '...' : ''}</em>` : 'No papers yet.'}`;
-  }
+async function updateAdminStats() {
+    const papers = await getPapers();
+    const users = await getUsers();
+    const categories = [...new Set(papers.map(p => p.category).filter(Boolean))];
+    const statsDiv = document.getElementById('aStats');
+    if (statsDiv) {
+        statsDiv.innerHTML = `<div class="asc"><div class="n">${papers.length}</div><div class="l">Research Papers</div></div>
+                              <div class="asc"><div class="n">${users.length}</div><div class="l">Students</div></div>
+                              <div class="asc"><div class="n">${categories.length}</div><div class="l">Categories</div></div>
+                              <div class="asc r"><div class="n">${papers.filter(p => p.has_pdf).length}</div><div class="l">With PDF</div></div>`;
+    }
+    const overview = document.getElementById('overviewTxt');
+    if (overview) {
+        const last = papers.length ? papers[papers.length - 1] : null;
+        overview.innerHTML = `<strong>${papers.length}</strong> papers · <strong>${users.length}</strong> students · <strong>${categories.length}</strong> categories<br><br>${last ? `Latest: <em>${escapeHtml(last.title.substring(0, 60))}${last.title.length > 60 ? '...' : ''}</em>` : 'No papers yet.'}`;
+    }
 }
-function renderAPapers() {
-  const search = (document.getElementById('aPSearch')?.value || '').toLowerCase();
-  const papers = getPapers();
-  let filtered = [...papers].reverse();
-  if (search) filtered = filtered.filter(p => p.title.toLowerCase().includes(search) || (p.category || '').toLowerCase().includes(search) || p.uploader.toLowerCase().includes(search));
-  const tbody = document.getElementById('aPapersTb');
-  if (!tbody) return;
-  if (filtered.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">No papers found.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = filtered.map(p => `
-    <tr>
-      <td style="max-width:180px"><div style="font-size:12px;font-weight:500">${escapeHtml(p.title.substring(0, 65))}${p.title.length > 65 ? '...' : ''}</div></td>
-      <td><span class="tag" style="font-size:10px">${escapeHtml(p.category || '—')}</span></td>
-      <td style="font-size:11px">${escapeHtml(p.uploader)}</td>
-      <td style="font-size:11px">${p.date}</td>
-      <td style="font-size:11px">${p.has_pdf ? '✅' : '—'}</td>
-      <td><div style="display:flex;gap:4px">${p.has_pdf ? `<button class="bsm g" onclick='showPDF("${p.id}")'>PDF</button>` : ''}<button class="bsm d" onclick='deletePaper("${p.id}",false)'>Remove</button></div></td>
-    </tr>
-  `).join('');
+async function renderAPapers() {
+    const search = (document.getElementById('aPSearch')?.value || '').toLowerCase();
+    const papers = await getPapers();
+    let filtered = [...papers].reverse();
+    if (search) filtered = filtered.filter(p => p.title.toLowerCase().includes(search) || (p.category || '').toLowerCase().includes(search) || p.uploader.toLowerCase().includes(search));
+    const tbody = document.getElementById('aPapersTb');
+    if (!tbody) return;
+    if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">No papers found.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = filtered.map(p => `
+        <tr>
+            <td style="max-width:180px"><div style="font-size:12px;font-weight:500">${escapeHtml(p.title.substring(0, 65))}${p.title.length > 65 ? '...' : ''}</div></td>
+            <td><span class="tag" style="font-size:10px">${escapeHtml(p.category || '—')}</span></td>
+            <td style="font-size:11px">${escapeHtml(p.uploader)}</td>
+            <td style="font-size:11px">${p.date}</td>
+            <td style="font-size:11px">${p.has_pdf ? '✅' : '—'}</td>
+            <td><div style="display:flex;gap:4px">${p.has_pdf ? `<button class="bsm g" onclick='showPDF("${p.id}")'>PDF</button>` : ''}<button class="bsm d" onclick='deletePaper("${p.id}",false)'>Remove</button></div></td>
+        </tr>
+    `).join('');
 }
-function removeStudent(sn, confirmed) {
-  if (!confirmed) {
-    confirmAction('👤', 'Remove Student', `Remove student ${sn}? Their account will be deleted.`, () => removeStudent(sn, true));
-    return;
-  }
-  const users = getUsers().filter(u => u.studentNum !== sn);
-  saveUsers(users);
-  updateAdminStats();
-  renderAStudents();
+async function removeStudent(sn, confirmed) {
+    if (!confirmed) {
+        confirmAction('👤', 'Remove Student', `Remove student ${sn}? Their account will be deleted.`, () => removeStudent(sn, true));
+        return;
+    }
+    if (!supabase) return;
+    await supabase.from('users').delete().eq('student_num', sn);
+    updateAdminStats();
+    renderAStudents();
 }
-function renderAStudents() {
-  const search = (document.getElementById('aSSearch')?.value || '').toLowerCase();
-  const users = getUsers();
-  const papers = getPapers();
-  let filtered = [...users];
-  if (search) filtered = filtered.filter(u => u.studentNum.toLowerCase().includes(search) || u.name.toLowerCase().includes(search) || (u.course || '').toLowerCase().includes(search));
-  const tbody = document.getElementById('aStudentsTb');
-  if (!tbody) return;
-  if (filtered.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">No students registered yet.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = filtered.map(u => `
-    <tr>
-      <td><span class="br s">${escapeHtml(u.studentNum)}</span></td>
-      <td style="font-size:12px">${escapeHtml(u.name)}</td>
-      <td style="font-size:11px;color:var(--muted)">${escapeHtml(u.course || '—')}</td>
-      <td style="font-size:11px">${u.joined ? new Date(u.joined).toLocaleDateString() : '—'}</td>
-      <td style="font-size:11px">${papers.filter(p => p.uploader === u.studentNum).length}</td>
-      <td><button class="bsm d" onclick='removeStudent("${u.studentNum}",false)'>Remove</button></td>
-    </tr>
-  `).join('');
+async function renderAStudents() {
+    const search = (document.getElementById('aSSearch')?.value || '').toLowerCase();
+    const users = await getUsers();
+    const papers = await getPapers();
+    let filtered = [...users];
+    if (search) filtered = filtered.filter(u => u.student_num.toLowerCase().includes(search) || u.name.toLowerCase().includes(search) || (u.course || '').toLowerCase().includes(search));
+    const tbody = document.getElementById('aStudentsTb');
+    if (!tbody) return;
+    if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">No students registered yet.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = filtered.map(u => `
+        <tr>
+            <td><span class="br s">${escapeHtml(u.student_num)}</span></td>
+            <td style="font-size:12px">${escapeHtml(u.name)}</td>
+            <td style="font-size:11px;color:var(--muted)">${escapeHtml(u.course || '—')}</td>
+            <td style="font-size:11px">${u.joined ? new Date(u.joined).toLocaleDateString() : '—'}</td>
+            <td style="font-size:11px">${papers.filter(p => p.uploader === u.student_num).length}</td>
+            <td><button class="bsm d" onclick='removeStudent("${u.student_num}",false)'>Remove</button></td>
+        </tr>
+    `).join('');
 }
-function aTab(tabName, btn) {
+async function aTab(tabName, btn) {
   document.querySelectorAll('.atab').forEach(t => t.classList.remove('active'));
   if (btn) btn.classList.add('active');
   document.querySelectorAll('.asec').forEach(s => s.classList.remove('active'));
@@ -908,7 +1017,17 @@ function confirmAction(icon, title, msg, callback) {
 document.querySelectorAll('.modal-bg').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
 
 // ==================== INITIALIZE ====================
-initPapers();
+initPapers(
+   // Initialize and setup real-time
+if (supabase) {
+    setupRealtime();
+    loadPapers();
+} else {
+    // Fallback to localStorage if Supabase fails
+    initPapers();
+    loadPapers();
+}
+);
 loadPapers();
 
 // Check for existing session
