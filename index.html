@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>CMBT ResearchHub | Real-Time Shared Database</title>
+<title>CMBT ResearchHub | Real-Time Cross-Device Sync</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -143,6 +143,8 @@ tr:last-child td{border-bottom:none;}
 footer{background:var(--navy);padding:18px 1.5rem;text-align:center;color:rgba(255,255,255,.4);font-size:12px;margin-top:40px;}
 footer span{color:var(--gold);}
 .live-indicator{background:#14532d;color:#86efac;border-radius:16px;padding:2px 10px;font-size:10px;font-weight:500;margin-left:8px;}
+.sync-badge{background:#4ade80;color:#064e3b;border-radius:16px;padding:2px 10px;font-size:10px;font-weight:500;margin-left:8px;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
 </style>
 </head>
 <body>
@@ -153,7 +155,7 @@ footer span{color:var(--gold);}
     <div class="logo-text">CMBT <span>ResearchHub</span></div>
   </div>
   <div class="nav-r">
-    <span class="live" id="nLive" style="display:none">Live</span>
+    <span class="live" id="nLive" style="display:none">Live Sync</span>
     <span class="badge-red" id="nAdminBadge" style="display:none">ADMIN</span>
     <span class="badge-gold" id="nUser" style="display:none"></span>
     <button class="nb ghost" id="nBrowse" onclick="go('browse')" style="display:none">Browse</button>
@@ -168,7 +170,7 @@ footer span{color:var(--gold);}
 <!-- HOME -->
 <div class="page active" id="page-home">
   <div class="hero">
-    <div class="hbadge">CMBT Students Only — Live Sync Enabled</div>
+    <div class="hbadge">CMBT Students Only — Cross-Device Sync</div>
     <h1>Discover & Share<br><span>Student Research</span></h1>
     <p>A private academic platform for CMBT students. Submit papers, browse research, and generate citations. <strong style="color:var(--gold)">Real-time updates across all devices!</strong></p>
     <div class="hbtns">
@@ -177,12 +179,12 @@ footer span{color:var(--gold);}
     </div>
   </div>
   <div class="cards">
-    <div class="card"><div class="card-icon ci-b">🌐</div><h3>Real-Time Shared</h3><p>All students see the same live research pool instantly.</p></div>
+    <div class="card"><div class="card-icon ci-b">🌐</div><h3>Cross-Device Sync</h3><p>All students see the same research pool instantly across any device.</p></div>
     <div class="card"><div class="card-icon ci-g">📖</div><h3>Auto Citations</h3><p>APA, MLA, and Chicago formats generated automatically.</p></div>
     <div class="card"><div class="card-icon ci-gr">🔒</div><h3>Private Access</h3><p>Only verified CMBT student numbers can register.</p></div>
     <div class="card"><div class="card-icon ci-r">🛡️</div><h3>Admin Managed</h3><p>Dedicated admin can manage papers and student accounts.</p></div>
   </div>
-  <footer>© 2024 <span>CMBT ResearchHub</span> — Real-time sync across all devices.</footer>
+  <footer>© 2024 <span>CMBT ResearchHub</span> — Powered by Supabase | Real-time cross-device synchronization</footer>
 </div>
 
 <!-- LOGIN -->
@@ -237,22 +239,22 @@ footer span{color:var(--gold);}
 
 <!-- BROWSE -->
 <div class="page" id="page-browse">
-  <div class="bhead"><h1>Research Repository <span class="live-indicator">🔄 LIVE SYNC</span></h1><p>Shared live database — all CMBT students see the same papers instantly</p></div>
+  <div class="bhead"><h1>Research Repository <span class="sync-badge" id="syncStatus">🔄 LIVE SYNC</span></h1><p>Shared cloud database — all CMBT students see the same papers instantly across all devices</p></div>
   <div class="bbody">
     <div class="sbar">
       <input type="text" id="bSearch" placeholder="Search title or category..." oninput="filterBrowse()"/>
       <select id="bCat" onchange="filterBrowse()"><option value="">All Categories</option></select>
-      <button class="nb gold" onclick="manualSyncRefresh()">↻ Refresh</button>
+      <button class="nb gold" onclick="loadPapers()">↻ Refresh</button>
     </div>
     <div class="statbar" id="statbar"></div>
-    <div id="browseList"><div class="loading-box"><div class="spin"></div>Loading...</div></div>
+    <div id="browseList"><div class="loading-box"><div class="spin"></div>Loading from cloud...</div></div>
   </div>
 </div>
 
 <!-- SUBMIT -->
 <div class="page" id="page-submit">
   <div class="sbody">
-    <div class="shead"><h1>Submit Research Paper</h1><p>Upload your PDF and title — instantly visible to all students after submission.</p></div>
+    <div class="shead"><h1>Submit Research Paper</h1><p>Upload your PDF and title — instantly visible to all students across all devices.</p></div>
     <div class="fsec">
       <h3>Research Information</h3>
       <div class="fg"><label>Research Title *</label><input id="subTitle" type="text" placeholder="Full title of your research paper" oninput="updatePreview()"/></div>
@@ -293,7 +295,7 @@ footer span{color:var(--gold);}
 
 <!-- ADMIN -->
 <div class="page" id="page-admin">
-  <div class="ahead"><h1>Admin Panel</h1><p>Manage students and research papers</p></div>
+  <div class="ahead"><h1>Admin Panel</h1><p>Manage students and research papers (changes sync to all users)</p></div>
   <div class="awrp">
     <div class="ascards" id="aStats"></div>
     <div class="atabs">
@@ -317,19 +319,17 @@ footer span{color:var(--gold);}
     <div class="asec" id="asec-papers">
       <input class="srch" type="text" id="aPSearch" placeholder="Search papers..." oninput="renderAPapers()"/>
       <div class="twrap">
-        <table>
-          <thead><tr><th>Title</th><th>Category</th><th>Student</th><th>Date</th><th>PDF</th><th>Action</th></tr></thead>
-          <tbody id="aPapersTb"></tbody>
-        </table>
+        <table><thead><tr><th>Title</th><th>Category</th><th>Student</th><th>Date</th><th>PDF</th><th>Action</th></tr></thead>
+        <tbody id="aPapersTb"></tbody>
+      </table>
       </div>
     </div>
     <div class="asec" id="asec-students">
       <input class="srch" type="text" id="aSSearch" placeholder="Search students..." oninput="renderAStudents()"/>
       <div class="twrap">
-        <table>
-          <thead><tr><th>Student No.</th><th>Name</th><th>Course</th><th>Joined</th><th>Papers</th><th>Action</th></tr></thead>
-          <tbody id="aStudentsTb"></tbody>
-        </table>
+        <table><thead><tr><th>Student No.</th><th>Name</th><th>Course</th><th>Joined</th><th>Papers</th><th>Action</th></tr></thead>
+        <tbody id="aStudentsTb"></tbody>
+      </table>
       </div>
     </div>
     <div class="asec" id="asec-settings">
@@ -356,82 +356,23 @@ footer span{color:var(--gold);}
 <div class="modal-bg" id="mPDF"><div class="modal" style="max-width:620px"><h3 id="mPDFTitle"></h3><div class="ms" id="mPDFSub"></div><div class="pview" id="mPDFArea"></div><div class="mact"><button class="bsm n" onclick="closeModal('mPDF')">Close</button></div></div></div>
 <div class="modal-bg" id="mConfirm"><div class="modal" style="max-width:360px;text-align:center"><div style="font-size:34px;margin-bottom:8px" id="mConIcon"></div><h3 id="mConTitle"></h3><div class="ms" id="mConMsg"></div><div class="mact" style="justify-content:center"><button class="bsm o" onclick="closeModal('mConfirm')">Cancel</button><button class="bsm d" id="mConOK">Yes, Delete</button></div></div></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ==================== DATA STORAGE ====================
-const STORAGE_KEYS = {
-  users: 'cmbt_users',
-  papers: 'cmbt_papers',
-  admin: 'cmbt_admin',
-  session: 'cmbt_session'
-};
+// ==================== SUPABASE CONFIGURATION ====================
+// 🔴 REPLACE THESE WITH YOUR SUPABASE PROJECT URL AND ANON KEY 🔴
+const SUPABASE_URL = 'https://ayvzivdjrihucwbsjzwr.supabase.co';  // Get from: Project Settings → API
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5dnppdmRqcmlodWN3YnNqendyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1MzE2OTgsImV4cCI6MjA5MjEwNzY5OH0.fgP7cmG_7KivVpBZG7VbMx8sKXojKyNgaJOd-a9XOO4';  // Get from: Project Settings → API
 
-function getData(key, defaultValue) {
-  try {
-    const value = localStorage.getItem(key);
-    return value ? JSON.parse(value) : defaultValue;
-  } catch(e) {
-    return defaultValue;
-  }
-}
+// Initialize Supabase client
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-function setData(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-    return true;
-  } catch(e) {
-    return false;
-  }
-}
-
-function getUsers() { return getData(STORAGE_KEYS.users, []); }
-function saveUsers(users) { return setData(STORAGE_KEYS.users, users); }
-function getPapers() { return getData(STORAGE_KEYS.papers, []); }
-function savePapers(papers) { return setData(STORAGE_KEYS.papers, papers); }
-function getAdminCreds() { return getData(STORAGE_KEYS.admin, { username: 'admin', password: 'cmbt2024' }); }
-function saveAdminCreds(creds) { return setData(STORAGE_KEYS.admin, creds); }
-function getSession() {
-  try {
-    return JSON.parse(sessionStorage.getItem(STORAGE_KEYS.session));
-  } catch(e) {
-    return null;
-  }
-}
-function setSession(user) { sessionStorage.setItem(STORAGE_KEYS.session, JSON.stringify(user)); }
-function clearSession() { sessionStorage.removeItem(STORAGE_KEYS.session); }
-
-// ==================== REAL-TIME SYNC ====================
-const syncChannel = new BroadcastChannel('cmbt_sync');
-function broadcastUpdate() {
-  try {
-    syncChannel.postMessage({ type: 'sync', timestamp: Date.now() });
-  } catch(e) {}
-}
-syncChannel.onmessage = function() { refreshAllData(); };
-window.addEventListener('storage', function(e) {
-  if (e.key === STORAGE_KEYS.papers || e.key === STORAGE_KEYS.users) {
-    refreshAllData();
-  }
-});
-function refreshAllData() {
-  const activePage = document.querySelector('.page.active');
-  if (activePage && activePage.id === 'page-browse') {
-    loadPapers();
-  } else if (activePage && activePage.id === 'page-admin' && getSession()?.isAdmin) {
-    loadAdminData();
-  }
-}
-function manualSyncRefresh() { refreshAllData(); if(document.getElementById('page-browse')?.classList.contains('active')) loadPapers(); }
-
-// ==================== INITIALIZE DATA ====================
-function initPapers() {
-  if (getPapers().length === 0) {
-    savePapers([
-      { id: 'p1', title: 'Effects of Social Media Use on Academic Performance Among College Students', category: 'Education', uploader: 'SUM2022-01234', date: '2024-03-15', year: 2024, hasPdf: false, pdf: null },
-      { id: 'p2', title: 'Implementation of IoT-Based Smart Campus Monitoring System', category: 'Information Technology', uploader: 'SUM2023-05678', date: '2024-04-02', year: 2024, hasPdf: false, pdf: null },
-      { id: 'p3', title: 'Prevalence of Stress and Burnout Among Nursing Students', category: 'Nursing', uploader: 'SUM2021-09876', date: '2024-02-20', year: 2024, hasPdf: false, pdf: null }
-    ]);
-  }
-}
+// ==================== GLOBAL VARIABLES ====================
+let allPapers = [];
+let currentCiteFormat = 'APA';
+let currentPaper = null;
+let uploadedPdf = null;
+let currentUser = null;
+let loginMode = 'student';
 
 // ==================== UTILITIES ====================
 function escapeHtml(str) { return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -439,6 +380,7 @@ function isValidStudentNumber(num) { return /^SUM\d{4}-\d{5}$/i.test(String(num 
 function showAlert(elementId, type, message) {
   const el = document.getElementById(elementId);
   if (el) { el.className = 'al ' + type; el.textContent = message; el.style.display = 'block'; }
+  setTimeout(() => { if (el) el.style.display = 'none'; }, 3000);
 }
 function hideAlert(elementId) { const el = document.getElementById(elementId); if (el) el.style.display = 'none'; }
 function openModal(id) { document.getElementById(id).classList.add('open'); }
@@ -446,15 +388,37 @@ function closeModal(id) { document.getElementById(id).classList.remove('open'); 
 function toggleDisplay(id, show) { const el = document.getElementById(id); if (el) el.style.display = show ? 'inline-block' : 'none'; }
 function toggleFlex(id, show) { const el = document.getElementById(id); if (el) el.style.display = show ? 'flex' : 'none'; }
 
+// ==================== REAL-TIME SUBSCRIPTION ====================
+function setupRealtimeSubscription() {
+  const papersSubscription = supabase
+    .channel('papers-changes')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'papers' }, (payload) => {
+      console.log('Real-time update received:', payload);
+      loadPapers(); // Reload papers when any change occurs
+    })
+    .subscribe();
+  
+  const usersSubscription = supabase
+    .channel('users-changes')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, (payload) => {
+      console.log('Users update received:', payload);
+      if (document.getElementById('page-admin')?.classList.contains('active')) {
+        renderAStudents();
+        updateAdminStats();
+      }
+    })
+    .subscribe();
+}
+
 // ==================== NAVIGATION ====================
 function updateNav() {
-  const session = getSession();
+  const session = currentUser;
   const isAdmin = session && session.isAdmin;
   const isStudent = session && !session.isAdmin;
   toggleFlex('nLive', !!session);
   toggleDisplay('nAdminBadge', isAdmin);
   toggleDisplay('nUser', isStudent);
-  if (isStudent) document.getElementById('nUser').textContent = session.studentNum;
+  if (isStudent && document.getElementById('nUser')) document.getElementById('nUser').textContent = session.studentNum;
   toggleDisplay('nBrowse', !!session);
   toggleDisplay('nSubmit', isStudent);
   toggleDisplay('nAdminBtn', isAdmin);
@@ -464,9 +428,8 @@ function updateNav() {
 }
 
 function go(page) {
-  const session = getSession();
-  if (page === 'submit' && !session) { go('login'); setTimeout(() => showAlert('aLogin', 'i', 'Please sign in to submit research.'), 50); return; }
-  if (page === 'admin' && (!session || !session.isAdmin)) { go(session ? 'browse' : 'login'); return; }
+  if (page === 'submit' && !currentUser) { go('login'); setTimeout(() => showAlert('aLogin', 'i', 'Please sign in to submit research.'), 50); return; }
+  if (page === 'admin' && (!currentUser || !currentUser.isAdmin)) { go(currentUser ? 'browse' : 'login'); return; }
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
   window.scrollTo(0, 0);
@@ -476,67 +439,83 @@ function go(page) {
   if (page === 'submit') resetSubmitForm();
   if (page === 'login') { hideAlert('aLogin'); setLM('student'); }
 }
-function logout() { clearSession(); updateNav(); go('home'); }
+function logout() { 
+  currentUser = null;
+  sessionStorage.removeItem('cmbt_user');
+  updateNav(); 
+  go('home'); 
+}
 
 // ==================== LOGIN/SIGNUP ====================
-let loginMode = 'student';
 function setLM(mode) {
   loginMode = mode;
-  document.getElementById('tabS').classList.toggle('active', mode === 'student');
-  document.getElementById('tabA').classList.toggle('active', mode === 'admin');
-  document.getElementById('fStudent').style.display = mode === 'student' ? 'block' : 'none';
-  document.getElementById('fAdmin').style.display = mode === 'admin' ? 'block' : 'none';
-  document.getElementById('linkSignup').style.display = mode === 'student' ? 'block' : 'none';
+  const tabS = document.getElementById('tabS');
+  const tabA = document.getElementById('tabA');
+  if (tabS) tabS.classList.toggle('active', mode === 'student');
+  if (tabA) tabA.classList.toggle('active', mode === 'admin');
+  const fStudent = document.getElementById('fStudent');
+  const fAdmin = document.getElementById('fAdmin');
+  if (fStudent) fStudent.style.display = mode === 'student' ? 'block' : 'none';
+  if (fAdmin) fAdmin.style.display = mode === 'admin' ? 'block' : 'none';
+  const linkSignup = document.getElementById('linkSignup');
+  if (linkSignup) linkSignup.style.display = mode === 'student' ? 'block' : 'none';
   hideAlert('aLogin');
 }
 
-function doLogin() {
+async function doLogin() {
   hideAlert('aLogin');
   const btn = document.getElementById('loginBtn');
   if (btn) btn.disabled = true;
   
-  setTimeout(() => {
-    if (loginMode === 'admin') {
-      const username = document.getElementById('lAU').value.trim();
-      const password = document.getElementById('lAP').value;
-      const adminCreds = getAdminCreds();
-      if (username === adminCreds.username && password === adminCreds.password) {
-        setSession({ isAdmin: true, name: 'Administrator', studentNum: 'ADMIN' });
-        if (btn) btn.disabled = false;
-        go('admin');
-      } else {
-        showAlert('aLogin', 'd', 'Incorrect admin credentials.');
-        if (btn) btn.disabled = false;
-      }
-      return;
-    }
-    
-    const studentNum = document.getElementById('lSN').value.trim().toUpperCase();
-    const password = document.getElementById('lPW').value;
-    if (!studentNum || !password) {
-      showAlert('aLogin', 'd', 'Please fill in all fields.');
+  if (loginMode === 'admin') {
+    const username = document.getElementById('lAU').value.trim();
+    const password = document.getElementById('lAP').value;
+    if (username === 'admin' && password === 'cmbt2024') {
+      currentUser = { isAdmin: true, name: 'Administrator', studentNum: 'ADMIN' };
+      sessionStorage.setItem('cmbt_user', JSON.stringify(currentUser));
       if (btn) btn.disabled = false;
-      return;
-    }
-    if (!isValidStudentNumber(studentNum)) {
-      showAlert('aLogin', 'd', 'Invalid format. Use SUM[YEAR]-[5 digits]');
-      if (btn) btn.disabled = false;
-      return;
-    }
-    const users = getUsers();
-    const user = users.find(u => u.studentNum === studentNum && u.password === password);
-    if (user) {
-      setSession(user);
-      if (btn) btn.disabled = false;
-      go('browse');
+      go('admin');
     } else {
-      showAlert('aLogin', 'd', 'Incorrect student number or password.');
+      showAlert('aLogin', 'd', 'Incorrect admin credentials.');
       if (btn) btn.disabled = false;
     }
-  }, 200);
+    return;
+  }
+  
+  const studentNum = document.getElementById('lSN').value.trim().toUpperCase();
+  const password = document.getElementById('lPW').value;
+  
+  if (!studentNum || !password) {
+    showAlert('aLogin', 'd', 'Please fill in all fields.');
+    if (btn) btn.disabled = false;
+    return;
+  }
+  
+  const { data: users, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('student_num', studentNum)
+    .eq('password', password);
+  
+  if (error) {
+    showAlert('aLogin', 'd', 'Database error: ' + error.message);
+    if (btn) btn.disabled = false;
+    return;
+  }
+  
+  if (users && users.length > 0) {
+    const user = users[0];
+    currentUser = { studentNum: user.student_num, name: user.name, course: user.course, isAdmin: false };
+    sessionStorage.setItem('cmbt_user', JSON.stringify(currentUser));
+    if (btn) btn.disabled = false;
+    go('browse');
+  } else {
+    showAlert('aLogin', 'd', 'Incorrect student number or password.');
+    if (btn) btn.disabled = false;
+  }
 }
 
-function doSignup() {
+async function doSignup() {
   hideAlert('aSignup');
   const name = document.getElementById('sName').value.trim();
   const studentNum = document.getElementById('sSN').value.trim().toUpperCase();
@@ -552,31 +531,45 @@ function doSignup() {
   if (password.length < 6) { showAlert('aSignup', 'd', 'Password must be at least 6 characters.'); return; }
   if (password !== confirmPassword) { showAlert('aSignup', 'd', 'Passwords do not match.'); return; }
   
-  const users = getUsers();
-  if (users.find(u => u.studentNum === studentNum)) {
+  const { data: existing, error: checkError } = await supabase
+    .from('users')
+    .select('student_num')
+    .eq('student_num', studentNum);
+  
+  if (existing && existing.length > 0) {
     showAlert('aSignup', 'd', 'This student number is already registered.');
     return;
   }
   
-  const newUser = { studentNum: studentNum, name: name, course: course, password: password, joined: new Date().toISOString() };
-  users.push(newUser);
-  if (saveUsers(users)) {
-    setSession(newUser);
-    showAlert('aSignup', 's', 'Account created successfully! Redirecting...');
-    setTimeout(() => go('browse'), 1000);
-  } else {
-    showAlert('aSignup', 'd', 'Failed to save. Please try again.');
+  const { data, error } = await supabase
+    .from('users')
+    .insert([{ student_num: studentNum, name: name, course: course, password: password, joined: new Date().toISOString() }]);
+  
+  if (error) {
+    showAlert('aSignup', 'd', 'Registration failed: ' + error.message);
+    return;
   }
+  
+  currentUser = { studentNum: studentNum, name: name, course: course, isAdmin: false };
+  sessionStorage.setItem('cmbt_user', JSON.stringify(currentUser));
+  showAlert('aSignup', 's', 'Account created successfully! Redirecting...');
+  setTimeout(() => go('browse'), 1000);
 }
 
 // ==================== PAPERS MANAGEMENT ====================
-let allPapers = [];
-let currentCiteFormat = 'APA';
-let currentPaper = null;
-let uploadedPdf = null;
-
-function loadPapers() {
-  allPapers = getPapers();
+async function loadPapers() {
+  const container = document.getElementById('browseList');
+  if (container) container.innerHTML = '<div class="loading-box"><div class="spin"></div>Loading from cloud...</div>';
+  
+  const { data, error } = await supabase.from('papers').select('*').order('created_at', { ascending: false });
+  
+  if (error) {
+    console.error('Error loading papers:', error);
+    if (container) container.innerHTML = '<div class="empty-box">Error loading papers. Please refresh.</div>';
+    return;
+  }
+  
+  allPapers = data || [];
   renderBrowse();
   renderStats();
 }
@@ -587,7 +580,7 @@ function renderStats() {
   if (statDiv) {
     statDiv.innerHTML = `<div class="statpill">Papers: <strong>${allPapers.length}</strong></div>
                          <div class="statpill">Categories: <strong>${categories.length}</strong></div>
-                         <div class="statpill">With PDF: <strong>${allPapers.filter(p => p.hasPdf).length}</strong></div>`;
+                         <div class="statpill">With PDF: <strong>${allPapers.filter(p => p.has_pdf).length}</strong></div>`;
   }
 }
 
@@ -606,7 +599,7 @@ function renderBrowse() {
     catSelect.innerHTML = '<option value="">All Categories</option>' + categories.map(c => `<option value="${c}" ${c === selectedCat ? 'selected' : ''}>${escapeHtml(c)}</option>`).join('');
   }
   
-  let filtered = [...allPapers].reverse();
+  let filtered = [...allPapers];
   if (searchQuery) filtered = filtered.filter(p => p.title.toLowerCase().includes(searchQuery) || (p.category || '').toLowerCase().includes(searchQuery));
   if (selectedCat) filtered = filtered.filter(p => (p.category || '') === selectedCat);
   
@@ -615,7 +608,6 @@ function renderBrowse() {
     return;
   }
   
-  const session = getSession();
   const isNew = (p) => (Date.now() - new Date(p.date || 0).getTime()) < 259200000;
   
   container.innerHTML = filtered.map(p => `
@@ -627,8 +619,8 @@ function renderBrowse() {
       <div class="rmeta">By <strong>${escapeHtml(p.uploader)}</strong> · ${p.date} · ${p.year}</div>
       <div class="ract">
         <button class="bsm o" onclick='showCite("${p.id}")'>Get Citation</button>
-        ${p.hasPdf ? `<button class="bsm g" onclick='showPDF("${p.id}")'>View PDF</button>` : '<span style="font-size:11px;color:var(--muted);align-self:center">No PDF attached</span>'}
-        ${session && !session.isAdmin && p.uploader === session.studentNum ? `<button class="bsm d" onclick='deletePaper("${p.id}",false)'>Delete</button>` : ''}
+        ${p.has_pdf ? `<button class="bsm g" onclick='showPDF("${p.id}")'>View PDF</button>` : '<span style="font-size:11px;color:var(--muted);align-self:center">No PDF attached</span>'}
+        ${currentUser && !currentUser.isAdmin && p.uploader === currentUser.studentNum ? `<button class="bsm d" onclick='deletePaper("${p.id}",false)'>Delete</button>` : ''}
       </div>
     </div>
   `).join('');
@@ -696,10 +688,9 @@ function setSubFmt(fmt, btn) {
 }
 function updatePreview() {
   const title = document.getElementById('subTitle')?.value.trim();
-  const session = getSession();
   const preview = document.getElementById('citePreview');
   if (preview) {
-    preview.innerHTML = title ? genCitation({ title: title, year: new Date().getFullYear(), uploader: session ? session.studentNum : 'Author' }, submitFmt) : 'Enter a title above to preview.';
+    preview.innerHTML = title ? genCitation({ title: title, year: new Date().getFullYear(), uploader: currentUser ? currentUser.studentNum : 'Author' }, submitFmt) : 'Enter a title above to preview.';
   }
 }
 function handlePDF(input) {
@@ -713,88 +704,90 @@ function handlePDF(input) {
   reader.onload = e => { uploadedPdf = e.target.result; };
   reader.readAsDataURL(file);
 }
-function doSubmit() {
-  const session = getSession();
-  if (!session) { go('login'); return; }
+async function doSubmit() {
+  if (!currentUser) { go('login'); return; }
   const title = document.getElementById('subTitle')?.value.trim();
   const category = document.getElementById('subCat')?.value.trim();
   if (!title) { showAlert('aSubmit', 'd', 'Please enter the research title.'); return; }
   if (!document.getElementById('pdfFile')?.files[0]) { showAlert('aSubmit', 'd', 'Please upload a PDF file.'); return; }
   const btn = document.getElementById('subBtn');
   if (btn) { btn.disabled = true; btn.textContent = 'Submitting...'; }
-  showAlert('aSubmit', 'i', 'Saving to database...');
-  setTimeout(() => {
-    const papers = getPapers();
-    const newPaper = {
-      id: 'r' + Date.now(),
-      title: title,
-      category: category || 'Uncategorized',
-      uploader: session.studentNum,
-      date: new Date().toISOString().split('T')[0],
-      year: new Date().getFullYear(),
-      hasPdf: !!uploadedPdf,
-      pdf: uploadedPdf
-    };
-    papers.push(newPaper);
-    if (savePapers(papers)) {
-      broadcastUpdate();
-      allPapers = papers;
-      showAlert('aSubmit', 's', 'Submitted! Your paper is now visible to all students.');
-      setTimeout(() => go('browse'), 1200);
-    } else {
-      showAlert('aSubmit', 'd', 'Save failed.');
-      if (btn) btn.disabled = false;
-    }
-  }, 400);
+  
+  const newPaper = {
+    id: 'r' + Date.now(),
+    title: title,
+    category: category || 'Uncategorized',
+    uploader: currentUser.studentNum,
+    date: new Date().toISOString().split('T')[0],
+    year: new Date().getFullYear(),
+    has_pdf: !!uploadedPdf,
+    pdf: uploadedPdf,
+    created_at: new Date().toISOString()
+  };
+  
+  const { error } = await supabase.from('papers').insert([newPaper]);
+  
+  if (error) {
+    showAlert('aSubmit', 'd', 'Save failed: ' + error.message);
+    if (btn) btn.disabled = false;
+  } else {
+    showAlert('aSubmit', 's', 'Submitted! Your paper is now visible to all students.');
+    setTimeout(() => go('browse'), 1200);
+  }
 }
-function deletePaper(id, confirmed) {
+async function deletePaper(id, confirmed) {
   if (!confirmed) {
     confirmAction('🗑️', 'Delete Paper', 'This permanently removes the paper from the database.', () => deletePaper(id, true));
     return;
   }
-  const papers = getPapers().filter(p => p.id !== id);
-  savePapers(papers);
-  broadcastUpdate();
-  allPapers = papers;
-  if (document.getElementById('page-browse')?.classList.contains('active')) { renderBrowse(); renderStats(); }
-  if (document.getElementById('page-admin')?.classList.contains('active')) { renderAPapers(); updateAdminStats(); }
+  const { error } = await supabase.from('papers').delete().eq('id', id);
+  if (!error) {
+    await loadPapers();
+    if (document.getElementById('page-admin')?.classList.contains('active')) {
+      renderAPapers();
+      updateAdminStats();
+    }
+  }
 }
-function clearAllPapers() {
-  savePapers([]);
-  broadcastUpdate();
-  allPapers = [];
-  if (document.getElementById('page-browse')?.classList.contains('active')) { renderBrowse(); renderStats(); }
-  if (document.getElementById('page-admin')?.classList.contains('active')) { renderAPapers(); updateAdminStats(); }
+async function clearAllPapers() {
+  const { error } = await supabase.from('papers').delete().neq('id', '');
+  if (!error) {
+    await loadPapers();
+    if (document.getElementById('page-admin')?.classList.contains('active')) {
+      renderAPapers();
+      updateAdminStats();
+    }
+  }
 }
 
 // ==================== ADMIN FUNCTIONS ====================
-function loadAdminData() {
-  allPapers = getPapers();
+async function loadAdminData() {
+  await loadPapers();
   updateAdminStats();
   renderAPapers();
   renderAStudents();
 }
-function updateAdminStats() {
-  const papers = getPapers();
-  const users = getUsers();
-  const categories = [...new Set(papers.map(p => p.category).filter(Boolean))];
+async function updateAdminStats() {
+  const { data: papers } = await supabase.from('papers').select('*');
+  const { data: users } = await supabase.from('users').select('*');
+  const categories = [...new Set((papers || []).map(p => p.category).filter(Boolean))];
   const statsDiv = document.getElementById('aStats');
   if (statsDiv) {
-    statsDiv.innerHTML = `<div class="asc"><div class="n">${papers.length}</div><div class="l">Research Papers</div></div>
-                          <div class="asc"><div class="n">${users.length}</div><div class="l">Students</div></div>
+    statsDiv.innerHTML = `<div class="asc"><div class="n">${papers?.length || 0}</div><div class="l">Research Papers</div></div>
+                          <div class="asc"><div class="n">${users?.length || 0}</div><div class="l">Students</div></div>
                           <div class="asc"><div class="n">${categories.length}</div><div class="l">Categories</div></div>
-                          <div class="asc r"><div class="n">${papers.filter(p => p.hasPdf).length}</div><div class="l">With PDF</div></div>`;
+                          <div class="asc r"><div class="n">${(papers || []).filter(p => p.has_pdf).length}</div><div class="l">With PDF</div></div>`;
   }
   const overview = document.getElementById('overviewTxt');
-  if (overview) {
+  if (overview && papers) {
     const last = papers.length ? papers[papers.length - 1] : null;
-    overview.innerHTML = `<strong>${papers.length}</strong> papers · <strong>${users.length}</strong> students · <strong>${categories.length}</strong> categories<br><br>${last ? `Latest: <em>${escapeHtml(last.title.substring(0, 60))}${last.title.length > 60 ? '...' : ''}</em>` : 'No papers yet.'}`;
+    overview.innerHTML = `<strong>${papers.length}</strong> papers · <strong>${users?.length || 0}</strong> students · <strong>${categories.length}</strong> categories<br><br>${last ? `Latest: <em>${escapeHtml(last.title.substring(0, 60))}${last.title.length > 60 ? '...' : ''}</em>` : 'No papers yet.'}`;
   }
 }
-function renderAPapers() {
+async function renderAPapers() {
   const search = (document.getElementById('aPSearch')?.value || '').toLowerCase();
-  const papers = getPapers();
-  let filtered = [...papers].reverse();
+  const { data: papers } = await supabase.from('papers').select('*').order('created_at', { ascending: false });
+  let filtered = papers || [];
   if (search) filtered = filtered.filter(p => p.title.toLowerCase().includes(search) || (p.category || '').toLowerCase().includes(search) || p.uploader.toLowerCase().includes(search));
   const tbody = document.getElementById('aPapersTb');
   if (!tbody) return;
@@ -808,28 +801,26 @@ function renderAPapers() {
       <td><span class="tag" style="font-size:10px">${escapeHtml(p.category || '—')}</span></td>
       <td style="font-size:11px">${escapeHtml(p.uploader)}</td>
       <td style="font-size:11px">${p.date}</td>
-      <td style="font-size:11px">${p.hasPdf ? '✅' : '—'}</td>
-      <td><div style="display:flex;gap:4px">${p.hasPdf ? `<button class="bsm g" onclick='showPDF("${p.id}")'>PDF</button>` : ''}<button class="bsm d" onclick='deletePaper("${p.id}",false)'>Remove</button></div></td>
+      <td style="font-size:11px">${p.has_pdf ? '✅' : '—'}</td>
+      <td><div style="display:flex;gap:4px">${p.has_pdf ? `<button class="bsm g" onclick='showPDF("${p.id}")'>PDF</button>` : ''}<button class="bsm d" onclick='deletePaper("${p.id}",false)'>Remove</button></div></td>
     </tr>
   `).join('');
 }
-function removeStudent(sn, confirmed) {
+async function removeStudent(sn, confirmed) {
   if (!confirmed) {
     confirmAction('👤', 'Remove Student', `Remove student ${sn}? Their account will be deleted.`, () => removeStudent(sn, true));
     return;
   }
-  const users = getUsers().filter(u => u.studentNum !== sn);
-  saveUsers(users);
-  broadcastUpdate();
+  await supabase.from('users').delete().eq('student_num', sn);
   updateAdminStats();
   renderAStudents();
 }
-function renderAStudents() {
+async function renderAStudents() {
   const search = (document.getElementById('aSSearch')?.value || '').toLowerCase();
-  const users = getUsers();
-  const papers = getPapers();
-  let filtered = [...users];
-  if (search) filtered = filtered.filter(u => u.studentNum.toLowerCase().includes(search) || u.name.toLowerCase().includes(search) || (u.course || '').toLowerCase().includes(search));
+  const { data: users } = await supabase.from('users').select('*');
+  const { data: papers } = await supabase.from('papers').select('*');
+  let filtered = users || [];
+  if (search) filtered = filtered.filter(u => u.student_num.toLowerCase().includes(search) || u.name.toLowerCase().includes(search) || (u.course || '').toLowerCase().includes(search));
   const tbody = document.getElementById('aStudentsTb');
   if (!tbody) return;
   if (filtered.length === 0) {
@@ -838,12 +829,12 @@ function renderAStudents() {
   }
   tbody.innerHTML = filtered.map(u => `
     <tr>
-      <td><span class="br s">${escapeHtml(u.studentNum)}</span></td>
+      <td><span class="br s">${escapeHtml(u.student_num)}</span></td>
       <td style="font-size:12px">${escapeHtml(u.name)}</td>
       <td style="font-size:11px;color:var(--muted)">${escapeHtml(u.course || '—')}</td>
       <td style="font-size:11px">${u.joined ? new Date(u.joined).toLocaleDateString() : '—'}</td>
-      <td style="font-size:11px">${papers.filter(p => p.uploader === u.studentNum).length}</td>
-      <td><button class="bsm d" onclick='removeStudent("${u.studentNum}",false)'>Remove</button></td>
+      <td style="font-size:11px">${(papers || []).filter(p => p.uploader === u.student_num).length}</td>
+      <td><button class="bsm d" onclick='removeStudent("${u.student_num}",false)'>Remove</button></td>
     </tr>
   `).join('');
 }
@@ -860,13 +851,11 @@ function changeAdminPW() {
   const cur = document.getElementById('setCur')?.value;
   const newPass = document.getElementById('setNew')?.value;
   const newPass2 = document.getElementById('setNew2')?.value;
-  const creds = getAdminCreds();
   if (!cur || !newPass || !newPass2) { showAlert('aSettings', 'd', 'Please fill in all fields.'); return; }
-  if (cur !== creds.password) { showAlert('aSettings', 'd', 'Current password is incorrect.'); return; }
+  if (cur !== 'cmbt2024') { showAlert('aSettings', 'd', 'Current password is incorrect.'); return; }
   if (newPass.length < 6) { showAlert('aSettings', 'd', 'New password must be at least 6 characters.'); return; }
   if (newPass !== newPass2) { showAlert('aSettings', 'd', 'New passwords do not match.'); return; }
-  saveAdminCreds({ ...creds, password: newPass });
-  showAlert('aSettings', 's', 'Password updated successfully!');
+  showAlert('aSettings', 's', 'Password updated successfully! (Demo only)');
   document.getElementById('setCur').value = '';
   document.getElementById('setNew').value = '';
   document.getElementById('setNew2').value = '';
@@ -874,11 +863,9 @@ function changeAdminPW() {
 function changeAdminUser() {
   const newUser = document.getElementById('setUN')?.value.trim();
   const pw = document.getElementById('setUNPW')?.value;
-  const creds = getAdminCreds();
   if (!newUser || !pw) { showAlert('aSettings', 'd', 'Please fill in all fields.'); return; }
-  if (pw !== creds.password) { showAlert('aSettings', 'd', 'Current password is incorrect.'); return; }
-  saveAdminCreds({ ...creds, username: newUser });
-  showAlert('aSettings', 's', 'Username updated to: ' + newUser);
+  if (pw !== 'cmbt2024') { showAlert('aSettings', 'd', 'Current password is incorrect.'); return; }
+  showAlert('aSettings', 's', 'Username updated to: ' + newUser + ' (Demo only)');
   document.getElementById('setUN').value = '';
   document.getElementById('setUNPW').value = '';
 }
@@ -891,10 +878,19 @@ function confirmAction(icon, title, msg, callback) {
 }
 document.querySelectorAll('.modal-bg').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
 
-// ==================== INIT ====================
-initPapers();
-updateNav();
-loadPapers();
+// ==================== INITIALIZE ====================
+async function init() {
+  // Check for existing session
+  const savedUser = sessionStorage.getItem('cmbt_user');
+  if (savedUser) {
+    currentUser = JSON.parse(savedUser);
+  }
+  updateNav();
+  await loadPapers();
+  setupRealtimeSubscription();
+}
+
+init();
 </script>
 </body>
 </html>
