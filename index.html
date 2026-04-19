@@ -186,9 +186,55 @@ footer span{color:var(--gold);}
 </div>
 
 <!-- LOGIN -->
-<div class="page" id="page-login">...</div>
+<div class="page" id="page-login">
+  <div class="awrap">
+    <div class="abox">
+      <div class="alogo"><div class="alogo-icon"><span>CR</span></div><h2>Sign In</h2><div class="asub">Use your student number or admin credentials</div></div>
+      <div class="tabs"><div class="tab active" id="tabS" onclick="setLM('student')">Student</div><div class="tab" id="tabA" onclick="setLM('admin')">Admin</div></div>
+      <div id="aLogin" class="al" style="display:none"></div>
+      <div id="fStudent">
+        <div class="fg"><label>Student Number</label><input id="lSN" type="text" placeholder="e.g. SUM2023-02430" onkeydown="if(event.key==='Enter')doLogin()"/><div class="fhint">Format: SUM[YEAR]-[5 digits]</div></div>
+        <div class="fg"><label>Password</label><input id="lPW" type="password" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      </div>
+      <div id="fAdmin" style="display:none">
+        <div class="al w">Default: username <strong>admin</strong> / password <strong>cmbt2024</strong></div>
+        <div class="fg"><label>Admin Username</label><input id="lAU" type="text" placeholder="admin" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+        <div class="fg"><label>Admin Password</label><input id="lAP" type="password" placeholder="cmbt2024" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      </div>
+      <button class="btn gold full" id="loginBtn" onclick="doLogin()">Sign In</button>
+      <div class="aswitch" id="linkSignup">No account? <a onclick="go('signup')">Register here</a></div>
+      <div class="aswitch" style="margin-top:8px"><a onclick="go('home')">← Home</a></div>
+    </div>
+  </div>
+</div>
+
 <!-- SIGNUP -->
-<div class="page" id="page-signup">...</div>
+<div class="page" id="page-signup">
+  <div class="awrap">
+    <div class="abox">
+      <div class="alogo"><div class="alogo-icon"><span>CR</span></div><h2>Student Registration</h2><div class="asub">Create your CMBT ResearchHub account</div></div>
+      <div id="aSignup" class="al" style="display:none"></div>
+      <div class="fg"><label>Full Name</label><input id="sName" type="text" placeholder="Your full name"/></div>
+      <div class="fg"><label>Student Number</label><input id="sSN" type="text" placeholder="e.g. SUM2023-02430"/><div class="fhint">This is your login ID — Format: SUM[YEAR]-[5 digits]</div></div>
+      <div class="fg"><label>Course / Program</label>
+        <select id="sCourse">
+          <option value="">Select your course</option>
+          <option>BS Information Technology</option><option>BS Computer Science</option>
+          <option>BS Business Administration</option><option>BS Accountancy</option>
+          <option>BS Nursing</option><option>BA Education</option>
+          <option>BS Tourism Management</option><option>BS Hospitality Management</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="fg"><label>Password</label><input id="sPW" type="password" placeholder="Min 6 characters"/></div>
+      <div class="fg"><label>Confirm Password</label><input id="sPW2" type="password" placeholder="Repeat password"/></div>
+      <button class="btn gold full" id="signupBtn" onclick="doSignup()">Create Account</button>
+      <div class="aswitch">Already registered? <a onclick="go('login')">Sign in here</a></div>
+      <div class="aswitch" style="margin-top:8px"><a onclick="go('home')">← Home</a></div>
+    </div>
+  </div>
+</div>
+
 <!-- BROWSE -->
 <div class="page" id="page-browse">
   <div class="bhead"><h1>Research Repository <span class="live-indicator" id="liveSyncBadge">🔄 LIVE SYNC</span></h1><p>Shared live database — all CMBT students see the same papers instantly</p></div>
@@ -246,149 +292,101 @@ footer span{color:var(--gold);}
 </div>
 
 <!-- ADMIN -->
-<div class="page" id="page-admin">...</div>
-<!-- CITE MODAL -->
-<div class="modal-bg" id="mCite">...</div>
-<!-- PDF MODAL -->
-<div class="modal-bg" id="mPDF">...</div>
-<!-- CONFIRM MODAL -->
-<div class="modal-bg" id="mConfirm">...</div>
+<div class="page" id="page-admin">
+  <div class="ahead"><h1>Admin Panel</h1><p>Manage students and research papers</p></div>
+  <div class="awrp">
+    <div class="ascards" id="aStats"></div>
+    <div class="atabs">
+      <button class="atab active" onclick="aTab('overview',this)">Overview</button>
+      <button class="atab" onclick="aTab('papers',this)">Research Papers</button>
+      <button class="atab" onclick="aTab('students',this)">Students</button>
+      <button class="atab" onclick="aTab('settings',this)">Settings</button>
+    </div>
+    <div class="asec active" id="asec-overview">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+        <div class="card"><div class="card-icon ci-b">📊</div><h3>Platform Summary</h3><div id="overviewTxt" style="font-size:12px;color:var(--muted);margin-top:7px;line-height:1.6">Loading...</div></div>
+        <div class="card"><div class="card-icon ci-r">⚡</div><h3>Quick Actions</h3>
+          <div style="display:flex;flex-direction:column;gap:7px;margin-top:9px">
+            <button class="bsm o" onclick="aTab('papers',document.querySelectorAll('.atab')[1]);setActiveTab(1)">Manage Research Papers</button>
+            <button class="bsm o" onclick="aTab('students',document.querySelectorAll('.atab')[2]);setActiveTab(2)">Manage Students</button>
+            <button class="bsm d" onclick="confirmDo('🗑️','Clear ALL Papers','Permanently delete every research paper? This cannot be undone!',clearAllPapers)">Clear All Papers</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="asec" id="asec-papers">
+      <input class="srch" type="text" id="aPSearch" placeholder="Search papers..." oninput="renderAPapers()"/>
+      <div class="twrap">
+        <table><thead><tr><th>Title</th><th>Category</th><th>Student</th><th>Date</th><th>PDF</th><th>Action</th></tr></thead>
+        <tbody id="aPapersTb"></tbody>
+      </table>
+      </div>
+    </div>
+    <div class="asec" id="asec-students">
+      <input class="srch" type="text" id="aSSearch" placeholder="Search students..." oninput="renderAStudents()"/>
+      <div class="twrap">
+        <table><thead><tr><th>Student No.</th><th>Name</th><th>Course</th><th>Joined</th><th>Papers</th><th>Action</th></tr></thead>
+        <tbody id="aStudentsTb"></tbody>
+      </table>
+      </div>
+    </div>
+    <div class="asec" id="asec-settings">
+      <div class="fsec">
+        <h3>Change Admin Password</h3>
+        <div id="aSettings" class="al" style="display:none"></div>
+        <div class="fg"><label>Current Password</label><input id="setCur" type="password" placeholder="Current password"/></div>
+        <div class="fg"><label>New Password</label><input id="setNew" type="password" placeholder="New password (min 6)"/></div>
+        <div class="fg"><label>Confirm New Password</label><input id="setNew2" type="password" placeholder="Repeat new password"/></div>
+        <button class="btn gold" onclick="changeAdminPW()">Update Password</button>
+      </div>
+      <div class="fsec">
+        <h3>Change Admin Username</h3>
+        <div class="fg"><label>New Username</label><input id="setUN" type="text" placeholder="New admin username"/></div>
+        <div class="fg"><label>Current Password (to confirm)</label><input id="setUNPW" type="password" placeholder="Current password"/></div>
+        <button class="btn gold" onclick="changeAdminUser()">Update Username</button>
+      </div>
+    </div>
+  </div>
 </div>
 
+<!-- MODALS -->
+<div class="modal-bg" id="mCite"><div class="modal"><h3 id="mCiteTitle"></h3><div class="ms">Copy a formatted citation for this paper.</div><div class="rfmt" id="mCiteFmt"><button class="rfb active" onclick="setMFmt('APA',this)">APA</button><button class="rfb" onclick="setMFmt('MLA',this)">MLA</button><button class="rfb" onclick="setMFmt('Chicago',this)">Chicago</button></div><div class="rdisp" id="mCiteRef"></div><div class="mact"><button class="bsm o" onclick="copyCite()">Copy</button><button class="bsm n" onclick="closeM('mCite')">Close</button></div></div></div>
+<div class="modal-bg" id="mPDF"><div class="modal" style="max-width:620px"><h3 id="mPDFTitle"></h3><div class="ms" id="mPDFSub"></div><div class="pview" id="mPDFArea"></div><div class="mact"><button class="bsm n" onclick="closeM('mPDF')">Close</button></div></div></div>
+<div class="modal-bg" id="mConfirm"><div class="modal" style="max-width:360px;text-align:center"><div style="font-size:34px;margin-bottom:8px" id="mConIcon"></div><h3 id="mConTitle"></h3><div class="ms" id="mConMsg"></div><div class="mact" style="justify-content:center"><button class="bsm o" onclick="closeM('mConfirm')">Cancel</button><button class="bsm d" id="mConOK">Yes, Delete</button></div></div></div>
+
 <script>
-// ==================== REAL-TIME SYNC ENGINE ====================
-// This enables live changes across all browser tabs and devices (same origin)
-// Uses BroadcastChannel for cross-tab + storage event for external updates
-// Every write operation (submit, delete, admin actions) triggers sync broadcast
-
-let allPapers = [];
-let subFmt = 'APA', citeFmt = 'APA', modalPaper = null, pdfB64 = null;
-let loginMode = 'student';
-
-// --- Data Keys ---
+// DATA KEYS & HELPERS
 const K = { users:'cmbt_users', papers:'cmbt_papers', admin:'cmbt_admin', sess:'cmbt_session' };
-
-function getData(key, def) {
-  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; }
-}
-function setData(key, val) {
-  try { localStorage.setItem(key, JSON.stringify(val)); return true; } catch { return false; }
-}
+function getData(key, def) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; } }
+function setData(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); return true; } catch { return false; } }
 function getUsers() { return getData(K.users, []); }
-function saveUsers(u) { return setData(K.users, u); }
+function saveUsers(u) { const ok = setData(K.users, u); if(ok) broadcastSync('users_updated'); return ok; }
 function getPapers() { return getData(K.papers, []); }
-function savePapers(p) { return setData(K.papers, p); }
+function savePapers(p) { const ok = setData(K.papers, p); if(ok) broadcastSync('papers_updated'); return ok; }
 function getAdminCreds() { return getData(K.admin, {username:'admin',password:'cmbt2024'}); }
-function saveAdminCreds(c) { return setData(K.admin, c); }
+function saveAdminCreds(c) { const ok = setData(K.admin, c); if(ok) broadcastSync('admin_updated'); return ok; }
 function getSess() { try { return JSON.parse(sessionStorage.getItem(K.sess)); } catch { return null; } }
 function setSess(u) { sessionStorage.setItem(K.sess, JSON.stringify(u)); }
 function clearSess() { sessionStorage.removeItem(K.sess); }
 
-// --- SYNC BROADCAST ---
+// REAL-TIME SYNC
 const syncChannel = new BroadcastChannel('cmbt_sync');
-function broadcastSync(action, payload) {
-  try {
-    syncChannel.postMessage({ type: 'DATA_CHANGE', action, timestamp: Date.now(), payload });
-  } catch(e) { console.warn(e); }
-}
-
-// Listen to cross-tab updates
-syncChannel.onmessage = (event) => {
-  if (event.data && event.data.type === 'DATA_CHANGE') {
-    console.log('Sync received:', event.data.action);
-    // Reload data from localStorage to reflect changes
-    refreshAllDataFromStorage();
-  }
-};
-
-// Also listen to storage events for cross-device / same-origin updates
-window.addEventListener('storage', (e) => {
-  if (e.key === K.papers || e.key === K.users || e.key === K.admin) {
-    console.log('Storage event detected, updating UI');
-    refreshAllDataFromStorage();
-  }
-});
+function broadcastSync(action) { try { syncChannel.postMessage({ type:'DATA_CHANGE', action, timestamp:Date.now() }); } catch(e) {} }
+syncChannel.onmessage = () => refreshAllDataFromStorage();
+window.addEventListener('storage', (e) => { if(e.key === K.papers || e.key === K.users || e.key === K.admin) refreshAllDataFromStorage(); });
 
 function refreshAllDataFromStorage() {
-  allPapers = getPapers() || [];
-  // Refresh active page UI accordingly
-  const activePage = document.querySelector('.page.active')?.id;
-  if (activePage === 'page-browse') {
-    renderBrowse();
-    renderStatbar();
-  } else if (activePage === 'page-admin') {
-    if (getSess()?.isAdmin) {
-      updateAdminStats();
-      renderAPapers();
-      renderAStudents();
-    }
-  }
-  // Also update any admin tables if visible
-  if (document.getElementById('page-admin')?.classList.contains('active')) {
-    updateAdminStats();
-    renderAPapers();
-    renderAStudents();
-  }
+  const active = document.querySelector('.page.active')?.id;
+  if(active === 'page-browse') { loadPapers(false); }
+  if(active === 'page-admin' && getSess()?.isAdmin) { loadAdmin(); }
 }
 
-function manualSyncRefresh() {
-  refreshAllDataFromStorage();
-  if (document.getElementById('page-browse')?.classList.contains('active')) {
-    renderBrowse();
-    renderStatbar();
-  }
-  const msgDiv = document.getElementById('aSubmit');
-  if(msgDiv && !msgDiv.classList.contains('active')) {
-    // optional visual feedback
-  }
-}
+function manualSyncRefresh() { refreshAllDataFromStorage(); if(document.getElementById('page-browse')?.classList.contains('active')) loadPapers(false); }
 
-function triggerSyncAndReload() {
-  broadcastSync('update', {});
-  refreshAllDataFromStorage();
-}
+// INIT PAPERS
+function initPapers() { if(getPapers().length === 0) savePapers([{id:'p1',title:'Effects of Social Media Use on Academic Performance Among College Students',category:'Education',uploader:'SUM2022-01234',date:'2024-03-15',year:2024,hasPdf:false,pdf:null},{id:'p2',title:'Implementation of IoT-Based Smart Campus Monitoring System',category:'Information Technology',uploader:'SUM2023-05678',date:'2024-04-02',year:2024,hasPdf:false,pdf:null},{id:'p3',title:'Prevalence of Stress and Burnout Among Nursing Students',category:'Nursing',uploader:'SUM2021-09876',date:'2024-02-20',year:2024,hasPdf:false,pdf:null}]); }
 
-// Override savePapers to broadcast after every write
-const originalSavePapers = savePapers;
-window.savePapers = function(papers) {
-  const result = originalSavePapers(papers);
-  if (result) {
-    broadcastSync('papers_updated', { count: papers.length });
-    refreshAllDataFromStorage();
-  }
-  return result;
-};
-
-const originalSaveUsers = saveUsers;
-window.saveUsers = function(users) {
-  const result = originalSaveUsers(users);
-  if (result) {
-    broadcastSync('users_updated', { count: users.length });
-    refreshAllDataFromStorage();
-  }
-  return result;
-};
-
-const originalSaveAdminCreds = saveAdminCreds;
-window.saveAdminCreds = function(creds) {
-  const result = originalSaveAdminCreds(creds);
-  if (result) {
-    broadcastSync('admin_updated', {});
-  }
-  return result;
-};
-
-// --- Original Functions (preserved with sync enhancement) ---
-function initPapers() {
-  if (getPapers().length === 0) {
-    savePapers([
-      {id:'p1',title:'Effects of Social Media Use on Academic Performance Among College Students',category:'Education',uploader:'SUM2022-01234',date:'2024-03-15',year:2024,hasPdf:false,pdf:null},
-      {id:'p2',title:'Implementation of IoT-Based Smart Campus Monitoring System',category:'Information Technology',uploader:'SUM2023-05678',date:'2024-04-02',year:2024,hasPdf:false,pdf:null},
-      {id:'p3',title:'Prevalence of Stress and Burnout Among Nursing Students',category:'Nursing',uploader:'SUM2021-09876',date:'2024-02-20',year:2024,hasPdf:false,pdf:null},
-    ]);
-  }
-}
-
+// UTILS
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function validSN(v){ return /^SUM\d{4}-\d{5}$/i.test(String(v||'').trim()); }
 function showAl(id,type,msg){ const e=document.getElementById(id); if(e){ e.className='al '+type; e.textContent=msg; e.style.display='block'; } }
@@ -422,15 +420,16 @@ function go(page) {
   document.getElementById('page-'+page).classList.add('active');
   window.scrollTo(0,0);
   updateNav();
-  if(page==='browse') { refreshAllDataFromStorage(); loadPapers(false); }
+  if(page==='browse') loadPapers(false);
   if(page==='admin') loadAdmin();
   if(page==='submit') resetSubmit();
   if(page==='login'){ hideAl('aLogin'); setLM('student'); }
 }
 function logout(){ clearSess(); updateNav(); go('home'); }
 
+let loginMode='student';
 function setLM(m){
-  loginMode = m;
+  loginMode=m;
   const tabS=document.getElementById('tabS'), tabA=document.getElementById('tabA');
   if(tabS) tabS.classList.toggle('active', m==='student');
   if(tabA) tabA.classList.toggle('active', m==='admin');
@@ -442,18 +441,60 @@ function setLM(m){
   hideAl('aLogin');
 }
 
-function doLogin(){ /* unchanged logic but ensure sync works */ hideAl('aLogin'); const btn=document.getElementById('loginBtn'); if(btn) btn.disabled=true; setTimeout(()=>{ /* same original logic */ 
-  if(loginMode==='admin'){ const u=document.getElementById('lAU')?.value.trim(); const p=document.getElementById('lAP')?.value; const creds=getAdminCreds(); if(u===creds.username && p===creds.password){ setSess({isAdmin:true,name:'Administrator',studentNum:'ADMIN'}); if(btn) btn.disabled=false; go('admin'); } else { showAl('aLogin','d','Incorrect admin credentials.'); if(btn) btn.disabled=false; } return; }
-  const sn=document.getElementById('lSN')?.value.trim().toUpperCase(); const pw=document.getElementById('lPW')?.value; const users=getUsers(); const user=users.find(u=>u.studentNum===sn && u.password===pw); if(user){ setSess(user); if(btn) btn.disabled=false; go('browse'); } else { showAl('aLogin','d','Incorrect student number or password.'); if(btn) btn.disabled=false; }
-}, 300); }
+function doLogin(){
+  hideAl('aLogin');
+  const btn=document.getElementById('loginBtn');
+  if(btn) btn.disabled=true;
+  setTimeout(()=>{
+    if(loginMode==='admin'){
+      const u=document.getElementById('lAU')?.value.trim();
+      const p=document.getElementById('lAP')?.value;
+      const creds=getAdminCreds();
+      if(u===creds.username && p===creds.password){
+        setSess({isAdmin:true,name:'Administrator',studentNum:'ADMIN'});
+        if(btn) btn.disabled=false;
+        go('admin');
+      } else { showAl('aLogin','d','Incorrect admin credentials.'); if(btn) btn.disabled=false; }
+      return;
+    }
+    const sn=document.getElementById('lSN')?.value.trim().toUpperCase();
+    const pw=document.getElementById('lPW')?.value;
+    if(!sn||!pw){ showAl('aLogin','d','Please fill in all fields.'); if(btn) btn.disabled=false; return; }
+    if(!validSN(sn)){ showAl('aLogin','d','Invalid format. Use SUM[YEAR]-[5 digits]'); if(btn) btn.disabled=false; return; }
+    const users=getUsers();
+    const user=users.find(u=>u.studentNum===sn && u.password===pw);
+    if(user){ setSess(user); if(btn) btn.disabled=false; go('browse'); }
+    else { showAl('aLogin','d','Incorrect student number or password.'); if(btn) btn.disabled=false; }
+  }, 200);
+}
 
-function doSignup(){ /* preserve original logic */ hideAl('aSignup'); const name=document.getElementById('sName')?.value.trim(); const sn=document.getElementById('sSN')?.value.trim().toUpperCase(); const course=document.getElementById('sCourse')?.value; const pw=document.getElementById('sPW')?.value; const pw2=document.getElementById('sPW2')?.value; if(!name||!sn||!validSN(sn)||!course||!pw||pw.length<6||pw!==pw2){ showAl('aSignup','d','Check fields (min 6 chars, student format)'); return; } const users=getUsers(); if(users.find(u=>u.studentNum===sn)){ showAl('aSignup','d','Student number already registered.'); return; } const newUser={studentNum:sn,name,course,password:pw,joined:new Date().toISOString()}; users.push(newUser); if(saveUsers(users)){ setSess(newUser); showAl('aSignup','s','Account created! Redirecting...'); setTimeout(()=>go('browse'),1000); } else { showAl('aSignup','d','Failed'); } }
+function doSignup(){
+  hideAl('aSignup');
+  const name=document.getElementById('sName')?.value.trim();
+  const sn=document.getElementById('sSN')?.value.trim().toUpperCase();
+  const course=document.getElementById('sCourse')?.value;
+  const pw=document.getElementById('sPW')?.value;
+  const pw2=document.getElementById('sPW2')?.value;
+  if(!name){ showAl('aSignup','d','Please enter your full name.'); return; }
+  if(!sn){ showAl('aSignup','d','Please enter your student number.'); return; }
+  if(!validSN(sn)){ showAl('aSignup','d','Invalid student number. Format: SUM[YEAR]-[5 digits].'); return; }
+  if(!course){ showAl('aSignup','d','Please select your course.'); return; }
+  if(!pw){ showAl('aSignup','d','Please enter a password.'); return; }
+  if(pw.length<6){ showAl('aSignup','d','Password must be at least 6 characters.'); return; }
+  if(pw!==pw2){ showAl('aSignup','d','Passwords do not match.'); return; }
+  const users=getUsers();
+  if(users.find(u=>u.studentNum===sn)){ showAl('aSignup','d','This student number is already registered.'); return; }
+  const newUser={studentNum:sn,name,course,password:pw,joined:new Date().toISOString()};
+  users.push(newUser);
+  if(saveUsers(users)){ setSess(newUser); showAl('aSignup','s','Account created! Redirecting...'); setTimeout(()=>go('browse'),1000); }
+  else showAl('aSignup','d','Failed to save. Please try again.');
+}
 
+let allPapers=[], subFmt='APA', citeFmt='APA', modalPaper=null, pdfB64=null;
 function loadPapers(force){ allPapers=getPapers(); renderBrowse(); renderStatbar(); }
 function renderStatbar(){ const cats=[...new Set(allPapers.map(r=>r.category).filter(Boolean))]; const statDiv=document.getElementById('statbar'); if(statDiv) statDiv.innerHTML=`<div class="statpill">Papers: <strong>${allPapers.length}</strong></div><div class="statpill">Categories: <strong>${cats.length}</strong></div><div class="statpill">With PDF: <strong>${allPapers.filter(r=>r.hasPdf).length}</strong></div>`; }
 function filterBrowse(){ renderBrowse(); }
 function renderBrowse(){ const list=document.getElementById('browseList'); if(!list) return; const q=(document.getElementById('bSearch')?.value||'').toLowerCase(); const catEl=document.getElementById('bCat'); const cats=[...new Set(allPapers.map(r=>r.category).filter(Boolean))].sort(); const cv=catEl?.value||''; if(catEl) catEl.innerHTML='<option value="">All Categories</option>'+cats.map(c=>`<option value="${c}" ${c===cv?'selected':''}>${esc(c)}</option>`).join(''); let data=[...allPapers].reverse(); if(q) data=data.filter(r=>r.title.toLowerCase().includes(q)||(r.category||'').toLowerCase().includes(q)); if(cv) data=data.filter(r=>(r.category||'')===cv); if(!data.length){ list.innerHTML='<div class="empty-box">No research papers found.</div>'; return; } const s=getSess(); const isNew=r=>(Date.now()-new Date(r.date||0).getTime())<259200000; list.innerHTML=data.map(r=>`<div class="rc"><div class="rch"><h3>${esc(r.title)}${isNew(r)?'<span class="new-tag">New</span>':''}</h3>${r.category?`<span class="tag">${esc(r.category)}</span>`:''}</div><div class="rmeta">By <strong>${esc(r.uploader)}</strong> · ${r.date} · ${r.year}</div><div class="ract"><button class="bsm o" onclick='showCite("${esc(r.id)}")'>Get Citation</button>${r.hasPdf?`<button class="bsm g" onclick='showPDF("${esc(r.id)}")'>View PDF</button>`:'<span style="font-size:11px;color:var(--muted);align-self:center">No PDF attached</span>'}${s&&!s.isAdmin&&r.uploader===s.studentNum?`<button class="bsm d" onclick='delPaper("${esc(r.id)}",false)'>Delete</button>`:''}</div></div>`).join(''); }
-
 function genRef(r,fmt){ const y=r.year||new Date().getFullYear(), t=r.title||'Untitled', u=r.uploader||'Unknown'; if(fmt==='APA') return `${esc(u)}. (${y}). <em>${esc(t)}</em>. CMBT ResearchHub.`; if(fmt==='MLA') return `${esc(u)}. "${esc(t)}." <em>CMBT ResearchHub</em>, ${y}.`; return `${esc(u)}. "${esc(t)}." CMBT ResearchHub, ${y}.`; }
 function showCite(id){ modalPaper=allPapers.find(p=>p.id===id); if(modalPaper){ document.getElementById('mCiteTitle').textContent=modalPaper.title; document.getElementById('mCiteRef').innerHTML=genRef(modalPaper,citeFmt); openM('mCite'); } }
 function setMFmt(fmt,btn){ citeFmt=fmt; document.querySelectorAll('#mCiteFmt .rfb').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); if(modalPaper) document.getElementById('mCiteRef').innerHTML=genRef(modalPaper,fmt); }
@@ -463,23 +504,25 @@ function resetSubmit(){ ['subTitle','subCat'].forEach(id=>{const el=document.get
 function setSubFmt(fmt,btn){ subFmt=fmt; document.querySelectorAll('.fsec .rfb').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); updatePreview(); }
 function updatePreview(){ const t=document.getElementById('subTitle')?.value.trim(); const s=getSess(); const previewDiv=document.getElementById('citePreview'); if(previewDiv) previewDiv.innerHTML=t?genRef({title:t,year:new Date().getFullYear(),uploader:s?s.studentNum:'Author'},subFmt):'Enter a title above to preview.'; }
 function handlePDF(input){ const f=input.files[0]; if(!f) return; if(!f.name.toLowerCase().endsWith('.pdf')){ alert('Only PDF files accepted.'); input.value=''; return; } if(f.size>4*1024*1024){ alert('File too large. Max 4MB.'); input.value=''; return; } document.getElementById('pdfName').textContent='✓ '+f.name+' ('+(f.size/1024).toFixed(0)+' KB)'; document.getElementById('uzone').classList.add('has'); const rd=new FileReader(); rd.onload=e=>{ pdfB64=e.target.result; }; rd.readAsDataURL(f); }
-function doSubmit(){ const s=getSess(); if(!s){ go('login'); return; } const title=document.getElementById('subTitle')?.value.trim(); const cat=document.getElementById('subCat')?.value.trim(); if(!title){ showAl('aSubmit','d','Please enter the research title.'); return; } if(!document.getElementById('pdfFile')?.files[0]){ showAl('aSubmit','d','Please upload a PDF file.'); return; } const btn=document.getElementById('subBtn'); if(btn){ btn.disabled=true; btn.textContent='Submitting...'; } showAl('aSubmit','i','Saving to database...'); setTimeout(()=>{ const papers=getPapers(); const entry={id:'r'+Date.now(), title, category:cat||'Uncategorized', uploader:s.studentNum, date:new Date().toISOString().split('T')[0], year:new Date().getFullYear(), hasPdf:!!pdfB64, pdf:pdfB64 }; papers.push(entry); if(savePapers(papers)){ allPapers=papers; showAl('aSubmit','s','Submitted! Paper is now visible to all students.'); setTimeout(()=>go('browse'),1200); } else { showAl('aSubmit','d','Save failed.'); if(btn){ btn.disabled=false; btn.textContent='Submit Research Paper'; } } },400); }
-function delPaper(id,confirmed){ if(!confirmed){ confirmDo('🗑️','Delete Paper','This permanently removes the paper from the database.',()=>delPaper(id,true)); return; } const papers=getPapers().filter(p=>p.id!==id); savePapers(papers); allPapers=papers; renderBrowse(); renderStatbar(); if(document.getElementById('page-admin')?.classList.contains('active')){ renderAPapers(); updateAdminStats(); } }
-function clearAllPapers(){ savePapers([]); allPapers=[]; renderBrowse(); renderStatbar(); if(document.getElementById('page-admin')?.classList.contains('active')){ renderAPapers(); updateAdminStats(); } }
+function doSubmit(){ const s=getSess(); if(!s){ go('login'); return; } const title=document.getElementById('subTitle')?.value.trim(); const cat=document.getElementById('subCat')?.value.trim(); if(!title){ showAl('aSubmit','d','Please enter the research title.'); return; } if(!document.getElementById('pdfFile')?.files[0]){ showAl('aSubmit','d','Please upload a PDF file.'); return; } const btn=document.getElementById('subBtn'); if(btn){ btn.disabled=true; btn.textContent='Submitting...'; } showAl('aSubmit','i','Saving to database...'); setTimeout(()=>{ const papers=getPapers(); const entry={id:'r'+Date.now(), title, category:cat||'Uncategorized', uploader:s.studentNum, date:new Date().toISOString().split('T')[0], year:new Date().getFullYear(), hasPdf:!!pdfB64, pdf:pdfB64 }; papers.push(entry); if(savePapers(papers)){ allPapers=papers; showAl('aSubmit','s','Submitted! Paper is now visible to all students.'); setTimeout(()=>go('browse'),1200); } else { showAl('aSubmit','d','Save failed.'); if(btn) btn.disabled=false; } },400); }
+function delPaper(id,confirmed){ if(!confirmed){ confirmDo('🗑️','Delete Paper','This permanently removes the paper.',()=>delPaper(id,true)); return; } const papers=getPapers().filter(p=>p.id!==id); savePapers(papers); allPapers=papers; if(document.getElementById('page-browse')?.classList.contains('active')){ renderBrowse(); renderStatbar(); } if(document.getElementById('page-admin')?.classList.contains('active')){ renderAPapers(); updateAdminStats(); } }
+function clearAllPapers(){ savePapers([]); allPapers=[]; if(document.getElementById('page-browse')?.classList.contains('active')){ renderBrowse(); renderStatbar(); } if(document.getElementById('page-admin')?.classList.contains('active')){ renderAPapers(); updateAdminStats(); } }
 function loadAdmin(){ allPapers=getPapers(); updateAdminStats(); renderAPapers(); renderAStudents(); }
 function updateAdminStats(){ const papers=getPapers(), users=getUsers(); const cats=[...new Set(papers.map(r=>r.category).filter(Boolean))]; const statDiv=document.getElementById('aStats'); if(statDiv) statDiv.innerHTML=`<div class="asc"><div class="n">${papers.length}</div><div class="l">Research Papers</div></div><div class="asc"><div class="n">${users.length}</div><div class="l">Students</div></div><div class="asc"><div class="n">${cats.length}</div><div class="l">Categories</div></div><div class="asc r"><div class="n">${papers.filter(r=>r.hasPdf).length}</div><div class="l">With PDF</div></div>`; const ov=document.getElementById('overviewTxt'); if(ov){ const last=papers.length?papers[papers.length-1]:null; ov.innerHTML=`<strong>${papers.length}</strong> papers · <strong>${users.length}</strong> students · <strong>${cats.length}</strong> categories<br><br>${last?`Latest: <em>${esc(last.title.substring(0,60))}${last.title.length>60?'...':''}</em>`:'No papers yet.'}`; } }
-function renderAPapers(){ const q=(document.getElementById('aPSearch')?.value||'').toLowerCase(); const papers=getPapers(); let data=[...papers].reverse(); if(q) data=data.filter(r=>r.title.toLowerCase().includes(q)||(r.category||'').toLowerCase().includes(q)||r.uploader.toLowerCase().includes(q)); const tb=document.getElementById('aPapersTb'); if(!tb) return; if(!data.length){ tb.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">No papers found.</td></tr>`; return; } tb.innerHTML=data.map(r=>`<tr><td style="max-width:180px"><div style="font-size:12px;font-weight:500;line-height:1.3">${esc(r.title.substring(0,65))}${r.title.length>65?'...':''}</div></td><td><span class="tag" style="font-size:10px">${esc(r.category||'—')}</span></td><td style="font-size:11px">${esc(r.uploader)}</td><td style="font-size:11px">${r.date}</td><td style="font-size:11px">${r.hasPdf?'✅':'—'}</td><td><div style="display:flex;gap:4px">${r.hasPdf?`<button class="bsm g" onclick='showPDF("${esc(r.id)}")'>PDF</button>`:''}<button class="bsm d" onclick='delPaper("${esc(r.id)}",false)'>Remove</button></div></td></tr>`).join(''); }
-function removeStudent(sn,confirmed){ if(!confirmed){ confirmDo('👤','Remove Student',`Remove student ${sn}? Their account will be deleted.`,()=>removeStudent(sn,true)); return; } const users=getUsers().filter(u=>u.studentNum!==sn); saveUsers(users); updateAdminStats(); renderAStudents(); }
-function renderAStudents(){ const q=(document.getElementById('aSSearch')?.value||'').toLowerCase(); const users=getUsers(); const papers=getPapers(); let data=[...users]; if(q) data=data.filter(u=>u.studentNum.toLowerCase().includes(q)||u.name.toLowerCase().includes(q)||(u.course||'').toLowerCase().includes(q)); const tb=document.getElementById('aStudentsTb'); if(!tb) return; if(!data.length){ tb.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">No students registered yet.</td></tr>`; return; } tb.innerHTML=data.map(u=>`<tr><td><span class="br s">${esc(u.studentNum)}</span></td><td style="font-size:12px">${esc(u.name)}</td><td style="font-size:11px;color:var(--muted)">${esc(u.course||'—')}</td><td style="font-size:11px">${u.joined?new Date(u.joined).toLocaleDateString():'—'}</td><td style="font-size:11px">${papers.filter(r=>r.uploader===u.studentNum).length}</td><td><button class="bsm d" onclick='removeStudent("${esc(u.studentNum)}",false)'>Remove</button></td></tr>`).join(''); }
+function renderAPapers(){ const q=(document.getElementById('aPSearch')?.value||'').toLowerCase(); const papers=getPapers(); let data=[...papers].reverse(); if(q) data=data.filter(r=>r.title.toLowerCase().includes(q)||(r.category||'').toLowerCase().includes(q)||r.uploader.toLowerCase().includes(q)); const tb=document.getElementById('aPapersTb'); if(!tb) return; if(!data.length){ tb.innerHTML=`<td><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">No papers found.</div></div><div class="mact"><button class="bsm o" onclick="closeM('mConfirm')">Cancel</button><button class="bsm d" id="mConOK">Yes, Delete</button></div></div></div>`
+
+tb.innerHTML=data.map(r=>`<tr><td style="max-width:180px"><div style="font-size:12px;font-weight:500">${esc(r.title.substring(0,65))}</div></td><td><span class="tag">${esc(r.category||'—')}</span></td><td>${esc(r.uploader)}</td><td>${r.date}</td><td>${r.hasPdf?'✅':'—'}</td><td><div style="display:flex;gap:4px">${r.hasPdf?`<button class="bsm g" onclick='showPDF("${esc(r.id)}")'>PDF</button>`:''}<button class="bsm d" onclick='delPaper("${esc(r.id)}",false)'>Remove</button></div></td></tr>`).join(''); }
+function removeStudent(sn,confirmed){ if(!confirmed){ confirmDo('👤','Remove Student',`Remove student ${sn}?`,()=>removeStudent(sn,true)); return; } const users=getUsers().filter(u=>u.studentNum!==sn); saveUsers(users); updateAdminStats(); renderAStudents(); }
+function renderAStudents(){ const q=(document.getElementById('aSSearch')?.value||'').toLowerCase(); const users=getUsers(); const papers=getPapers(); let data=[...users]; if(q) data=data.filter(u=>u.studentNum.toLowerCase().includes(q)||u.name.toLowerCase().includes(q)||(u.course||'').toLowerCase().includes(q)); const tb=document.getElementById('aStudentsTb'); if(!tb) return; if(!data.length){ tb.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:28px">No students.</div></div><div class="mact"><button class="bsm o" onclick="closeM('mConfirm')">Cancel</button><button class="bsm d" id="mConOK">Yes, Delete</button></div></div></div>`
+
+tb.innerHTML=data.map(u=>`<tr><td><span class="br s">${esc(u.studentNum)}</span></td><td>${esc(u.name)}</td><td>${esc(u.course||'—')}</td><td>${u.joined?new Date(u.joined).toLocaleDateString():'—'}</td><td>${papers.filter(r=>r.uploader===u.studentNum).length}</td><td><button class="bsm d" onclick='removeStudent("${esc(u.studentNum)}",false)'>Remove</button></td></tr>`).join(''); }
 function setActiveTab(i){ document.querySelectorAll('.atab').forEach((t,j)=>t.classList.toggle('active',j===i)); }
 function aTab(name,btn){ document.querySelectorAll('.atab').forEach(t=>t.classList.remove('active')); if(btn) btn.classList.add('active'); document.querySelectorAll('.asec').forEach(s=>s.classList.remove('active')); document.getElementById('asec-'+name).classList.add('active'); if(name==='papers') renderAPapers(); if(name==='students') renderAStudents(); if(name==='overview') updateAdminStats(); }
-function changeAdminPW(){ const cur=document.getElementById('setCur')?.value; const nw=document.getElementById('setNew')?.value; const nw2=document.getElementById('setNew2')?.value; const creds=getAdminCreds(); if(!cur||!nw||!nw2){ showAl('aSettings','d','Fill all fields'); return; } if(cur!==creds.password){ showAl('aSettings','d','Current password incorrect'); return; } if(nw.length<6){ showAl('aSettings','d','Min 6 chars'); return; } if(nw!==nw2){ showAl('aSettings','d','Passwords do not match'); return; } saveAdminCreds({...creds,password:nw}); showAl('aSettings','s','Password updated'); }
-function changeAdminUser(){ const nu=document.getElementById('setUN')?.value.trim(); const pw=document.getElementById('setUNPW')?.value; const creds=getAdminCreds(); if(!nu||!pw){ showAl('aSettings','d','Fill fields'); return; } if(pw!==creds.password){ showAl('aSettings','d','Incorrect password'); return; } saveAdminCreds({...creds,username:nu}); showAl('aSettings','s','Username updated'); }
+function changeAdminPW(){ const cur=document.getElementById('setCur')?.value; const nw=document.getElementById('setNew')?.value; const nw2=document.getElementById('setNew2')?.value; const creds=getAdminCreds(); if(!cur||!nw||!nw2){ showAl('aSettings','d','Fill all fields'); return; } if(cur!==creds.password){ showAl('aSettings','d','Current password incorrect'); return; } if(nw.length<6){ showAl('aSettings','d','Min 6 chars'); return; } if(nw!==nw2){ showAl('aSettings','d','Passwords do not match'); return; } saveAdminCreds({...creds,password:nw}); showAl('aSettings','s','Password updated'); document.getElementById('setCur').value=''; document.getElementById('setNew').value=''; document.getElementById('setNew2').value=''; }
+function changeAdminUser(){ const nu=document.getElementById('setUN')?.value.trim(); const pw=document.getElementById('setUNPW')?.value; const creds=getAdminCreds(); if(!nu||!pw){ showAl('aSettings','d','Fill fields'); return; } if(pw!==creds.password){ showAl('aSettings','d','Incorrect password'); return; } saveAdminCreds({...creds,username:nu}); showAl('aSettings','s','Username updated to: '+nu); document.getElementById('setUN').value=''; document.getElementById('setUNPW').value=''; }
 function confirmDo(icon,title,msg,cb){ document.getElementById('mConIcon').textContent=icon; document.getElementById('mConTitle').textContent=title; document.getElementById('mConMsg').textContent=msg; document.getElementById('mConOK').onclick=()=>{ closeM('mConfirm'); cb(); }; openM('mConfirm'); }
 document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('open'); }));
 initPapers(); updateNav(); loadPapers(false);
-// Restore missing DOM elements references for pages that were shortened but functional
-setTimeout(()=>{ if(document.getElementById('page-login')){ /* inject minimal content if needed but original structure works */ }},0);
 </script>
 </body>
 </html>
