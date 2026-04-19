@@ -1,0 +1,852 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--navy:#0d1b3e;--gold:#c9a84c;--cream:#faf8f4;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e2ddd4;--red:#991b1b;--redbg:#fee2e2;--greenbg:#dcfce7;--green:#166534;--bluebg:#eff6ff;--blue:#1e40af;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+.page{display:none;}.page.active{display:block;}
+nav{background:var(--navy);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:6px;}
+.logo{display:flex;align-items:center;gap:9px;cursor:pointer;}
+.logo-icon{width:34px;height:34px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;color:var(--navy);font-size:14px;}
+.logo-text{font-family:'Playfair Display',serif;color:#fff;font-size:16px;}
+.logo-text span{color:var(--gold);}
+.nav-r{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.nb{padding:6px 13px;border-radius:6px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;transition:all .15s;}
+.nb.ghost{background:transparent;color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2);}
+.nb.ghost:hover{background:rgba(255,255,255,.1);color:#fff;}
+.nb.gold{background:var(--gold);color:var(--navy);}
+.nb.red-btn{background:rgba(220,38,38,.2);color:#fca5a5;border:1px solid rgba(220,38,38,.3);}
+.badge-gold{font-size:11px;padding:3px 9px;border-radius:20px;background:rgba(201,168,76,.15);color:var(--gold);border:1px solid rgba(201,168,76,.3);}
+.badge-red{font-size:11px;padding:3px 9px;border-radius:20px;background:rgba(220,38,38,.15);color:#fca5a5;border:1px solid rgba(220,38,38,.3);font-weight:700;}
+.live{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#4ade80;}
+.live::before{content:'';width:6px;height:6px;background:#4ade80;border-radius:50%;animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.btn{padding:10px 20px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;transition:all .15s;display:inline-flex;align-items:center;gap:6px;}
+.btn.gold{background:var(--gold);color:var(--navy);}
+.btn.gold:hover{background:#d4a94f;}
+.btn.outline-w{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.3);}
+.btn.full{width:100%;justify-content:center;}
+.btn:disabled{opacity:.6;cursor:not-allowed;}
+.bsm{padding:5px 11px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .12s;}
+.bsm.o{border:1px solid var(--border);background:transparent;color:var(--text);}
+.bsm.o:hover{border-color:var(--navy);color:var(--navy);}
+.bsm.n{background:var(--navy);color:#fff;}
+.bsm.g{background:var(--gold);color:var(--navy);}
+.bsm.d{background:var(--redbg);color:var(--red);border:1px solid #fca5a5;}
+.bsm.d:hover{background:#fecaca;}
+.hero{background:var(--navy);padding:60px 1.5rem 68px;text-align:center;}
+.hero h1{font-family:'Playfair Display',serif;font-size:38px;color:#fff;line-height:1.2;margin-bottom:12px;}
+.hero h1 span{color:var(--gold);}
+.hero p{color:rgba(255,255,255,.6);font-size:15px;max-width:460px;margin:0 auto 26px;line-height:1.6;}
+.hbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.hbadge{display:inline-flex;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.25);color:var(--gold);font-size:11px;padding:4px 13px;border-radius:20px;margin-bottom:18px;letter-spacing:.07em;text-transform:uppercase;}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;padding:44px 1.5rem;max-width:900px;margin:0 auto;}
+.card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:20px;}
+.card-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:17px;}
+.ci-b{background:var(--bluebg);}.ci-g{background:#f5e6c0;}.ci-gr{background:var(--greenbg);}.ci-r{background:var(--redbg);}
+.card h3{font-size:13px;font-weight:600;margin-bottom:5px;color:var(--navy);}
+.card p{font-size:12px;color:var(--muted);line-height:1.5;}
+.awrap{min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center;padding:1.5rem;}
+.abox{background:var(--white);border:1px solid var(--border);border-radius:13px;padding:32px;width:100%;max-width:400px;}
+.alogo{text-align:center;margin-bottom:22px;}
+.alogo-icon{width:46px;height:46px;background:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 9px;}
+.alogo-icon span{font-family:'Playfair Display',serif;color:var(--gold);font-size:18px;font-weight:700;}
+.abox h2{font-family:'Playfair Display',serif;font-size:19px;color:var(--navy);text-align:center;margin-bottom:3px;}
+.asub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:20px;}
+.fg{margin-bottom:13px;}
+.fg label{display:block;font-size:12px;font-weight:500;margin-bottom:4px;}
+.fg input,.fg select{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--cream);outline:none;transition:border .15s;}
+.fg input:focus,.fg select:focus{border-color:var(--navy);background:var(--white);}
+.fhint{font-size:11px;color:var(--muted);margin-top:3px;}
+.al{padding:8px 12px;border-radius:7px;font-size:12px;margin-bottom:12px;}
+.al.s{background:var(--greenbg);color:var(--green);}
+.al.d{background:var(--redbg);color:var(--red);}
+.al.i{background:var(--bluebg);color:var(--blue);}
+.al.w{background:#fffbeb;color:#92400e;}
+.aswitch{text-align:center;margin-top:14px;font-size:12px;color:var(--muted);}
+.aswitch a{color:var(--navy);font-weight:500;cursor:pointer;text-decoration:underline;}
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:20px;}
+.tab{flex:1;padding:8px;text-align:center;font-size:13px;font-weight:500;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;}
+.tab.active{color:var(--navy);border-bottom-color:var(--navy);}
+.bhead{background:var(--navy);padding:32px 1.5rem 28px;}
+.bhead h1{font-family:'Playfair Display',serif;color:#fff;font-size:24px;margin-bottom:4px;}
+.bhead p{color:rgba(255,255,255,.6);font-size:13px;}
+.bbody{max-width:920px;margin:0 auto;padding:24px 1.5rem;}
+.sbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.sbar input{flex:1;min-width:160px;padding:8px 12px;border:1px solid var(--border);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--white);outline:none;}
+.sbar input:focus{border-color:var(--navy);}
+.sbar select{padding:8px 12px;border:1px solid var(--border);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--white);outline:none;cursor:pointer;}
+.statbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.statpill{background:var(--white);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--muted);}
+.statpill strong{color:var(--navy);}
+.rc{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:10px;transition:border .15s;animation:fi .3s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.rc:hover{border-color:var(--navy);}
+.rch{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px;}
+.rc h3{font-size:13px;font-weight:600;color:var(--navy);line-height:1.4;}
+.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;background:#f5e6c0;color:#7a5c10;}
+.rmeta{font-size:11px;color:var(--muted);margin-bottom:5px;}
+.ract{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px;}
+.new-tag{background:var(--greenbg);color:var(--green);font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500;margin-left:5px;vertical-align:middle;}
+.sbody{max-width:640px;margin:0 auto;padding:32px 1.5rem;}
+.shead{margin-bottom:24px;}
+.shead h1{font-family:'Playfair Display',serif;font-size:22px;color:var(--navy);margin-bottom:4px;}
+.shead p{color:var(--muted);font-size:13px;}
+.fsec{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:22px;margin-bottom:14px;}
+.fsec h3{font-size:11px;font-weight:600;color:var(--navy);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);letter-spacing:.05em;text-transform:uppercase;}
+.uzone{border:2px dashed var(--border);border-radius:8px;padding:28px 16px;text-align:center;cursor:pointer;transition:border .15s;background:var(--cream);}
+.uzone:hover{border-color:var(--navy);}
+.uzone.has{border-color:var(--gold);background:#f5e6c0;}
+.uzone input{display:none;}
+.rfmt{display:flex;gap:6px;margin-bottom:9px;}
+.rfb{padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--white);font-size:11px;font-weight:500;cursor:pointer;color:var(--muted);font-family:'DM Sans',sans-serif;}
+.rfb.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.rbox{background:var(--cream);border:1px solid var(--border);border-radius:6px;padding:11px 13px;font-size:12px;color:var(--text);font-family:Georgia,serif;line-height:1.7;min-height:55px;}
+.ahead{background:linear-gradient(135deg,#180808 0%,#3b0808 100%);padding:32px 1.5rem 28px;border-bottom:2px solid #dc2626;}
+.ahead h1{font-family:'Playfair Display',serif;color:#fff;font-size:24px;margin-bottom:3px;}
+.ahead p{color:rgba(255,255,255,.6);font-size:13px;}
+.awrp{max-width:980px;margin:0 auto;padding:24px 1.5rem;}
+.atabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:22px;}
+.atab{padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;background:none;border-top:none;border-left:none;border-right:none;font-family:'DM Sans',sans-serif;}
+.atab.active{color:#dc2626;border-bottom-color:#dc2626;}
+.asec{display:none;}.asec.active{display:block;}
+.ascards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:22px;}
+.asc{background:var(--white);border:1px solid var(--border);border-radius:9px;padding:14px;text-align:center;}
+.asc .n{font-size:26px;font-weight:600;color:var(--navy);}
+.asc.r .n{color:#dc2626;}
+.asc .l{font-size:11px;color:var(--muted);margin-top:3px;}
+.twrap{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:auto;margin-bottom:14px;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{text-align:left;padding:8px 12px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border);background:var(--cream);}
+td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+.srch{padding:8px 12px;border:1px solid var(--border);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:100%;max-width:280px;margin-bottom:12px;background:var(--white);}
+.srch:focus{border-color:var(--navy);}
+.br{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;}
+.br.s{background:var(--bluebg);color:var(--blue);}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:1.5rem;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--white);border-radius:12px;padding:26px;max-width:520px;width:100%;max-height:85vh;overflow-y:auto;}
+.modal h3{font-family:'Playfair Display',serif;font-size:18px;color:var(--navy);margin-bottom:4px;}
+.modal .ms{font-size:12px;color:var(--muted);margin-bottom:16px;}
+.mact{display:flex;gap:7px;margin-top:16px;justify-content:flex-end;flex-wrap:wrap;}
+.rdisp{background:var(--cream);border:1px solid var(--border);border-radius:6px;padding:11px 13px;font-size:12px;font-family:Georgia,serif;line-height:1.7;color:var(--text);word-break:break-word;}
+.pview{background:#f0f0f0;border-radius:7px;min-height:140px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px;padding:18px;text-align:center;font-size:13px;color:var(--muted);margin-top:9px;}
+.spin{width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:sp .8s linear infinite;margin:0 auto 8px;}
+@keyframes sp{to{transform:rotate(360deg)}}
+.loading-box{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;}
+.empty-box{text-align:center;padding:48px 20px;color:var(--muted);font-size:13px;}
+footer{background:var(--navy);padding:18px 1.5rem;text-align:center;color:rgba(255,255,255,.4);font-size:12px;margin-top:40px;}
+footer span{color:var(--gold);}
+</style>
+</head>
+<body>
+<div id="app">
+<nav>
+  <div class="logo" onclick="go('home')">
+    <div class="logo-icon">CR</div>
+    <div class="logo-text">CMBT <span>ResearchHub</span></div>
+  </div>
+  <div class="nav-r">
+    <span class="live" id="nLive" style="display:none">Live</span>
+    <span class="badge-red" id="nAdminBadge" style="display:none">ADMIN</span>
+    <span class="badge-gold" id="nUser" style="display:none"></span>
+    <button class="nb ghost" id="nBrowse" onclick="go('browse')" style="display:none">Browse</button>
+    <button class="nb ghost" id="nSubmit" onclick="go('submit')" style="display:none">Submit</button>
+    <button class="nb red-btn" id="nAdminBtn" onclick="go('admin')" style="display:none">Admin Panel</button>
+    <button class="nb ghost" id="nLogout" onclick="logout()" style="display:none">Sign Out</button>
+    <button class="nb ghost" id="nLogin" onclick="go('login')">Sign In</button>
+    <button class="nb gold" id="nSignup" onclick="go('signup')">Register</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hbadge">CMBT Students Only — Shared Database</div>
+    <h1>Discover & Share<br><span>Student Research</span></h1>
+    <p>A private academic platform for CMBT students. Submit papers, browse research, and generate citations.</p>
+    <div class="hbtns">
+      <button class="btn gold" onclick="go('signup')">Create Account</button>
+      <button class="btn outline-w" onclick="go('browse')">Browse Research</button>
+    </div>
+  </div>
+  <div class="cards">
+    <div class="card"><div class="card-icon ci-b">🌐</div><h3>Real-Time Shared</h3><p>All students see the same live research pool instantly.</p></div>
+    <div class="card"><div class="card-icon ci-g">📖</div><h3>Auto Citations</h3><p>APA, MLA, and Chicago formats generated automatically.</p></div>
+    <div class="card"><div class="card-icon ci-gr">🔒</div><h3>Private Access</h3><p>Only verified CMBT student numbers can register.</p></div>
+    <div class="card"><div class="card-icon ci-r">🛡️</div><h3>Admin Managed</h3><p>Dedicated admin can manage papers and student accounts.</p></div>
+  </div>
+  <footer>© 2024 <span>CMBT ResearchHub</span> — For CMBT Students Only.</footer>
+</div>
+
+<!-- LOGIN -->
+<div class="page" id="page-login">
+  <div class="awrap">
+    <div class="abox">
+      <div class="alogo"><div class="alogo-icon"><span>CR</span></div><h2>Sign In</h2><div class="asub">Use your student number or admin credentials</div></div>
+      <div class="tabs"><div class="tab active" id="tabS" onclick="setLM('student')">Student</div><div class="tab" id="tabA" onclick="setLM('admin')">Admin</div></div>
+      <div id="aLogin" class="al" style="display:none"></div>
+      <div id="fStudent">
+        <div class="fg"><label>Student Number</label><input id="lSN" type="text" placeholder="e.g. SUM2023-02430" onkeydown="if(event.key==='Enter')doLogin()"/><div class="fhint">Format: SUM[YEAR]-[5 digits]</div></div>
+        <div class="fg"><label>Password</label><input id="lPW" type="password" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      </div>
+      <div id="fAdmin" style="display:none">
+        <div class="al w">Default: username <strong>admin</strong> / password <strong>cmbt2024</strong></div>
+        <div class="fg"><label>Admin Username</label><input id="lAU" type="text" placeholder="admin" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+        <div class="fg"><label>Admin Password</label><input id="lAP" type="password" placeholder="cmbt2024" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      </div>
+      <button class="btn gold full" id="loginBtn" onclick="doLogin()">Sign In</button>
+      <div class="aswitch" id="linkSignup">No account? <a onclick="go('signup')">Register here</a></div>
+      <div class="aswitch" style="margin-top:8px"><a onclick="go('home')">← Home</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- SIGNUP -->
+<div class="page" id="page-signup">
+  <div class="awrap">
+    <div class="abox">
+      <div class="alogo"><div class="alogo-icon"><span>CR</span></div><h2>Student Registration</h2><div class="asub">Create your CMBT ResearchHub account</div></div>
+      <div id="aSignup" class="al" style="display:none"></div>
+      <div class="fg"><label>Full Name</label><input id="sName" type="text" placeholder="Your full name"/></div>
+      <div class="fg"><label>Student Number</label><input id="sSN" type="text" placeholder="e.g. SUM2023-02430"/><div class="fhint">This is your login ID — Format: SUM[YEAR]-[5 digits]</div></div>
+      <div class="fg"><label>Course / Program</label>
+        <select id="sCourse">
+          <option value="">Select your course</option>
+          <option>BS Information Technology</option><option>BS Computer Science</option>
+          <option>BS Business Administration</option><option>BS Accountancy</option>
+          <option>BS Nursing</option><option>BA Education</option>
+          <option>BS Tourism Management</option><option>BS Hospitality Management</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="fg"><label>Password</label><input id="sPW" type="password" placeholder="Min 6 characters"/></div>
+      <div class="fg"><label>Confirm Password</label><input id="sPW2" type="password" placeholder="Repeat password"/></div>
+      <button class="btn gold full" id="signupBtn" onclick="doSignup()">Create Account</button>
+      <div class="aswitch">Already registered? <a onclick="go('login')">Sign in here</a></div>
+      <div class="aswitch" style="margin-top:8px"><a onclick="go('home')">← Home</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- BROWSE -->
+<div class="page" id="page-browse">
+  <div class="bhead"><h1>Research Repository</h1><p>Shared live database — all CMBT students see the same papers</p></div>
+  <div class="bbody">
+    <div class="sbar">
+      <input type="text" id="bSearch" placeholder="Search title or category..." oninput="filterBrowse()"/>
+      <select id="bCat" onchange="filterBrowse()"><option value="">All Categories</option></select>
+      <button class="nb gold" onclick="loadPapers(true)">↻ Refresh</button>
+    </div>
+    <div class="statbar" id="statbar"></div>
+    <div id="browseList"><div class="loading-box"><div class="spin"></div>Loading...</div></div>
+  </div>
+</div>
+
+<!-- SUBMIT -->
+<div class="page" id="page-submit">
+  <div class="sbody">
+    <div class="shead"><h1>Submit Research Paper</h1><p>Upload your PDF and title — visible to all students immediately.</p></div>
+    <div class="fsec">
+      <h3>Research Information</h3>
+      <div class="fg"><label>Research Title *</label><input id="subTitle" type="text" placeholder="Full title of your research paper" oninput="updatePreview()"/></div>
+      <div class="fg"><label>Category</label>
+        <input id="subCat" type="text" list="catList" placeholder="e.g. Nursing, Education, IT..." oninput="updatePreview()"/>
+        <datalist id="catList">
+          <option value="Information Technology"><option value="Computer Science"><option value="Business Administration">
+          <option value="Accountancy"><option value="Nursing"><option value="Education">
+          <option value="Tourism Management"><option value="Hospitality Management">
+          <option value="Social Sciences"><option value="Natural Sciences">
+        </datalist>
+      </div>
+    </div>
+    <div class="fsec">
+      <h3>PDF Upload</h3>
+      <div class="uzone" id="uzone" onclick="document.getElementById('pdfFile').click()">
+        <input type="file" id="pdfFile" accept=".pdf" onchange="handlePDF(this)"/>
+        <div style="font-size:26px;margin-bottom:7px">📄</div>
+        <div style="font-size:13px;color:var(--muted)"><strong style="color:var(--navy)">Click to upload</strong></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">PDF only · Max 4MB</div>
+        <div id="pdfName" style="font-size:12px;color:#7a5c10;font-weight:500;margin-top:6px"></div>
+      </div>
+    </div>
+    <div class="fsec">
+      <h3>Citation Preview</h3>
+      <div class="rfmt">
+        <button class="rfb active" onclick="setSubFmt('APA',this)">APA</button>
+        <button class="rfb" onclick="setSubFmt('MLA',this)">MLA</button>
+        <button class="rfb" onclick="setSubFmt('Chicago',this)">Chicago</button>
+      </div>
+      <div class="rbox" id="citePreview">Enter a title above to preview.</div>
+    </div>
+    <div id="aSubmit" class="al" style="display:none"></div>
+    <button class="btn gold full" id="subBtn" onclick="doSubmit()">Submit Research Paper</button>
+    <div style="height:24px"></div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div class="page" id="page-admin">
+  <div class="ahead"><h1>Admin Panel</h1><p>Manage students and research papers</p></div>
+  <div class="awrp">
+    <div class="ascards" id="aStats"></div>
+    <div class="atabs">
+      <button class="atab active" onclick="aTab('overview',this)">Overview</button>
+      <button class="atab" onclick="aTab('papers',this)">Research Papers</button>
+      <button class="atab" onclick="aTab('students',this)">Students</button>
+      <button class="atab" onclick="aTab('settings',this)">Settings</button>
+    </div>
+    <div class="asec active" id="asec-overview">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+        <div class="card"><div class="card-icon ci-b">📊</div><h3>Platform Summary</h3><div id="overviewTxt" style="font-size:12px;color:var(--muted);margin-top:7px;line-height:1.6">Loading...</div></div>
+        <div class="card"><div class="card-icon ci-r">⚡</div><h3>Quick Actions</h3>
+          <div style="display:flex;flex-direction:column;gap:7px;margin-top:9px">
+            <button class="bsm o" onclick="aTab('papers',document.querySelectorAll('.atab')[1]);setActiveTab(1)">Manage Research Papers</button>
+            <button class="bsm o" onclick="aTab('students',document.querySelectorAll('.atab')[2]);setActiveTab(2)">Manage Students</button>
+            <button class="bsm d" onclick="confirmDo('🗑️','Clear ALL Papers','Permanently delete every research paper? This cannot be undone!',clearAllPapers)">Clear All Papers</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="asec" id="asec-papers">
+      <input class="srch" type="text" id="aPSearch" placeholder="Search papers..." oninput="renderAPapers()"/>
+      <div class="twrap">
+        <table><thead><tr><th>Title</th><th>Category</th><th>Student</th><th>Date</th><th>PDF</th><th>Action</th></tr></thead>
+        <tbody id="aPapersTb"></tbody></table>
+      </div>
+    </div>
+    <div class="asec" id="asec-students">
+      <input class="srch" type="text" id="aSSearch" placeholder="Search students..." oninput="renderAStudents()"/>
+      <div class="twrap">
+        <table><thead><tr><th>Student No.</th><th>Name</th><th>Course</th><th>Joined</th><th>Papers</th><th>Action</th></tr></thead>
+        <tbody id="aStudentsTb"></tbody></table>
+      </div>
+    </div>
+    <div class="asec" id="asec-settings">
+      <div class="fsec">
+        <h3>Change Admin Password</h3>
+        <div id="aSettings" class="al" style="display:none"></div>
+        <div class="fg"><label>Current Password</label><input id="setCur" type="password" placeholder="Current password"/></div>
+        <div class="fg"><label>New Password</label><input id="setNew" type="password" placeholder="New password (min 6)"/></div>
+        <div class="fg"><label>Confirm New Password</label><input id="setNew2" type="password" placeholder="Repeat new password"/></div>
+        <button class="btn gold" onclick="changeAdminPW()">Update Password</button>
+      </div>
+      <div class="fsec">
+        <h3>Change Admin Username</h3>
+        <div class="fg"><label>New Username</label><input id="setUN" type="text" placeholder="New admin username"/></div>
+        <div class="fg"><label>Current Password (to confirm)</label><input id="setUNPW" type="password" placeholder="Current password"/></div>
+        <button class="btn gold" onclick="changeAdminUser()">Update Username</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CITE MODAL -->
+<div class="modal-bg" id="mCite">
+  <div class="modal">
+    <h3 id="mCiteTitle"></h3><div class="ms">Copy a formatted citation for this paper.</div>
+    <div class="rfmt" id="mCiteFmt">
+      <button class="rfb active" onclick="setMFmt('APA',this)">APA</button>
+      <button class="rfb" onclick="setMFmt('MLA',this)">MLA</button>
+      <button class="rfb" onclick="setMFmt('Chicago',this)">Chicago</button>
+    </div>
+    <div class="rdisp" id="mCiteRef"></div>
+    <div class="mact"><button class="bsm o" onclick="copyCite()">Copy</button><button class="bsm n" onclick="closeM('mCite')">Close</button></div>
+  </div>
+</div>
+
+<!-- PDF MODAL -->
+<div class="modal-bg" id="mPDF">
+  <div class="modal" style="max-width:620px">
+    <h3 id="mPDFTitle"></h3><div class="ms" id="mPDFSub"></div>
+    <div class="pview" id="mPDFArea"></div>
+    <div class="mact"><button class="bsm n" onclick="closeM('mPDF')">Close</button></div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-bg" id="mConfirm">
+  <div class="modal" style="max-width:360px;text-align:center">
+    <div style="font-size:34px;margin-bottom:8px" id="mConIcon"></div>
+    <h3 id="mConTitle"></h3><div class="ms" id="mConMsg"></div>
+    <div class="mact" style="justify-content:center">
+      <button class="bsm o" onclick="closeM('mConfirm')">Cancel</button>
+      <button class="bsm d" id="mConOK">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+// ─── DATA STORE (localStorage as shared simulation) ──────────
+// NOTE: Uses localStorage so all data persists in THIS browser.
+// For true multi-device sharing, a backend is required.
+// This version makes ALL features work perfectly first.
+
+const K = { users:'cmbt_users', papers:'cmbt_papers', admin:'cmbt_admin', sess:'cmbt_session' };
+
+function getData(key, def) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; }
+}
+function setData(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); return true; } catch { return false; }
+}
+
+function getUsers() { return getData(K.users, []); }
+function saveUsers(u) { return setData(K.users, u); }
+function getPapers() { return getData(K.papers, null); }
+function savePapers(p) { return setData(K.papers, p); }
+function getAdminCreds() { return getData(K.admin, {username:'admin',password:'cmbt2024'}); }
+function saveAdminCreds(c) { return setData(K.admin, c); }
+function getSess() { try { return JSON.parse(sessionStorage.getItem(K.sess)); } catch { return null; } }
+function setSess(u) { sessionStorage.setItem(K.sess, JSON.stringify(u)); }
+function clearSess() { sessionStorage.removeItem(K.sess); }
+
+// ─── DEFAULTS ────────────────────────────────────────────────
+function initPapers() {
+  if (getPapers() === null) {
+    savePapers([
+      {id:'p1',title:'Effects of Social Media Use on Academic Performance Among College Students',category:'Education',uploader:'SUM2022-01234',date:'2024-03-15',year:2024,hasPdf:false,pdf:null},
+      {id:'p2',title:'Implementation of IoT-Based Smart Campus Monitoring System',category:'Information Technology',uploader:'SUM2023-05678',date:'2024-04-02',year:2024,hasPdf:false,pdf:null},
+      {id:'p3',title:'Prevalence of Stress and Burnout Among Nursing Students',category:'Nursing',uploader:'SUM2021-09876',date:'2024-02-20',year:2024,hasPdf:false,pdf:null},
+    ]);
+  }
+}
+
+// ─── UTILS ───────────────────────────────────────────────────
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function validSN(v){ return /^SUM\d{4}-\d{5}$/i.test(String(v||'').trim()); }
+function showAl(id,type,msg){ const e=document.getElementById(id); e.className='al '+type; e.textContent=msg; e.style.display='block'; }
+function hideAl(id){ document.getElementById(id).style.display='none'; }
+function openM(id){ document.getElementById(id).classList.add('open'); }
+function closeM(id){ document.getElementById(id).classList.remove('open'); }
+function show(id,v){ document.getElementById(id).style.display=v?'inline-block':'none'; }
+function showF(id,v){ document.getElementById(id).style.display=v?'flex':'none'; }
+
+// ─── NAV ─────────────────────────────────────────────────────
+function updateNav(){
+  const s = getSess();
+  const isAdmin = s && s.isAdmin;
+  const isStudent = s && !s.isAdmin;
+  showF('nLive', !!s);
+  show('nAdminBadge', isAdmin);
+  show('nUser', isStudent);
+  if(isStudent) document.getElementById('nUser').textContent = s.studentNum;
+  show('nBrowse', !!s);
+  show('nSubmit', isStudent);
+  show('nAdminBtn', isAdmin);
+  show('nLogout', !!s);
+  show('nLogin', !s);
+  show('nSignup', !s);
+}
+
+// ─── ROUTING ─────────────────────────────────────────────────
+function go(page) {
+  const s = getSess();
+  if(page==='submit' && !s){ go('login'); setTimeout(()=>showAl('aLogin','i','Please sign in to submit research.'),50); return; }
+  if(page==='admin' && (!s||!s.isAdmin)){ go(s?'browse':'login'); return; }
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  window.scrollTo(0,0);
+  updateNav();
+  if(page==='browse') loadPapers(false);
+  if(page==='admin') loadAdmin();
+  if(page==='submit') resetSubmit();
+  if(page==='login'){ hideAl('aLogin'); setLM('student'); }
+}
+
+function logout(){ clearSess(); updateNav(); go('home'); }
+
+// ─── LOGIN MODE ───────────────────────────────────────────────
+let loginMode = 'student';
+function setLM(m){
+  loginMode = m;
+  document.getElementById('tabS').classList.toggle('active', m==='student');
+  document.getElementById('tabA').classList.toggle('active', m==='admin');
+  document.getElementById('fStudent').style.display = m==='student'?'block':'none';
+  document.getElementById('fAdmin').style.display = m==='admin'?'block':'none';
+  document.getElementById('linkSignup').style.display = m==='student'?'block':'none';
+  hideAl('aLogin');
+}
+
+// ─── LOGIN ────────────────────────────────────────────────────
+function doLogin(){
+  hideAl('aLogin');
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Signing in...';
+
+  setTimeout(()=>{
+    if(loginMode==='admin'){
+      const u = document.getElementById('lAU').value.trim();
+      const p = document.getElementById('lAP').value;
+      if(!u||!p){ showAl('aLogin','d','Please fill in all fields.'); btn.disabled=false; btn.textContent='Sign In'; return; }
+      const creds = getAdminCreds();
+      if(u===creds.username && p===creds.password){
+        setSess({isAdmin:true, name:'Administrator', studentNum:'ADMIN'});
+        btn.disabled=false; btn.textContent='Sign In';
+        go('admin');
+      } else {
+        showAl('aLogin','d','Incorrect admin credentials.'); btn.disabled=false; btn.textContent='Sign In';
+      }
+      return;
+    }
+    const sn = document.getElementById('lSN').value.trim().toUpperCase();
+    const pw = document.getElementById('lPW').value;
+    if(!sn||!pw){ showAl('aLogin','d','Please fill in all fields.'); btn.disabled=false; btn.textContent='Sign In'; return; }
+    if(!validSN(sn)){ showAl('aLogin','d','Invalid format. Use SUM[YEAR]-[5 digits]'); btn.disabled=false; btn.textContent='Sign In'; return; }
+    const users = getUsers();
+    const user = users.find(u=>u.studentNum===sn && u.password===pw);
+    if(user){
+      setSess(user); btn.disabled=false; btn.textContent='Sign In'; go('browse');
+    } else {
+      showAl('aLogin','d','Incorrect student number or password.'); btn.disabled=false; btn.textContent='Sign In';
+    }
+  }, 300);
+}
+
+// ─── SIGNUP ───────────────────────────────────────────────────
+function doSignup(){
+  hideAl('aSignup');
+  const name = document.getElementById('sName').value.trim();
+  const sn = document.getElementById('sSN').value.trim().toUpperCase();
+  const course = document.getElementById('sCourse').value;
+  const pw = document.getElementById('sPW').value;
+  const pw2 = document.getElementById('sPW2').value;
+
+  if(!name){ showAl('aSignup','d','Please enter your full name.'); return; }
+  if(!sn){ showAl('aSignup','d','Please enter your student number.'); return; }
+  if(!validSN(sn)){ showAl('aSignup','d','Invalid student number. Format: SUM[YEAR]-[5 digits]. Example: SUM2023-02430'); return; }
+  if(!course){ showAl('aSignup','d','Please select your course.'); return; }
+  if(!pw){ showAl('aSignup','d','Please enter a password.'); return; }
+  if(pw.length<6){ showAl('aSignup','d','Password must be at least 6 characters.'); return; }
+  if(pw!==pw2){ showAl('aSignup','d','Passwords do not match.'); return; }
+
+  const btn = document.getElementById('signupBtn');
+  btn.disabled = true; btn.textContent = 'Creating account...';
+
+  setTimeout(()=>{
+    const users = getUsers();
+    if(users.find(u=>u.studentNum===sn)){
+      showAl('aSignup','d','This student number is already registered.'); btn.disabled=false; btn.textContent='Create Account'; return;
+    }
+    const newUser = {studentNum:sn, name, course, password:pw, joined:new Date().toISOString()};
+    users.push(newUser);
+    const ok = saveUsers(users);
+    if(ok){
+      setSess(newUser);
+      showAl('aSignup','s','Account created successfully! Redirecting...');
+      setTimeout(()=>go('browse'), 1000);
+    } else {
+      showAl('aSignup','d','Failed to save. Please try again.');
+      btn.disabled=false; btn.textContent='Create Account';
+    }
+  }, 300);
+}
+
+// ─── PAPERS ───────────────────────────────────────────────────
+let allPapers = [];
+let subFmt = 'APA', citeFmt = 'APA', modalPaper = null, pdfB64 = null;
+
+function loadPapers(force){
+  if(force) document.getElementById('browseList').innerHTML='<div class="loading-box"><div class="spin"></div>Loading...</div>';
+  allPapers = getPapers() || [];
+  renderBrowse();
+  renderStatbar();
+}
+
+function renderStatbar(){
+  const cats = [...new Set(allPapers.map(r=>r.category).filter(Boolean))];
+  document.getElementById('statbar').innerHTML=
+    `<div class="statpill">Papers: <strong>${allPapers.length}</strong></div>`+
+    `<div class="statpill">Categories: <strong>${cats.length}</strong></div>`+
+    `<div class="statpill">With PDF: <strong>${allPapers.filter(r=>r.hasPdf).length}</strong></div>`;
+}
+
+function filterBrowse(){ renderBrowse(); }
+
+function renderBrowse(){
+  const list = document.getElementById('browseList'); if(!list) return;
+  const q = (document.getElementById('bSearch').value||'').toLowerCase();
+  const catEl = document.getElementById('bCat');
+  const cats = [...new Set(allPapers.map(r=>r.category).filter(Boolean))].sort();
+  const cv = catEl.value;
+  catEl.innerHTML = '<option value="">All Categories</option>' + cats.map(c=>`<option value="${c}" ${c===cv?'selected':''}>${esc(c)}</option>`).join('');
+
+  let data = [...allPapers].reverse();
+  if(q) data = data.filter(r=>r.title.toLowerCase().includes(q)||(r.category||'').toLowerCase().includes(q));
+  if(cv) data = data.filter(r=>(r.category||'')===cv);
+
+  if(!data.length){ list.innerHTML='<div class="empty-box">No research papers found.</div>'; return; }
+  const s = getSess();
+  const isNew = r => (Date.now()-new Date(r.date||0).getTime()) < 259200000;
+  list.innerHTML = data.map(r=>`
+    <div class="rc">
+      <div class="rch">
+        <h3>${esc(r.title)}${isNew(r)?'<span class="new-tag">New</span>':''}</h3>
+        ${r.category?`<span class="tag">${esc(r.category)}</span>`:''}
+      </div>
+      <div class="rmeta">By <strong>${esc(r.uploader)}</strong> · ${r.date} · ${r.year}</div>
+      <div class="ract">
+        <button class="bsm o" onclick='showCite("${esc(r.id)}")'>Get Citation</button>
+        ${r.hasPdf?`<button class="bsm g" onclick='showPDF("${esc(r.id)}")'>View PDF</button>`:'<span style="font-size:11px;color:var(--muted);align-self:center">No PDF attached</span>'}
+        ${s&&!s.isAdmin&&r.uploader===s.studentNum?`<button class="bsm d" onclick='delPaper("${esc(r.id)}",false)'>Delete</button>`:''}
+      </div>
+    </div>`).join('');
+}
+
+// ─── CITATION ─────────────────────────────────────────────────
+function genRef(r,fmt){
+  const y=r.year||new Date().getFullYear(), t=r.title||'Untitled', u=r.uploader||'Unknown';
+  if(fmt==='APA') return `${esc(u)}. (${y}). <em>${esc(t)}</em>. CMBT ResearchHub.`;
+  if(fmt==='MLA') return `${esc(u)}. "${esc(t)}." <em>CMBT ResearchHub</em>, ${y}.`;
+  return `${esc(u)}. "${esc(t)}." CMBT ResearchHub, ${y}.`;
+}
+
+function showCite(id){
+  modalPaper = allPapers.find(p=>p.id===id); if(!modalPaper) return;
+  document.getElementById('mCiteTitle').textContent = modalPaper.title;
+  document.getElementById('mCiteRef').innerHTML = genRef(modalPaper, citeFmt);
+  document.querySelectorAll('#mCiteFmt .rfb').forEach(b=>b.classList.toggle('active',b.textContent===citeFmt));
+  openM('mCite');
+}
+function setMFmt(fmt,btn){
+  citeFmt=fmt;
+  document.querySelectorAll('#mCiteFmt .rfb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(modalPaper) document.getElementById('mCiteRef').innerHTML=genRef(modalPaper,fmt);
+}
+function copyCite(){ navigator.clipboard.writeText(document.getElementById('mCiteRef').innerText).then(()=>alert('Citation copied!')).catch(()=>{}); }
+
+function showPDF(id){
+  const r = allPapers.find(p=>p.id===id); if(!r) return;
+  document.getElementById('mPDFTitle').textContent = r.title;
+  document.getElementById('mPDFSub').textContent = r.category||'';
+  document.getElementById('mPDFArea').innerHTML = r.pdf
+    ? `<iframe src="${r.pdf}" style="width:100%;height:380px;border:none;border-radius:6px"></iframe>`
+    : '<span style="font-size:32px">📄</span><span>PDF not available for preview.</span>';
+  openM('mPDF');
+}
+
+// ─── SUBMIT ───────────────────────────────────────────────────
+function resetSubmit(){
+  ['subTitle','subCat'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('citePreview').textContent='Enter a title above to preview.';
+  document.getElementById('pdfName').textContent='';
+  document.getElementById('uzone').classList.remove('has');
+  document.getElementById('pdfFile').value='';
+  document.getElementById('aSubmit').style.display='none';
+  document.getElementById('subBtn').disabled=false;
+  document.getElementById('subBtn').textContent='Submit Research Paper';
+  pdfB64=null;
+}
+
+function setSubFmt(fmt,btn){
+  subFmt=fmt;
+  document.querySelectorAll('.fsec .rfb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  updatePreview();
+}
+function updatePreview(){
+  const t = document.getElementById('subTitle').value.trim();
+  const s = getSess();
+  document.getElementById('citePreview').innerHTML = t
+    ? genRef({title:t,year:new Date().getFullYear(),uploader:s?s.studentNum:'Author'},subFmt)
+    : 'Enter a title above to preview.';
+}
+
+function handlePDF(input){
+  const f = input.files[0]; if(!f) return;
+  if(!f.name.toLowerCase().endsWith('.pdf')){ alert('Only PDF files accepted.'); input.value=''; return; }
+  if(f.size>4*1024*1024){ alert('File too large. Max 4MB. Please compress your PDF.'); input.value=''; return; }
+  document.getElementById('pdfName').textContent = '✓ '+f.name+' ('+(f.size/1024).toFixed(0)+' KB)';
+  document.getElementById('uzone').classList.add('has');
+  const rd = new FileReader();
+  rd.onload = e=>{ pdfB64=e.target.result; };
+  rd.readAsDataURL(f);
+}
+
+function doSubmit(){
+  const s = getSess(); if(!s){ go('login'); return; }
+  const title = document.getElementById('subTitle').value.trim();
+  const cat = document.getElementById('subCat').value.trim();
+  if(!title){ showAl('aSubmit','d','Please enter the research title.'); return; }
+  if(!document.getElementById('pdfFile').files[0]){ showAl('aSubmit','d','Please upload a PDF file.'); return; }
+  const btn = document.getElementById('subBtn');
+  btn.disabled=true; btn.textContent='Submitting...';
+  showAl('aSubmit','i','Saving to database...');
+
+  setTimeout(()=>{
+    const papers = getPapers()||[];
+    const entry = {
+      id:'r'+Date.now(), title, category:cat||'Uncategorized',
+      uploader:s.studentNum, date:new Date().toISOString().split('T')[0],
+      year:new Date().getFullYear(), hasPdf:!!pdfB64, pdf:pdfB64
+    };
+    papers.push(entry);
+    const ok = savePapers(papers);
+    if(ok){
+      allPapers = papers;
+      showAl('aSubmit','s','Submitted! Your paper is now visible to all students.');
+      setTimeout(()=>go('browse'), 1200);
+    } else {
+      showAl('aSubmit','d','Save failed. PDF may be too large.');
+      btn.disabled=false; btn.textContent='Submit Research Paper';
+    }
+  }, 400);
+}
+
+// ─── DELETE PAPER ─────────────────────────────────────────────
+function delPaper(id, confirmed){
+  if(!confirmed){
+    confirmDo('🗑️','Delete Paper','This permanently removes the paper from the database.',()=>delPaper(id,true));
+    return;
+  }
+  const papers = (getPapers()||[]).filter(p=>p.id!==id);
+  savePapers(papers);
+  allPapers = papers;
+  renderBrowse(); renderStatbar();
+  if(document.getElementById('page-admin').classList.contains('active')){ renderAPapers(); updateAdminStats(); }
+}
+
+function clearAllPapers(){
+  savePapers([]);
+  allPapers = [];
+  renderBrowse(); renderStatbar();
+  renderAPapers(); updateAdminStats();
+}
+
+// ─── ADMIN ────────────────────────────────────────────────────
+function loadAdmin(){
+  allPapers = getPapers()||[];
+  updateAdminStats();
+  renderAPapers();
+  renderAStudents();
+}
+
+function updateAdminStats(){
+  const papers = getPapers()||[], users = getUsers();
+  const cats = [...new Set(papers.map(r=>r.category).filter(Boolean))];
+  document.getElementById('aStats').innerHTML=`
+    <div class="asc"><div class="n">${papers.length}</div><div class="l">Research Papers</div></div>
+    <div class="asc"><div class="n">${users.length}</div><div class="l">Students</div></div>
+    <div class="asc"><div class="n">${cats.length}</div><div class="l">Categories</div></div>
+    <div class="asc r"><div class="n">${papers.filter(r=>r.hasPdf).length}</div><div class="l">With PDF</div></div>`;
+  const last = papers.length ? papers[papers.length-1] : null;
+  document.getElementById('overviewTxt').innerHTML =
+    `<strong>${papers.length}</strong> papers · <strong>${users.length}</strong> students · <strong>${cats.length}</strong> categories<br><br>`+
+    (last?`Latest: <em>${esc(last.title.substring(0,60))}${last.title.length>60?'...':''}</em>`:'No papers yet.');
+}
+
+function renderAPapers(){
+  const q = (document.getElementById('aPSearch').value||'').toLowerCase();
+  const papers = getPapers()||[];
+  let data = [...papers].reverse();
+  if(q) data = data.filter(r=>r.title.toLowerCase().includes(q)||(r.category||'').toLowerCase().includes(q)||r.uploader.toLowerCase().includes(q));
+  const tb = document.getElementById('aPapersTb');
+  if(!data.length){ tb.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">No papers found.</td></tr>`; return; }
+  tb.innerHTML = data.map(r=>`<tr>
+    <td style="max-width:180px"><div style="font-size:12px;font-weight:500;line-height:1.3">${esc(r.title.substring(0,65))}${r.title.length>65?'...':''}</div></td>
+    <td><span class="tag" style="font-size:10px">${esc(r.category||'—')}</span></td>
+    <td style="font-size:11px">${esc(r.uploader)}</td>
+    <td style="font-size:11px">${r.date}</td>
+    <td style="font-size:11px">${r.hasPdf?'✅':'—'}</td>
+    <td><div style="display:flex;gap:4px">
+      ${r.hasPdf?`<button class="bsm g" onclick='showPDF("${esc(r.id)}")'>PDF</button>`:''}
+      <button class="bsm d" onclick='delPaper("${esc(r.id)}",false)'>Remove</button>
+    </div></td></tr>`).join('');
+}
+
+function removeStudent(sn, confirmed){
+  if(!confirmed){
+    confirmDo('👤','Remove Student',`Remove student ${sn}? Their account will be deleted.`,()=>removeStudent(sn,true));
+    return;
+  }
+  const users = getUsers().filter(u=>u.studentNum!==sn);
+  saveUsers(users);
+  updateAdminStats();
+  renderAStudents();
+}
+
+function renderAStudents(){
+  const q = (document.getElementById('aSSearch').value||'').toLowerCase();
+  const users = getUsers();
+  const papers = getPapers()||[];
+  let data = [...users];
+  if(q) data = data.filter(u=>u.studentNum.toLowerCase().includes(q)||u.name.toLowerCase().includes(q)||(u.course||'').toLowerCase().includes(q));
+  const tb = document.getElementById('aStudentsTb');
+  if(!data.length){ tb.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">No students registered yet.</td></tr>`; return; }
+  tb.innerHTML = data.map(u=>`<tr>
+    <td><span class="br s">${esc(u.studentNum)}</span></td>
+    <td style="font-size:12px">${esc(u.name)}</td>
+    <td style="font-size:11px;color:var(--muted)">${esc(u.course||'—')}</td>
+    <td style="font-size:11px">${u.joined?new Date(u.joined).toLocaleDateString():'—'}</td>
+    <td style="font-size:11px">${papers.filter(r=>r.uploader===u.studentNum).length}</td>
+    <td><button class="bsm d" onclick='removeStudent("${esc(u.studentNum)}",false)'>Remove</button></td></tr>`).join('');
+}
+
+function setActiveTab(i){
+  document.querySelectorAll('.atab').forEach((t,j)=>t.classList.toggle('active',j===i));
+}
+function aTab(name,btn){
+  document.querySelectorAll('.atab').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.querySelectorAll('.asec').forEach(s=>s.classList.remove('active'));
+  document.getElementById('asec-'+name).classList.add('active');
+  if(name==='papers') renderAPapers();
+  if(name==='students') renderAStudents();
+  if(name==='overview') updateAdminStats();
+}
+
+// ─── ADMIN SETTINGS ───────────────────────────────────────────
+function changeAdminPW(){
+  const cur=document.getElementById('setCur').value;
+  const nw=document.getElementById('setNew').value;
+  const nw2=document.getElementById('setNew2').value;
+  if(!cur||!nw||!nw2){ showAl('aSettings','d','Please fill in all fields.'); return; }
+  const creds=getAdminCreds();
+  if(cur!==creds.password){ showAl('aSettings','d','Current password is incorrect.'); return; }
+  if(nw.length<6){ showAl('aSettings','d','New password must be at least 6 characters.'); return; }
+  if(nw!==nw2){ showAl('aSettings','d','New passwords do not match.'); return; }
+  saveAdminCreds({...creds,password:nw});
+  showAl('aSettings','s','Password updated successfully!');
+  document.getElementById('setCur').value='';
+  document.getElementById('setNew').value='';
+  document.getElementById('setNew2').value='';
+}
+
+function changeAdminUser(){
+  const nu=document.getElementById('setUN').value.trim();
+  const pw=document.getElementById('setUNPW').value;
+  if(!nu||!pw){ showAl('aSettings','d','Please fill in all fields.'); return; }
+  const creds=getAdminCreds();
+  if(pw!==creds.password){ showAl('aSettings','d','Current password is incorrect.'); return; }
+  saveAdminCreds({...creds,username:nu});
+  showAl('aSettings','s','Username updated to: '+nu);
+  document.getElementById('setUN').value='';
+  document.getElementById('setUNPW').value='';
+}
+
+// ─── CONFIRM ─────────────────────────────────────────────────
+function confirmDo(icon,title,msg,cb){
+  document.getElementById('mConIcon').textContent=icon;
+  document.getElementById('mConTitle').textContent=title;
+  document.getElementById('mConMsg').textContent=msg;
+  document.getElementById('mConOK').onclick=()=>{ closeM('mConfirm'); cb(); };
+  openM('mConfirm');
+}
+
+// ─── MODAL BACKDROP ──────────────────────────────────────────
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('open'); }));
+
+// ─── INIT ─────────────────────────────────────────────────────
+initPapers();
+updateNav();
+loadPapers(false);
+</script>
+</body>
+</html>
