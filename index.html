@@ -131,7 +131,7 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
 .pop-header h1{font-family:'Playfair Display',serif;color:#fff;font-size:28px;margin-bottom:5px;}
 .pop-header p{color:rgba(255,255,255,.6);font-size:13px;}
 .pop-body{max-width:1100px;margin:0 auto;padding:32px 2rem;}
-.course-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:32px;}
+.course-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:20px;margin-bottom:32px;}
 .course-card{background:var(--white);border:1px solid var(--border);border-radius:13px;overflow:hidden;cursor:pointer;transition:all .15s;}
 .course-card:hover{border-color:var(--navy);box-shadow:0 4px 16px rgba(13,27,62,.08);}
 .cc-header{background:var(--navy);padding:18px 20px;display:flex;justify-content:space-between;align-items:center;}
@@ -271,7 +271,7 @@ footer span{color:var(--gold);}
   </div>
 </nav>
 
-<!-- ════ HOME ════ -->
+<!-- HOME -->
 <div class="page active" id="page-home">
   <div class="hero">
     <div class="hbadge">CMBT Students Only · Real-Time Database</div>
@@ -305,7 +305,7 @@ footer span{color:var(--gold);}
   <footer>© 2024 <span>CMBT ResearchHub</span> — Private Academic Platform for CMBT Students Only.</footer>
 </div>
 
-<!-- ════ LOGIN ════ -->
+<!-- LOGIN -->
 <div class="page" id="page-login">
   <div class="auth-wrap">
     <div class="auth-box">
@@ -328,7 +328,7 @@ footer span{color:var(--gold);}
   </div>
 </div>
 
-<!-- ════ SIGNUP ════ -->
+<!-- SIGNUP -->
 <div class="page" id="page-signup">
   <div class="auth-wrap">
     <div class="auth-box" style="max-width:460px">
@@ -337,16 +337,8 @@ footer span{color:var(--gold);}
       <div class="fg"><label>Full Name</label><input id="sName" type="text" placeholder="Your full name"/></div>
       <div class="fg"><label>Student Number</label><input id="sSN" type="text" placeholder="e.g. SUM2023-02430"/><div class="fhint">This is your login ID — Format: SUM[YEAR]-[5 digits]</div></div>
       <div class="fg"><label>Course</label>
-        <select id="sCourse" onchange="updateSectionOptions()">
+        <select id="sCourse">
           <option value="">Select your course</option>
-          <option value="BS Information Technology">BS Information Technology</option>
-          <option value="BS Computer Science">BS Computer Science</option>
-          <option value="BS Business Administration">BS Business Administration</option>
-          <option value="BS Accountancy">BS Accountancy</option>
-          <option value="BS Nursing">BS Nursing</option>
-          <option value="BA Education">BA Education</option>
-          <option value="BS Tourism Management">BS Tourism Management</option>
-          <option value="BS Hospitality Management">BS Hospitality Management</option>
           <option value="Marketing Management">Marketing Management</option>
         </select>
       </div>
@@ -371,7 +363,7 @@ footer span{color:var(--gold);}
   </div>
 </div>
 
-<!-- ════ BROWSE (Google Scholar style) ════ -->
+<!-- BROWSE -->
 <div class="page" id="page-browse">
   <div style="background:var(--navy);padding:28px 2rem;">
     <div style="max-width:700px;margin:0 auto;">
@@ -382,7 +374,6 @@ footer span{color:var(--gold);}
     </div>
   </div>
   <div class="main-layout">
-    <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="sidebar-card">
         <div class="sidebar-card-title">Filter by Course</div>
@@ -397,7 +388,6 @@ footer span{color:var(--gold);}
         <div id="yearFilterList"></div>
       </div>
     </div>
-    <!-- RESULTS -->
     <div>
       <div class="results-header">
         <div class="results-count" id="resultsCount"></div>
@@ -413,11 +403,11 @@ footer span{color:var(--gold);}
   </div>
 </div>
 
-<!-- ════ POPULATION ════ -->
+<!-- POPULATION - ONLY MARKETING MANAGEMENT -->
 <div class="page" id="page-population">
   <div class="pop-header">
-    <h1>Student Population</h1>
-    <p>Marketing Management — enrolled students per section · click any section to view details</p>
+    <h1>Marketing Management · Student Population</h1>
+    <p>Enrolled students per section — click any section to view registered students</p>
   </div>
   <div class="pop-body">
     <div class="statbar" id="popStatbar"></div>
@@ -425,7 +415,7 @@ footer span{color:var(--gold);}
   </div>
 </div>
 
-<!-- ════ SUBMIT ════ -->
+<!-- SUBMIT -->
 <div class="page" id="page-submit">
   <div class="sbody">
     <div class="shead"><h1>Submit Research Paper</h1><p>Your paper will be visible to all CMBT students immediately after submission.</p></div>
@@ -435,12 +425,10 @@ footer span{color:var(--gold);}
       <div class="fg"><label>Authors / Researchers *</label><input id="subAuthors" type="text" placeholder="e.g. Juan Dela Cruz, Maria Santos"/><div class="fhint">Separate multiple authors with commas</div></div>
       <div class="fg"><label>Abstract *</label><textarea id="subAbstract" rows="5" style="width:100%;padding:9px 13px;border:1px solid var(--border);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--cream);outline:none;resize:vertical;" placeholder="Write a brief summary of your research (100–300 words)..."></textarea></div>
       <div class="fg"><label>Category / Field of Study</label>
-        <input id="subCat" type="text" list="catList" placeholder="e.g. Nursing, Information Technology..." oninput="updatePreview()"/>
+        <input id="subCat" type="text" list="catList" placeholder="e.g. Marketing, Business..." oninput="updatePreview()"/>
         <datalist id="catList">
-          <option value="Information Technology"><option value="Computer Science"><option value="Business Administration">
-          <option value="Accountancy"><option value="Nursing"><option value="Education">
-          <option value="Tourism Management"><option value="Hospitality Management">
-          <option value="Social Sciences"><option value="Natural Sciences"><option value="Public Health">
+          <option value="Marketing Management"><option value="Business Administration">
+          <option value="Information Technology"><option value="Computer Science">
         </datalist>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
@@ -448,12 +436,9 @@ footer span{color:var(--gold);}
         <div class="fg"><label>Section</label>
           <select id="subSection">
             <option value="">Select section</option>
-            <option value="MM-1B">MM-1B</option>
-            <option value="MM-1C">MM-1C</option>
-            <option value="MM-2B">MM-2B</option>
-            <option value="MM-2C">MM-2C</option>
-            <option value="MM-2D">MM-2D</option>
-            <option value="MM-3H">MM-3H</option>
+            <option value="MM-1B">MM-1B</option><option value="MM-1C">MM-1C</option>
+            <option value="MM-2B">MM-2B</option><option value="MM-2C">MM-2C</option>
+            <option value="MM-2D">MM-2D</option><option value="MM-3H">MM-3H</option>
             <option value="MM-4H">MM-4H</option>
           </select>
         </div>
@@ -485,7 +470,7 @@ footer span{color:var(--gold);}
   </div>
 </div>
 
-<!-- ════ ADMIN ════ -->
+<!-- ADMIN -->
 <div class="page" id="page-admin">
   <div class="ahead"><h1>Admin Panel</h1><p>Manage students, research papers, and platform settings</p></div>
   <div class="awrp">
@@ -592,13 +577,10 @@ footer span{color:var(--gold);}
   </div>
 </div>
 
-</div><!-- end app -->
+</div>
 
 <script>
-// ════════════════════════════════════════════
-// FIREBASE CONFIG — Replace with yours from:
-// https://console.firebase.google.com
-// ════════════════════════════════════════════
+// ==================== FIREBASE CONFIG ====================
 const firebaseConfig = {
   apiKey: "AIzaSyCxLBr97IFsdXsm9yIhQHbKvd14z49h5nY",
   authDomain: "cmbt-researchhub.firebaseapp.com",
@@ -607,546 +589,536 @@ const firebaseConfig = {
   messagingSenderId: "602869628082",
   appId: "1:602869628082:web:175fd992e0dddbbbdc9dab"
 };
-// ════════════════════════════════════════════
-// If Firebase is not configured, app runs in
-// LOCAL MODE (your device only — for testing)
-// ════════════════════════════════════════════
 
-let db=null, useFirebase=false;
-try{
-  if(!firebaseConfig.apiKey.includes('PASTE')){
-    firebase.initializeApp(firebaseConfig);
-    db=firebase.firestore();
-    useFirebase=true;
-    console.log('✅ Firebase connected — shared mode');
-  } else { console.log('ℹ️ Local mode — replace firebaseConfig to enable sharing'); }
-} catch(e){ console.log('Local mode'); }
+let db = null;
+let useFirebase = false;
 
-// ── LOCAL STORAGE FALLBACK ────────────────
-const LK={users:'cmbt_u2',papers:'cmbt_p2',admin:'cmbt_a2'};
-function lGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;}}
-function lSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch{return false;}}
-
-// ── UNIFIED DB API ────────────────────────
-async function dbGetUsers(){
-  if(useFirebase){try{const s=await db.collection('users').get();return s.docs.map(d=>({id:d.id,...d.data()}));}catch{useFirebase=false;}}
-  return lGet(LK.users,[]);
-}
-async function dbSaveUser(u){
-  if(useFirebase){try{await db.collection('users').doc(u.studentNum).set(u);return true;}catch{useFirebase=false;}}
-  const users=lGet(LK.users,[]);const i=users.findIndex(x=>x.studentNum===u.studentNum);
-  if(i>=0)users[i]=u;else users.push(u);return lSet(LK.users,users);
-}
-async function dbDeleteUser(sn){
-  if(useFirebase){try{await db.collection('users').doc(sn).delete();return true;}catch{useFirebase=false;}}
-  return lSet(LK.users,lGet(LK.users,[]).filter(u=>u.studentNum!==sn));
-}
-async function dbGetPapers(){
-  if(useFirebase){try{const s=await db.collection('papers').orderBy('ts','asc').get();return s.docs.map(d=>({id:d.id,...d.data()}));}catch{useFirebase=false;}}
-  return lGet(LK.papers,[]);
-}
-async function dbSavePaper(p){
-  if(useFirebase){try{await db.collection('papers').doc(p.id).set({...p,ts:firebase.firestore.FieldValue.serverTimestamp()});return true;}catch{useFirebase=false;}}
-  const papers=lGet(LK.papers,[]);papers.push(p);return lSet(LK.papers,papers);
-}
-async function dbDeletePaper(id){
-  if(useFirebase){try{await db.collection('papers').doc(id).delete();return true;}catch{useFirebase=false;}}
-  return lSet(LK.papers,lGet(LK.papers,[]).filter(p=>p.id!==id));
-}
-async function dbClearPapers(){
-  if(useFirebase){try{const s=await db.collection('papers').get();const b=db.batch();s.docs.forEach(d=>b.delete(d.ref));await b.commit();return true;}catch{useFirebase=false;}}
-  return lSet(LK.papers,[]);
-}
-async function dbGetAdmin(){
-  if(useFirebase){try{const d=await db.collection('config').doc('admin').get();return d.exists?d.data():{username:'admin',password:'cmbt2024'};}catch{useFirebase=false;}}
-  return lGet(LK.admin,{username:'admin',password:'cmbt2024'});
-}
-async function dbSaveAdmin(c){
-  if(useFirebase){try{await db.collection('config').doc('admin').set(c);return true;}catch{useFirebase=false;}}
-  return lSet(LK.admin,c);
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+  useFirebase = true;
+  console.log('✅ Firebase connected');
+} catch(e) {
+  console.log('⚠️ Using local storage mode');
 }
 
-// ── POPULATION DATA ───────────────────────
-const POPULATION = {
-  'Marketing Management':        {sections:{'MM-1B':43,'MM-1C':39,'MM-2B':34,'MM-2C:35,'MM-2D':36,'MM-3H':41,'MM-4H':30}},
+// ==================== DATA STORAGE ====================
+const LK = { users: 'cmbt_users_v3', papers: 'cmbt_papers_v3', admin: 'cmbt_admin_v3' };
+function lGet(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e) { return d; } }
+function lSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e) { return false; } }
+
+async function dbGetUsers() {
+  if (useFirebase) { try { const s = await db.collection('users').get(); return s.docs.map(d => ({ id: d.id, ...d.data() })); } catch(e) { useFirebase = false; } }
+  return lGet(LK.users, []);
+}
+async function dbSaveUser(u) {
+  if (useFirebase) { try { await db.collection('users').doc(u.studentNum).set(u); return true; } catch(e) { useFirebase = false; } }
+  const users = lGet(LK.users, []);
+  const idx = users.findIndex(x => x.studentNum === u.studentNum);
+  if (idx >= 0) users[idx] = u;
+  else users.push(u);
+  return lSet(LK.users, users);
+}
+async function dbGetPapers() {
+  if (useFirebase) { try { const s = await db.collection('papers').orderBy('createdAt', 'desc').get(); return s.docs.map(d => ({ id: d.id, ...d.data() })); } catch(e) { useFirebase = false; } }
+  return lGet(LK.papers, []);
+}
+async function dbSavePaper(p) {
+  if (useFirebase) { try { await db.collection('papers').doc(p.id).set({ ...p, createdAt: new Date().toISOString() }); return true; } catch(e) { useFirebase = false; } }
+  const papers = lGet(LK.papers, []);
+  papers.push(p);
+  return lSet(LK.papers, papers);
+}
+async function dbDeletePaper(id) {
+  if (useFirebase) { try { await db.collection('papers').doc(id).delete(); return true; } catch(e) { useFirebase = false; } }
+  return lSet(LK.papers, lGet(LK.papers, []).filter(p => p.id !== id));
+}
+async function dbClearPapers() {
+  if (useFirebase) { try { const s = await db.collection('papers').get(); const b = db.batch(); s.docs.forEach(d => b.delete(d.ref)); await b.commit(); return true; } catch(e) { useFirebase = false; } }
+  return lSet(LK.papers, []);
+}
+async function dbGetAdmin() {
+  if (useFirebase) { try { const d = await db.collection('config').doc('admin').get(); return d.exists ? d.data() : { username: 'admin', password: 'cmbt2024' }; } catch(e) { useFirebase = false; } }
+  return lGet(LK.admin, { username: 'admin', password: 'cmbt2024' });
+}
+async function dbSaveAdmin(c) {
+  if (useFirebase) { try { await db.collection('config').doc('admin').set(c); return true; } catch(e) { useFirebase = false; } }
+  return lSet(LK.admin, c);
+}
+
+// ==================== MARKETING MANAGEMENT POPULATION ====================
+const MARKETING_SECTIONS = {
+  'MM-1B': 43,
+  'MM-1C': 39,
+  'MM-2B': 34,
+  'MM-2C': 35,
+  'MM-2D': 36,
+  'MM-3H': 41,
+  'MM-4H': 30
 };
-// Population page only shows Marketing Management
-const POPULATION_PAGE_COURSES = ['Marketing Management'];
-const ALL_SECTIONS = ['MM-1B','MM-1C','MM-2B','MM-2C','MM-2D','MM-3H', 'MM-4H'];
-const SECTION_COURSE = {
-  'MM-1B':'Marketing Management','MM-1C':'Marketing Management',
-  'MM-2B':'Marketing Management','MM-2C':'Marketing Management',
-  'MM-2D':'Marketing Management','MM-3H':'Marketing Management',
-  'MM-4H':'Marketing Management',
-};
-const SECTION_CAPACITY = {'MM-1B':43,'MM-1C':39,'MM-2B':34,'MM-2C':35,'MM-2D':36,'MM-3H':41,'MM-4H':30};
 
-// ── SESSION ───────────────────────────────
-const SESS='cmbt_session_v2';
-function getSess(){try{return JSON.parse(sessionStorage.getItem(SESS));}catch{return null;}}
-function setSess(u){sessionStorage.setItem(SESS,JSON.stringify(u));}
-function clearSess(){sessionStorage.removeItem(SESS);}
+// ==================== SESSION ====================
+const SESS = 'cmbt_session_v3';
+function getSess() { try { return JSON.parse(sessionStorage.getItem(SESS)); } catch(e) { return null; } }
+function setSess(u) { sessionStorage.setItem(SESS, JSON.stringify(u)); }
+function clearSess() { sessionStorage.removeItem(SESS); }
 
-// ── UTILS ─────────────────────────────────
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function validSN(v){return /^SUM\d{4}-\d{5}$/i.test(String(v||'').trim());}
-function showAl(id,t,m){const e=document.getElementById(id);e.className='al '+t;e.innerHTML=m;e.style.display='block';}
-function hideAl(id){document.getElementById(id).style.display='none';}
-function openM(id){document.getElementById(id).classList.add('open');}
-function closeM(id){document.getElementById(id).classList.remove('open');}
-function vis(id,show,type='inline-block'){document.getElementById(id).style.display=show?type:'none';}
+// ==================== UTILS ====================
+function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function validSN(v) { return /^SUM\d{4}-\d{5}$/i.test(String(v || '').trim()); }
+function showAl(id, t, m) { const e = document.getElementById(id); e.className = 'al ' + t; e.innerHTML = m; e.style.display = 'block'; setTimeout(() => e.style.display = 'none', 3000); }
+function hideAl(id) { document.getElementById(id).style.display = 'none'; }
+function openM(id) { document.getElementById(id).classList.add('open'); }
+function closeM(id) { document.getElementById(id).classList.remove('open'); }
+function vis(id, show, type = 'inline-block') { document.getElementById(id).style.display = show ? type : 'none'; }
 
-// ── NAV ───────────────────────────────────
-function updateNav(){
-  const s=getSess(),isA=s&&s.isAdmin,isSt=s&&!s.isAdmin;
-  vis('nLive',!!s,'inline-flex');vis('nAdminBadge',isA);vis('nUser',isSt);
-  if(isSt)document.getElementById('nUser').textContent=s.studentNum;
-  vis('nBrowse',!!s);vis('nPop',!!s);vis('nSubmit',isSt);
-  vis('nAdminBtn',isA);vis('nLogout',!!s);vis('nLogin',!s);vis('nSignup',!s);
+// ==================== NAV ====================
+function updateNav() {
+  const s = getSess(), isA = s && s.isAdmin, isSt = s && !s.isAdmin;
+  vis('nLive', !!s, 'inline-flex'); vis('nAdminBadge', isA); vis('nUser', isSt);
+  if (isSt) document.getElementById('nUser').textContent = s.studentNum;
+  vis('nBrowse', !!s); vis('nPop', !!s); vis('nSubmit', isSt);
+  vis('nAdminBtn', isA); vis('nLogout', !!s); vis('nLogin', !s); vis('nSignup', !s);
 }
 
-// ── ROUTING ───────────────────────────────
-function go(page){
-  const s=getSess();
-  if(page==='submit'&&!s){go('login');setTimeout(()=>showAl('aLogin','i','Please sign in to submit research.'),50);return;}
-  if(page==='admin'&&(!s||!s.isAdmin)){go(s?'browse':'login');return;}
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
-  window.scrollTo(0,0);updateNav();
-  if(page==='browse')loadAndRender();
-  if(page==='population')renderPopulation();
-  if(page==='admin')loadAdmin();
-  if(page==='submit')resetSubmit();
-  if(page==='login'){hideAl('aLogin');setLM('student');}
+function go(page) {
+  const s = getSess();
+  if (page === 'submit' && !s) { go('login'); setTimeout(() => showAl('aLogin', 'i', 'Please sign in to submit research.'), 50); return; }
+  if (page === 'admin' && (!s || !s.isAdmin)) { go(s ? 'browse' : 'login'); return; }
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo(0, 0); updateNav();
+  if (page === 'browse') loadAndRender();
+  if (page === 'population') renderPopulation();
+  if (page === 'admin') loadAdmin();
+  if (page === 'submit') resetSubmit();
+  if (page === 'login') { hideAl('aLogin'); setLM('student'); }
 }
-function logout(){clearSess();updateNav();go('home');}
+function logout() { clearSess(); updateNav(); go('home'); }
 
-// ── LOGIN MODE ────────────────────────────
-let loginMode='student';
-function setLM(m){
-  loginMode=m;
-  document.getElementById('tabS').classList.toggle('active',m==='student');
-  document.getElementById('tabA').classList.toggle('active',m==='admin');
-  document.getElementById('fStudent').style.display=m==='student'?'block':'none';
-  document.getElementById('fAdmin').style.display=m==='admin'?'block':'none';
-  document.getElementById('signupLink').style.display=m==='student'?'block':'none';
+// ==================== LOGIN MODE ====================
+let loginMode = 'student';
+function setLM(m) {
+  loginMode = m;
+  document.getElementById('tabS').classList.toggle('active', m === 'student');
+  document.getElementById('tabA').classList.toggle('active', m === 'admin');
+  document.getElementById('fStudent').style.display = m === 'student' ? 'block' : 'none';
+  document.getElementById('fAdmin').style.display = m === 'admin' ? 'block' : 'none';
+  document.getElementById('signupLink').style.display = m === 'student' ? 'block' : 'none';
   hideAl('aLogin');
 }
 
-// ── LOGIN ─────────────────────────────────
-async function doLogin(){
+// ==================== LOGIN ====================
+async function doLogin() {
   hideAl('aLogin');
-  const btn=document.getElementById('loginBtn');
-  btn.disabled=true;btn.textContent='Signing in...';
-  try{
-    if(loginMode==='admin'){
-      const u=document.getElementById('lAU').value.trim();
-      const p=document.getElementById('lAP').value;
-      if(!u||!p){showAl('aLogin','d','Please fill in all fields.');btn.disabled=false;btn.textContent='Sign In';return;}
-      const creds=await dbGetAdmin();
-      if(u===creds.username&&p===creds.password){setSess({isAdmin:true,name:'Administrator',studentNum:'ADMIN'});btn.disabled=false;btn.textContent='Sign In';go('admin');}
-      else{showAl('aLogin','d','Incorrect admin credentials.');btn.disabled=false;btn.textContent='Sign In';}
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Signing in...';
+  try {
+    if (loginMode === 'admin') {
+      const u = document.getElementById('lAU').value.trim();
+      const p = document.getElementById('lAP').value;
+      if (!u || !p) { showAl('aLogin', 'd', 'Please fill in all fields.'); btn.disabled = false; btn.textContent = 'Sign In'; return; }
+      const creds = await dbGetAdmin();
+      if (u === creds.username && p === creds.password) { setSess({ isAdmin: true, name: 'Administrator', studentNum: 'ADMIN' }); btn.disabled = false; btn.textContent = 'Sign In'; go('admin'); }
+      else { showAl('aLogin', 'd', 'Incorrect admin credentials.'); btn.disabled = false; btn.textContent = 'Sign In'; }
       return;
     }
-    const sn=document.getElementById('lSN').value.trim().toUpperCase();
-    const pw=document.getElementById('lPW').value;
-    if(!sn||!pw){showAl('aLogin','d','Please fill in all fields.');btn.disabled=false;btn.textContent='Sign In';return;}
-    if(!validSN(sn)){showAl('aLogin','d','Invalid format. Use SUM[YEAR]-[5 digits], e.g. SUM2023-02430');btn.disabled=false;btn.textContent='Sign In';return;}
-    const users=await dbGetUsers();
-    const user=users.find(u=>u.studentNum===sn&&u.password===pw);
-    if(user){setSess(user);btn.disabled=false;btn.textContent='Sign In';go('browse');}
-    else{showAl('aLogin','d','Incorrect student number or password.');btn.disabled=false;btn.textContent='Sign In';}
-  }catch(e){showAl('aLogin','d','Error: '+e.message);btn.disabled=false;btn.textContent='Sign In';}
+    const sn = document.getElementById('lSN').value.trim().toUpperCase();
+    const pw = document.getElementById('lPW').value;
+    if (!sn || !pw) { showAl('aLogin', 'd', 'Please fill in all fields.'); btn.disabled = false; btn.textContent = 'Sign In'; return; }
+    if (!validSN(sn)) { showAl('aLogin', 'd', 'Invalid format. Use SUM[YEAR]-[5 digits]'); btn.disabled = false; btn.textContent = 'Sign In'; return; }
+    const users = await dbGetUsers();
+    const user = users.find(u => u.studentNum === sn && u.password === pw);
+    if (user) { setSess(user); btn.disabled = false; btn.textContent = 'Sign In'; go('browse'); }
+    else { showAl('aLogin', 'd', 'Incorrect student number or password.'); btn.disabled = false; btn.textContent = 'Sign In'; }
+  } catch (e) { showAl('aLogin', 'd', 'Error: ' + e.message); btn.disabled = false; btn.textContent = 'Sign In'; }
 }
 
-// ── SECTION OPTIONS PER COURSE ────────────
-const COURSE_SECTIONS = {
-  'Marketing Management':       ['MM-1B','MM-1C','MM-2B','MM-2C','MM-2D','MM-3H','MM-4H'],
-};
-function updateSectionOptions(){
-  const course=document.getElementById('sCourse').value;
-  const sel=document.getElementById('sSection');
-  const opts=COURSE_SECTIONS[course]||['MM-1B','MM-1C','MM-2B','MM-2C','MM-2D','MM-3H','MM-4H'];
-  sel.innerHTML='<option value="">Select your section</option>'+opts.map(s=>`<option value="${s}">${s}</option>`).join('');
-}
-
-// ── SIGNUP ────────────────────────────────
-async function doSignup(){
+// ==================== SIGNUP ====================
+async function doSignup() {
   hideAl('aSignup');
-  const name=document.getElementById('sName').value.trim();
-  const sn=document.getElementById('sSN').value.trim().toUpperCase();
-  const course=document.getElementById('sCourse').value;
-  const section=document.getElementById('sSection').value;
-  const pw=document.getElementById('sPW').value;
-  const pw2=document.getElementById('sPW2').value;
-  if(!name){showAl('aSignup','d','Please enter your full name.');return;}
-  if(!sn){showAl('aSignup','d','Please enter your student number.');return;}
-  if(!validSN(sn)){showAl('aSignup','d','Invalid student number. Format: SUM[YEAR]-[5 digits]. Example: SUM2023-02430');return;}
-  if(!course){showAl('aSignup','d','Please select your course.');return;}
-  if(!section){showAl('aSignup','d','Please select your year and section.');return;}
-  if(!pw){showAl('aSignup','d','Please enter a password.');return;}
-  if(pw.length<6){showAl('aSignup','d','Password must be at least 6 characters.');return;}
-  if(pw!==pw2){showAl('aSignup','d','Passwords do not match.');return;}
-  const btn=document.getElementById('signupBtn');
-  btn.disabled=true;btn.textContent='Creating account...';
-  try{
-    const users=await dbGetUsers();
-    if(users.find(u=>u.studentNum===sn)){showAl('aSignup','d','This student number is already registered.');btn.disabled=false;btn.textContent='Create Account';return;}
-    const newUser={studentNum:sn,name,course,section,password:pw,joined:new Date().toISOString()};
-    const ok=await dbSaveUser(newUser);
-    if(ok){setSess(newUser);showAl('aSignup','s','✅ Account created successfully! Redirecting...');setTimeout(()=>go('browse'),1000);}
-    else{showAl('aSignup','d','Failed to save. Please try again.');btn.disabled=false;btn.textContent='Create Account';}
-  }catch(e){showAl('aSignup','d','Error: '+e.message);btn.disabled=false;btn.textContent='Create Account';}
+  const name = document.getElementById('sName').value.trim();
+  const sn = document.getElementById('sSN').value.trim().toUpperCase();
+  const course = document.getElementById('sCourse').value;
+  const section = document.getElementById('sSection').value;
+  const pw = document.getElementById('sPW').value;
+  const pw2 = document.getElementById('sPW2').value;
+  
+  if (!name) { showAl('aSignup', 'd', 'Please enter your full name.'); return; }
+  if (!sn) { showAl('aSignup', 'd', 'Please enter your student number.'); return; }
+  if (!validSN(sn)) { showAl('aSignup', 'd', 'Invalid student number. Format: SUM[YEAR]-[5 digits]'); return; }
+  if (!course) { showAl('aSignup', 'd', 'Please select your course.'); return; }
+  if (!section) { showAl('aSignup', 'd', 'Please select your section.'); return; }
+  if (!pw) { showAl('aSignup', 'd', 'Please enter a password.'); return; }
+  if (pw.length < 6) { showAl('aSignup', 'd', 'Password must be at least 6 characters.'); return; }
+  if (pw !== pw2) { showAl('aSignup', 'd', 'Passwords do not match.'); return; }
+  
+  const btn = document.getElementById('signupBtn');
+  btn.disabled = true; btn.textContent = 'Creating account...';
+  try {
+    const users = await dbGetUsers();
+    if (users.find(u => u.studentNum === sn)) { showAl('aSignup', 'd', 'This student number is already registered.'); btn.disabled = false; btn.textContent = 'Create Account'; return; }
+    const newUser = { studentNum: sn, name, course, section, password: pw, joined: new Date().toISOString() };
+    const ok = await dbSaveUser(newUser);
+    if (ok) { setSess(newUser); showAl('aSignup', 's', '✅ Account created! Redirecting...'); setTimeout(() => go('browse'), 1000); }
+    else { showAl('aSignup', 'd', 'Failed to save. Please try again.'); btn.disabled = false; btn.textContent = 'Create Account'; }
+  } catch (e) { showAl('aSignup', 'd', 'Error: ' + e.message); btn.disabled = false; btn.textContent = 'Create Account'; }
 }
 
-// ── BROWSE / PAPERS ───────────────────────
-let allPapers=[];
-let activeCourseFilt='',activeSectionFilt='',activeYearFilt='';
-let subFmt='APA',citeFmt='APA',modalPaper=null,pdfB64=null;
+// ==================== BROWSE / PAPERS ====================
+let allPapers = [];
+let activeCourseFilt = '', activeSectionFilt = '', activeYearFilt = '';
+let subFmt = 'APA', citeFmt = 'APA', modalPaper = null, pdfB64 = null;
 
-async function loadAndRender(){
-  document.getElementById('browseList').innerHTML='<div class="loading-box"><div class="spin"></div>Loading research papers...</div>';
-  try{allPapers=await dbGetPapers();buildSidebar();filterBrowse();}
-  catch(e){document.getElementById('browseList').innerHTML='<div class="empty-box">⚠️ Failed to load. Try refreshing.</div>';}
+async function loadAndRender() {
+  document.getElementById('browseList').innerHTML = '<div class="loading-box"><div class="spin"></div>Loading research papers...</div>';
+  try { allPapers = await dbGetPapers(); buildSidebar(); filterBrowse(); }
+  catch (e) { document.getElementById('browseList').innerHTML = '<div class="empty-box">⚠️ Failed to load. Try refreshing.</div>'; }
 }
 
-function buildSidebar(){
-  // Courses
-  const courses=[...new Set(allPapers.map(p=>p.category).filter(Boolean))].sort();
-  const cfl=document.getElementById('courseFilterList');
-  cfl.innerHTML='<div class="course-item '+(activeCourseFilt===''?'active':'')+'" onclick="setCourseFilter(\'\')"><span class="course-name">All Courses</span><span class="course-count">'+allPapers.length+'</span></div>'+
-    courses.map(c=>{const cnt=allPapers.filter(p=>p.category===c).length;return`<div class="course-item ${activeCourseFilt===c?'active':''}" onclick="setCourseFilter('${esc(c)}')"><span class="course-name">${esc(c)}</span><span class="course-count">${cnt}</span></div>`;}).join('');
-  // Sections
-  const sections=[...new Set(allPapers.map(p=>p.section).filter(Boolean))].sort();
-  if(sections.length){
-    document.getElementById('sectionFilterCard').style.display='block';
-    document.getElementById('sectionFilterList').innerHTML='<div class="section-item '+(activeSectionFilt===''?'active':'')+'" onclick="setSectionFilter(\'\')"><span class="section-dot"></span>All Sections</div>'+
-      sections.map(s=>{const cnt=allPapers.filter(p=>p.section===s).length;return`<div class="section-item ${activeSectionFilt===s?'active':''}" onclick="setSectionFilter('${s}')"><span class="section-dot"></span>${s} <span style="margin-left:auto;font-size:11px;color:var(--muted)">${cnt}</span></div>`;}).join('');
+function buildSidebar() {
+  const courses = [...new Set(allPapers.map(p => p.category).filter(Boolean))].sort();
+  const cfl = document.getElementById('courseFilterList');
+  cfl.innerHTML = '<div class="course-item ' + (activeCourseFilt === '' ? 'active' : '') + '" onclick="setCourseFilter(\'\')"><span class="course-name">All Courses</span><span class="course-count">' + allPapers.length + '</span></div>' +
+    courses.map(c => { const cnt = allPapers.filter(p => p.category === c).length; return `<div class="course-item ${activeCourseFilt === c ? 'active' : ''}" onclick="setCourseFilter('${esc(c)}')"><span class="course-name">${esc(c)}</span><span class="course-count">${cnt}</span></div>`; }).join('');
+  
+  const sections = [...new Set(allPapers.map(p => p.section).filter(Boolean))].sort();
+  if (sections.length) {
+    document.getElementById('sectionFilterCard').style.display = 'block';
+    document.getElementById('sectionFilterList').innerHTML = '<div class="section-item ' + (activeSectionFilt === '' ? 'active' : '') + '" onclick="setSectionFilter(\'\')"><span class="section-dot"></span>All Sections</div>' +
+      sections.map(s => { const cnt = allPapers.filter(p => p.section === s).length; return `<div class="section-item ${activeSectionFilt === s ? 'active' : ''}" onclick="setSectionFilter('${s}')"><span class="section-dot"></span>${s} <span style="margin-left:auto;font-size:11px;color:var(--muted)">${cnt}</span></div>`; }).join('');
   }
-  // Years
-  const years=[...new Set(allPapers.map(p=>p.year).filter(Boolean))].sort((a,b)=>b-a);
-  document.getElementById('yearFilterList').innerHTML='<div class="course-item '+(activeYearFilt===''?'active':'')+'" onclick="setYearFilter(\'\')"><span class="course-name">All Years</span><span class="course-count">'+allPapers.length+'</span></div>'+
-    years.map(y=>{const cnt=allPapers.filter(p=>p.year==y).length;return`<div class="course-item ${activeYearFilt==y?'active':''}" onclick="setYearFilter(${y})"><span class="course-name">${y}</span><span class="course-count">${cnt}</span></div>`;}).join('');
+  
+  const years = [...new Set(allPapers.map(p => p.year).filter(Boolean))].sort((a, b) => b - a);
+  document.getElementById('yearFilterList').innerHTML = '<div class="course-item ' + (activeYearFilt === '' ? 'active' : '') + '" onclick="setYearFilter(\'\')"><span class="course-name">All Years</span><span class="course-count">' + allPapers.length + '</span></div>' +
+    years.map(y => { const cnt = allPapers.filter(p => p.year == y).length; return `<div class="course-item ${activeYearFilt == y ? 'active' : ''}" onclick="setYearFilter(${y})"><span class="course-name">${y}</span><span class="course-count">${cnt}</span></div>`; }).join('');
 }
 
-function setCourseFilter(c){activeCourseFilt=c;buildSidebar();filterBrowse();}
-function setSectionFilter(s){activeSectionFilt=s;buildSidebar();filterBrowse();}
-function setYearFilter(y){activeYearFilt=y;buildSidebar();filterBrowse();}
+function setCourseFilter(c) { activeCourseFilt = c; buildSidebar(); filterBrowse(); }
+function setSectionFilter(s) { activeSectionFilt = s; buildSidebar(); filterBrowse(); }
+function setYearFilter(y) { activeYearFilt = y; buildSidebar(); filterBrowse(); }
 
-function filterBrowse(){
-  const q=(document.getElementById('bSearch').value||'').toLowerCase();
-  const sort=document.getElementById('bSort').value;
-  let data=[...allPapers];
-  if(q) data=data.filter(p=>p.title.toLowerCase().includes(q)||( p.authors||'').toLowerCase().includes(q)||(p.abstract||'').toLowerCase().includes(q)||(p.category||'').toLowerCase().includes(q));
-  if(activeCourseFilt) data=data.filter(p=>(p.category||'')===activeCourseFilt);
-  if(activeSectionFilt) data=data.filter(p=>(p.section||'')===activeSectionFilt);
-  if(activeYearFilt) data=data.filter(p=>p.year==activeYearFilt);
-  if(sort==='newest') data.sort((a,b)=>b.year-a.year||(b.id>a.id?1:-1));
-  else if(sort==='oldest') data.sort((a,b)=>a.year-b.year);
-  else if(sort==='title') data.sort((a,b)=>a.title.localeCompare(b.title));
-  document.getElementById('resultsCount').textContent='About '+data.length+' result'+(data.length!==1?'s':'');
-  const cats=[...new Set(data.map(p=>p.category).filter(Boolean))];
-  document.getElementById('bStatbar').innerHTML=`<div class="statpill">Papers: <strong>${data.length}</strong></div><div class="statpill">Categories: <strong>${cats.length}</strong></div><div class="statpill">With PDF: <strong>${data.filter(p=>p.hasPdf).length}</strong></div>`;
+function filterBrowse() {
+  const q = (document.getElementById('bSearch').value || '').toLowerCase();
+  const sort = document.getElementById('bSort').value;
+  let data = [...allPapers];
+  if (q) data = data.filter(p => p.title.toLowerCase().includes(q) || (p.authors || '').toLowerCase().includes(q) || (p.abstract || '').toLowerCase().includes(q) || (p.category || '').toLowerCase().includes(q));
+  if (activeCourseFilt) data = data.filter(p => (p.category || '') === activeCourseFilt);
+  if (activeSectionFilt) data = data.filter(p => (p.section || '') === activeSectionFilt);
+  if (activeYearFilt) data = data.filter(p => p.year == activeYearFilt);
+  if (sort === 'newest') data.sort((a, b) => b.year - a.year || (b.id > a.id ? 1 : -1));
+  else if (sort === 'oldest') data.sort((a, b) => a.year - b.year);
+  else if (sort === 'title') data.sort((a, b) => a.title.localeCompare(b.title));
+  document.getElementById('resultsCount').textContent = 'About ' + data.length + ' result' + (data.length !== 1 ? 's' : '');
+  const cats = [...new Set(data.map(p => p.category).filter(Boolean))];
+  document.getElementById('bStatbar').innerHTML = `<div class="statpill">Papers: <strong>${data.length}</strong></div><div class="statpill">Categories: <strong>${cats.length}</strong></div><div class="statpill">With PDF: <strong>${data.filter(p => p.hasPdf).length}</strong></div>`;
   renderPapers(data);
 }
 
-function renderPapers(data){
-  const list=document.getElementById('browseList');
-  if(!data.length){list.innerHTML='<div class="empty-box">No research papers found matching your search.</div>';return;}
-  const s=getSess();
-  const isNew=p=>(Date.now()-new Date(p.date||0).getTime())<259200000;
-  list.innerHTML=data.map(p=>`
+function renderPapers(data) {
+  const list = document.getElementById('browseList');
+  if (!data.length) { list.innerHTML = '<div class="empty-box">No research papers found matching your search.</div>'; return; }
+  const s = getSess();
+  const isNew = p => (Date.now() - new Date(p.date || 0).getTime()) < 259200000;
+  list.innerHTML = data.map(p => `
     <div class="paper-card">
-      <div class="paper-title" onclick='openPaperDetail("${esc(p.id)}")'>${esc(p.title)}${isNew(p)?'<span class="new-badge">New</span>':''}</div>
-      <div class="paper-authors">${esc(p.authors||p.uploader||'Unknown')}</div>
+      <div class="paper-title" onclick='openPaperDetail("${esc(p.id)}")'>${esc(p.title)}${isNew(p) ? '<span class="new-badge">New</span>' : ''}</div>
+      <div class="paper-authors">${esc(p.authors || p.uploader || 'Unknown')}</div>
       <div class="paper-meta">
-        ${p.category?`<span class="pm-tag cat">${esc(p.category)}</span>`:''}
-        ${p.section?`<span class="pm-tag sec">Section ${esc(p.section)}</span>`:''}
-        <span class="pm-tag yr">${p.year||''}</span>
+        ${p.category ? `<span class="pm-tag cat">${esc(p.category)}</span>` : ''}
+        ${p.section ? `<span class="pm-tag sec">${esc(p.section)}</span>` : ''}
+        <span class="pm-tag yr">${p.year || ''}</span>
       </div>
-      ${p.abstract?`<div class="paper-abstract" id="abs-${esc(p.id)}">${esc(p.abstract)}</div>`:'' }
+      ${p.abstract ? `<div class="paper-abstract">${esc(p.abstract)}</div>` : ''}
       <div class="paper-actions">
         <button class="bsm b" onclick='openPaperDetail("${esc(p.id)}")'>View Details & Cite</button>
-        ${p.link?`<a class="paper-link" href="${esc(p.link)}" target="_blank" rel="noopener">🔗 Full Paper</a>`:''}
-        ${p.hasPdf?`<button class="bsm g" onclick='openPaperDetail("${esc(p.id)}")'> PDF</button>`:''}
-        ${s&&!s.isAdmin&&p.uploader===s.studentNum?`<button class="bsm d" onclick='delPaper("${esc(p.id)}",false)'>Delete</button>`:''}
+        ${p.link ? `<a class="paper-link" href="${esc(p.link)}" target="_blank">🔗 Full Paper</a>` : ''}
+        ${p.hasPdf ? `<button class="bsm g" onclick='openPaperDetail("${esc(p.id)}")'>PDF</button>` : ''}
+        ${s && !s.isAdmin && p.uploader === s.studentNum ? `<button class="bsm d" onclick='delPaper("${esc(p.id)}",false)'>Delete</button>` : ''}
       </div>
     </div>`).join('');
 }
 
-// ── PAPER DETAIL ──────────────────────────
-function openPaperDetail(id){
-  const p=allPapers.find(x=>x.id===id);if(!p)return;
-  modalPaper=p;
-  document.getElementById('mDTitle').textContent=p.title;
-  document.getElementById('mDMeta').textContent=(p.authors||p.uploader||'Unknown')+' · '+(p.date||'')+(p.year?' · '+p.year:'');
-  document.getElementById('mDAbstract').textContent=p.abstract||'No abstract provided.';
-  document.getElementById('mDCat').textContent=p.category||'—';
-  document.getElementById('mDSection').textContent=p.section?'Section '+p.section:'—';
-  document.getElementById('mDYear').textContent=p.year||'—';
-  document.getElementById('mDUploader').textContent=p.uploader||'—';
-  const lw=document.getElementById('mDLinkWrap');
-  if(p.link){lw.style.display='block';document.getElementById('mDLink').href=p.link;}else{lw.style.display='none';}
-  const pw=document.getElementById('mDPDFWrap');
-  if(p.hasPdf&&p.pdf){pw.style.display='block';document.getElementById('mDPDF').innerHTML=`<iframe src="${p.pdf}" style="width:100%;height:380px;border:none;border-radius:7px"></iframe>`;}else{pw.style.display='none';}
-  document.getElementById('mCiteRef').innerHTML=genRef(p,citeFmt);
-  document.querySelectorAll('#mCiteFmt .rfb').forEach(b=>b.classList.toggle('active',b.textContent===citeFmt));
+// ==================== PAPER DETAIL ====================
+function openPaperDetail(id) {
+  const p = allPapers.find(x => x.id === id); if (!p) return;
+  modalPaper = p;
+  document.getElementById('mDTitle').textContent = p.title;
+  document.getElementById('mDMeta').textContent = (p.authors || p.uploader || 'Unknown') + ' · ' + (p.date || '') + (p.year ? ' · ' + p.year : '');
+  document.getElementById('mDAbstract').textContent = p.abstract || 'No abstract provided.';
+  document.getElementById('mDCat').textContent = p.category || '—';
+  document.getElementById('mDSection').textContent = p.section || '—';
+  document.getElementById('mDYear').textContent = p.year || '—';
+  document.getElementById('mDUploader').textContent = p.uploader || '—';
+  const lw = document.getElementById('mDLinkWrap');
+  if (p.link) { lw.style.display = 'block'; document.getElementById('mDLink').href = p.link; } else { lw.style.display = 'none'; }
+  const pw = document.getElementById('mDPDFWrap');
+  if (p.hasPdf && p.pdf) { pw.style.display = 'block'; document.getElementById('mDPDF').innerHTML = `<iframe src="${p.pdf}" style="width:100%;height:380px;border:none;border-radius:7px"></iframe>`; } else { pw.style.display = 'none'; }
+  document.getElementById('mCiteRef').innerHTML = genRef(p, citeFmt);
+  document.querySelectorAll('#mCiteFmt .rfb').forEach(b => b.classList.toggle('active', b.textContent === citeFmt));
   openM('mDetail');
 }
 
-// ── CITATION ─────────────────────────────
-function genRef(p,fmt){
-  const y=p.year||new Date().getFullYear();
-  const t=p.title||'Untitled';
-  const a=p.authors||p.uploader||'Unknown';
-  if(fmt==='APA') return `${esc(a)}. (${y}). <em>${esc(t)}</em>. CMBT ResearchHub.${p.link?' Retrieved from '+esc(p.link):''}`;
-  if(fmt==='MLA') return `${esc(a)}. "${esc(t)}." <em>CMBT ResearchHub</em>, ${y}.${p.link?' '+esc(p.link):''}`;
-  return `${esc(a)}. "${esc(t)}." CMBT ResearchHub, ${y}.${p.link?' '+esc(p.link):''}`;
+function genRef(p, fmt) {
+  const y = p.year || new Date().getFullYear();
+  const t = p.title || 'Untitled';
+  const a = p.authors || p.uploader || 'Unknown';
+  if (fmt === 'APA') return `${esc(a)}. (${y}). <em>${esc(t)}</em>. CMBT ResearchHub.${p.link ? ' Retrieved from ' + esc(p.link) : ''}`;
+  if (fmt === 'MLA') return `${esc(a)}. "${esc(t)}." <em>CMBT ResearchHub</em>, ${y}.${p.link ? ' ' + esc(p.link) : ''}`;
+  return `${esc(a)}. "${esc(t)}." CMBT ResearchHub, ${y}.${p.link ? ' ' + esc(p.link) : ''}`;
 }
-function setMFmt(fmt,btn){
-  citeFmt=fmt;
-  document.querySelectorAll('#mCiteFmt .rfb').forEach(b=>b.classList.remove('active'));
+function setMFmt(fmt, btn) {
+  citeFmt = fmt;
+  document.querySelectorAll('#mCiteFmt .rfb').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  if(modalPaper) document.getElementById('mCiteRef').innerHTML=genRef(modalPaper,fmt);
+  if (modalPaper) document.getElementById('mCiteRef').innerHTML = genRef(modalPaper, fmt);
 }
-function copyCite(){navigator.clipboard.writeText(document.getElementById('mCiteRef').innerText).then(()=>alert('Citation copied to clipboard!')).catch(()=>{});}
+function copyCite() { navigator.clipboard.writeText(document.getElementById('mCiteRef').innerText).then(() => alert('Citation copied!')).catch(() => { }); }
 
-// ── DELETE PAPER ──────────────────────────
-async function delPaper(id,confirmed){
-  if(!confirmed){confirmDo('🗑️','Delete Paper','This permanently removes the paper from the shared database.',()=>delPaper(id,true));return;}
-  try{
+// ==================== DELETE PAPER ====================
+async function delPaper(id, confirmed) {
+  if (!confirmed) { confirmDo('🗑️', 'Delete Paper', 'This permanently removes the paper.', () => delPaper(id, true)); return; }
+  try {
     await dbDeletePaper(id);
-    allPapers=allPapers.filter(p=>p.id!==id);
-    buildSidebar();filterBrowse();
-    if(document.getElementById('page-admin').classList.contains('active')){renderAPapers();updateAdminStats();}
-  }catch(e){alert('Delete failed: '+e.message);}
+    allPapers = allPapers.filter(p => p.id !== id);
+    buildSidebar(); filterBrowse();
+    if (document.getElementById('page-admin').classList.contains('active')) { renderAPapers(); updateAdminStats(); }
+  } catch (e) { alert('Delete failed: ' + e.message); }
 }
-async function clearAllPapers(){
-  try{await dbClearPapers();allPapers=[];buildSidebar();filterBrowse();renderAPapers();updateAdminStats();}
-  catch(e){alert('Failed: '+e.message);}
+async function clearAllPapers() {
+  try { await dbClearPapers(); allPapers = []; buildSidebar(); filterBrowse(); renderAPapers(); updateAdminStats(); }
+  catch (e) { alert('Failed: ' + e.message); }
 }
 
-// ── POPULATION ───────────────────────────
-async function renderPopulation(){
-  let registeredUsers=[];
-  try{registeredUsers=await dbGetUsers();}catch{}
-  const mmCourse='Marketing Management';
-  const mmSections=Object.keys(POPULATION[mmCourse].sections);
-  const mmUsers=registeredUsers.filter(u=>u.course===mmCourse||mmSections.includes(u.section));
-  const mmTotalCap=Object.values(POPULATION[mmCourse].sections).reduce((a,b)=>a+b,0);
-  const mmTotalReg=mmUsers.length;
-  document.getElementById('popStatbar').innerHTML=
-    `<div class="statpill">Course: <strong>${mmCourse}</strong></div>`+
-    `<div class="statpill">Total Capacity: <strong>${mmTotalCap}</strong></div>`+
-    `<div class="statpill">Registered: <strong>${mmTotalReg}</strong></div>`+
-    `<div class="statpill">Sections: <strong>${mmSections.length}</strong></div>`;
-  const grid=document.getElementById('courseGrid');
-  const {sections}=POPULATION[mmCourse];
-  const total=Object.values(sections).reduce((a,b)=>a+b,0);
-  const srows=Object.entries(sections).map(([sec,cap])=>{
-    const stuCount=registeredUsers.filter(u=>u.section===sec).length;
-    const pct=Math.round((stuCount/cap)*100);
-    return`<div class="section-row" onclick="showSectionDetail('${sec}','${esc(mmCourse)}',${cap})">
-      <div style="flex:1"><div class="sr-name">Section ${sec}</div><div class="sr-bar"><div class="sr-fill" style="width:${Math.min(100,pct)}%"></div></div></div>
-      <div style="text-align:right;margin-left:12px">
-        <div style="font-size:14px;font-weight:700;color:var(--navy)">${stuCount}/${cap}</div>
-        <div style="font-size:10px;color:var(--muted)">registered</div>
+// ==================== POPULATION (ONLY MARKETING MANAGEMENT) ====================
+async function renderPopulation() {
+  let registeredUsers = [];
+  try { registeredUsers = await dbGetUsers(); } catch (e) { }
+  const marketingStudents = registeredUsers.filter(u => u.course === 'Marketing Management');
+  const sectionCounts = {};
+  for (let sec of Object.keys(MARKETING_SECTIONS)) {
+    sectionCounts[sec] = marketingStudents.filter(u => u.section === sec).length;
+  }
+  const totalCapacity = Object.values(MARKETING_SECTIONS).reduce((a, b) => a + b, 0);
+  const totalRegistered = marketingStudents.length;
+  
+  document.getElementById('popStatbar').innerHTML = `
+    <div class="statpill">Total Capacity: <strong>${totalCapacity}</strong></div>
+    <div class="statpill">Registered: <strong>${totalRegistered}</strong></div>
+    <div class="statpill">Sections: <strong>${Object.keys(MARKETING_SECTIONS).length}</strong></div>
+  `;
+  
+  let sectionsHtml = '';
+  for (let [section, capacity] of Object.entries(MARKETING_SECTIONS)) {
+    const registered = sectionCounts[section] || 0;
+    const percent = Math.min(100, Math.round((registered / capacity) * 100));
+    sectionsHtml += `
+      <div class="section-row" onclick="showSectionDetail('${section}', ${capacity}, ${registered})">
+        <div><div class="sr-name">Section ${section}</div><div class="sr-bar"><div class="sr-fill" style="width:${percent}%"></div></div></div>
+        <div style="text-align:right">
+          <div style="font-size:14px;font-weight:700;color:var(--navy)">${registered} / ${capacity}</div>
+          <div style="font-size:10px;color:var(--muted)">registered</div>
+        </div>
       </div>
-    </div>`;
-  }).join('');
-  grid.innerHTML=`<div class="course-card" style="grid-column:1/-1">
-    <div class="cc-header"><div class="cc-name">${esc(mmCourse)}</div><div class="cc-total">${total} total slots</div></div>
-    <div class="cc-body">${srows}</div>
-  </div>`;
+    `;
+  }
+  
+  document.getElementById('courseGrid').innerHTML = `
+    <div class="course-card">
+      <div class="cc-header"><div class="cc-name">📊 Marketing Management</div><div class="cc-total">${totalRegistered} / ${totalCapacity} enrolled</div></div>
+      <div class="cc-body">${sectionsHtml}</div>
+    </div>
+  `;
 }
 
-async function showSectionDetail(section,course,capacity){
-  document.getElementById('mSecTitle').textContent='Section '+section;
-  document.getElementById('mSecCourse').textContent=course;
-  let users=[];
-  try{const all=await dbGetUsers();users=all.filter(u=>u.section===section);}catch{}
-  const regCount=users.length;
-  document.getElementById('mSecBadge').textContent=regCount+'/'+capacity+' registered';
-  document.getElementById('mSecBar').style.width=Math.min(100,Math.round(regCount/capacity*100))+'%';
-  document.getElementById('mSecCapacity').textContent='Registered: '+regCount+' / '+capacity+' slots';
-  const stuDiv=document.getElementById('mSecStudents');
-  if(!users.length){
-    stuDiv.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">No students registered yet for this section.</div>';
-  }else{
-    stuDiv.innerHTML='<div style="font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:500">'+users.length+' registered student'+(users.length!==1?'s':'')+'</div>'+
-      users.map((u,i)=>`<div class="student-row">
+async function showSectionDetail(section, capacity, registered) {
+  let users = [];
+  try { const all = await dbGetUsers(); users = all.filter(u => u.course === 'Marketing Management' && u.section === section); } catch (e) { }
+  const percent = Math.min(100, Math.round((registered / capacity) * 100));
+  
+  document.getElementById('mSecTitle').textContent = 'Section ' + section;
+  document.getElementById('mSecCourse').textContent = 'Marketing Management';
+  document.getElementById('mSecBadge').textContent = registered + ' / ' + capacity + ' students';
+  document.getElementById('mSecBar').style.width = percent + '%';
+  document.getElementById('mSecCapacity').innerHTML = `Enrolled: ${registered} out of ${capacity} capacity (${percent}%)`;
+  
+  if (!users.length) {
+    document.getElementById('mSecStudents').innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">No students registered yet.</div>';
+  } else {
+    document.getElementById('mSecStudents').innerHTML = users.map(u => `
+      <div class="student-row">
         <div class="student-avatar">${esc(u.name.charAt(0).toUpperCase())}</div>
         <div class="student-info"><div class="student-name">${esc(u.name)}</div><div class="student-sn">${esc(u.studentNum)}</div></div>
-      </div>`).join('');
+      </div>
+    `).join('');
   }
   openM('mSection');
 }
 
-// ── SUBMIT ────────────────────────────────
-function resetSubmit(){
-  ['subTitle','subAuthors','subAbstract','subCat','subLink'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('subYear').value=new Date().getFullYear();
-  document.getElementById('subSection').value='';
-  document.getElementById('citePreview').textContent='Fill in the title and authors above to preview the citation.';
-  document.getElementById('pdfName').textContent='';
+// ==================== SUBMIT ====================
+function resetSubmit() {
+  ['subTitle', 'subAuthors', 'subAbstract', 'subCat', 'subLink'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  document.getElementById('subYear').value = new Date().getFullYear();
+  document.getElementById('subSection').value = '';
+  document.getElementById('citePreview').textContent = 'Fill in the title and authors above to preview the citation.';
+  document.getElementById('pdfName').textContent = '';
   document.getElementById('uzone').classList.remove('has');
-  document.getElementById('pdfFile').value='';
-  document.getElementById('aSubmit').style.display='none';
-  document.getElementById('subBtn').disabled=false;
-  document.getElementById('subBtn').textContent='Submit Research Paper';
-  pdfB64=null;
+  document.getElementById('pdfFile').value = '';
+  document.getElementById('aSubmit').style.display = 'none';
+  document.getElementById('subBtn').disabled = false;
+  document.getElementById('subBtn').textContent = 'Submit Research Paper';
+  pdfB64 = null;
 }
-function setSubFmt(fmt,btn){
-  subFmt=fmt;
-  document.querySelectorAll('.fsec .rfb').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');updatePreview();
+function setSubFmt(fmt, btn) {
+  subFmt = fmt;
+  document.querySelectorAll('.fsec .rfb').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active'); updatePreview();
 }
-function updatePreview(){
-  const t=document.getElementById('subTitle').value.trim();
-  const a=document.getElementById('subAuthors').value.trim();
-  const s=getSess();
-  if(!t){document.getElementById('citePreview').textContent='Fill in the title and authors above to preview the citation.';return;}
-  document.getElementById('citePreview').innerHTML=genRef({title:t,authors:a||s&&s.studentNum||'Author',year:parseInt(document.getElementById('subYear').value)||new Date().getFullYear()},subFmt);
+function updatePreview() {
+  const t = document.getElementById('subTitle').value.trim();
+  const a = document.getElementById('subAuthors').value.trim();
+  const s = getSess();
+  if (!t) { document.getElementById('citePreview').textContent = 'Fill in the title and authors above to preview the citation.'; return; }
+  document.getElementById('citePreview').innerHTML = genRef({ title: t, authors: a || (s && s.studentNum) || 'Author', year: parseInt(document.getElementById('subYear').value) || new Date().getFullYear() }, subFmt);
 }
-function handlePDF(input){
-  const f=input.files[0];if(!f)return;
-  if(!f.name.toLowerCase().endsWith('.pdf')){alert('Only PDF files accepted.');input.value='';return;}
-  if(f.size>4*1024*1024){alert('File too large. Max 4MB. Please compress your PDF first.');input.value='';return;}
-  document.getElementById('pdfName').textContent='✓ '+f.name+' ('+(f.size/1024).toFixed(0)+' KB)';
+function handlePDF(input) {
+  const f = input.files[0]; if (!f) return;
+  if (!f.name.toLowerCase().endsWith('.pdf')) { alert('Only PDF files accepted.'); input.value = ''; return; }
+  if (f.size > 4 * 1024 * 1024) { alert('File too large. Max 4MB.'); input.value = ''; return; }
+  document.getElementById('pdfName').textContent = '✓ ' + f.name + ' (' + (f.size / 1024).toFixed(0) + ' KB)';
   document.getElementById('uzone').classList.add('has');
-  const rd=new FileReader();rd.onload=e=>{pdfB64=e.target.result;};rd.readAsDataURL(f);
+  const rd = new FileReader(); rd.onload = e => { pdfB64 = e.target.result; }; rd.readAsDataURL(f);
 }
-async function doSubmit(){
-  const s=getSess();if(!s){go('login');return;}
-  const title=document.getElementById('subTitle').value.trim();
-  const authors=document.getElementById('subAuthors').value.trim();
-  const abstract=document.getElementById('subAbstract').value.trim();
-  const cat=document.getElementById('subCat').value.trim();
-  const year=parseInt(document.getElementById('subYear').value)||new Date().getFullYear();
-  const section=document.getElementById('subSection').value;
-  const link=document.getElementById('subLink').value.trim();
-  if(!title){showAl('aSubmit','d','Please enter the research title.');return;}
-  if(!authors){showAl('aSubmit','d','Please enter the authors/researchers.');return;}
-  if(!abstract){showAl('aSubmit','d','Please write an abstract for the research.');return;}
-  const btn=document.getElementById('subBtn');
-  btn.disabled=true;btn.textContent='Submitting...';
-  showAl('aSubmit','i','Saving to shared database...');
-  try{
-    const entry={id:'r'+Date.now(),title,authors,abstract,category:cat||'Uncategorized',year,section:section||s.section||'',date:new Date().toISOString().split('T')[0],uploader:s.studentNum,link:link||null,hasPdf:!!pdfB64,pdf:pdfB64};
-    const ok=await dbSavePaper(entry);
-    if(ok){allPapers.push(entry);showAl('aSubmit','s','✅ Submitted! Your paper is now visible to all students.');setTimeout(()=>go('browse'),1200);}
-    else{showAl('aSubmit','d','Save failed. PDF may be too large. Try compressing it.');btn.disabled=false;btn.textContent='Submit Research Paper';}
-  }catch(e){showAl('aSubmit','d','Error: '+e.message);btn.disabled=false;btn.textContent='Submit Research Paper';}
+async function doSubmit() {
+  const s = getSess(); if (!s) { go('login'); return; }
+  const title = document.getElementById('subTitle').value.trim();
+  const authors = document.getElementById('subAuthors').value.trim();
+  const abstract = document.getElementById('subAbstract').value.trim();
+  const cat = document.getElementById('subCat').value.trim();
+  const year = parseInt(document.getElementById('subYear').value) || new Date().getFullYear();
+  const section = document.getElementById('subSection').value;
+  const link = document.getElementById('subLink').value.trim();
+  if (!title) { showAl('aSubmit', 'd', 'Please enter the research title.'); return; }
+  if (!authors) { showAl('aSubmit', 'd', 'Please enter the authors.'); return; }
+  if (!abstract) { showAl('aSubmit', 'd', 'Please write an abstract.'); return; }
+  const btn = document.getElementById('subBtn');
+  btn.disabled = true; btn.textContent = 'Submitting...';
+  showAl('aSubmit', 'i', 'Saving to database...');
+  try {
+    const entry = { id: 'r' + Date.now(), title, authors, abstract, category: cat || 'Uncategorized', year, section: section || s.section || '', date: new Date().toISOString().split('T')[0], uploader: s.studentNum, link: link || null, hasPdf: !!pdfB64, pdf: pdfB64 };
+    const ok = await dbSavePaper(entry);
+    if (ok) { allPapers.push(entry); showAl('aSubmit', 's', '✅ Submitted! Your paper is now visible to all students.'); setTimeout(() => go('browse'), 1200); }
+    else { showAl('aSubmit', 'd', 'Save failed.'); btn.disabled = false; btn.textContent = 'Submit Research Paper'; }
+  } catch (e) { showAl('aSubmit', 'd', 'Error: ' + e.message); btn.disabled = false; btn.textContent = 'Submit Research Paper'; }
 }
 
-// ── ADMIN ─────────────────────────────────
-let adminUsers=[],adminPapers=[];
-async function loadAdmin(){
-  try{adminUsers=await dbGetUsers();adminPapers=await dbGetPapers();allPapers=adminPapers;updateAdminStats();renderAPapers();renderAStudents();}
-  catch(e){console.error(e);}
+// ==================== ADMIN ====================
+let adminUsers = [], adminPapers = [];
+async function loadAdmin() {
+  try { adminUsers = await dbGetUsers(); adminPapers = await dbGetPapers(); allPapers = adminPapers; updateAdminStats(); renderAPapers(); renderAStudents(); }
+  catch (e) { console.error(e); }
 }
-function updateAdminStats(){
-  const cats=[...new Set(adminPapers.map(r=>r.category).filter(Boolean))];
-  document.getElementById('aStats').innerHTML=`
+function updateAdminStats() {
+  const cats = [...new Set(adminPapers.map(r => r.category).filter(Boolean))];
+  document.getElementById('aStats').innerHTML = `
     <div class="asc"><div class="n">${adminPapers.length}</div><div class="l">Research Papers</div></div>
     <div class="asc"><div class="n">${adminUsers.length}</div><div class="l">Students</div></div>
     <div class="asc"><div class="n">${cats.length}</div><div class="l">Categories</div></div>
-    <div class="asc r"><div class="n">${adminPapers.filter(r=>r.hasPdf).length}</div><div class="l">With PDF</div></div>`;
-  const last=adminPapers.length?adminPapers[adminPapers.length-1]:null;
-  document.getElementById('overviewTxt').innerHTML=
-    `<strong>${adminPapers.length}</strong> papers · <strong>${adminUsers.length}</strong> students · <strong>${cats.length}</strong> categories<br><br>`+
-    (last?`Latest: <em>${esc(last.title.substring(0,65))}${last.title.length>65?'...':''}</em>`:'No papers yet.');
+    <div class="asc r"><div class="n">${adminPapers.filter(r => r.hasPdf).length}</div><div class="l">With PDF</div></div>`;
+  const last = adminPapers.length ? adminPapers[adminPapers.length - 1] : null;
+  document.getElementById('overviewTxt').innerHTML = `<strong>${adminPapers.length}</strong> papers · <strong>${adminUsers.length}</strong> students · <strong>${cats.length}</strong> categories<br><br>${last ? `Latest: <em>${esc(last.title.substring(0, 65))}${last.title.length > 65 ? '...' : ''}</em>` : 'No papers yet.'}`;
 }
-function renderAPapers(){
-  const q=(document.getElementById('aPSearch').value||'').toLowerCase();
-  let data=[...adminPapers].reverse();
-  if(q) data=data.filter(r=>r.title.toLowerCase().includes(q)||(r.category||'').toLowerCase().includes(q)||r.uploader.toLowerCase().includes(q)||(r.authors||'').toLowerCase().includes(q));
-  const tb=document.getElementById('aPapersTb');
-  if(!data.length){tb.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--muted)">No papers found.</td></tr>`;return;}
-  tb.innerHTML=data.map(r=>`<tr>
-    <td style="max-width:180px"><div style="font-size:12px;font-weight:500;line-height:1.3;cursor:pointer;color:#1a56db" onclick='openPaperDetail("${esc(r.id)}")'>${esc(r.title.substring(0,60))}${r.title.length>60?'...':''}</div></td>
-    <td style="font-size:11px;color:var(--muted);max-width:120px">${esc((r.authors||'').substring(0,40))}</td>
-    <td><span style="background:var(--gold-light);color:#7a5c10;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500">${esc(r.category||'—')}</span></td>
-    <td style="font-size:12px">${r.section?'Sec '+r.section:'—'}</td>
-    <td style="font-size:12px">${r.year||'—'}</td>
-    <td style="font-size:12px">${esc(r.uploader)}</td>
-    <td><div style="display:flex;gap:4px">
-      <button class="bsm d" onclick='adminDelPaper("${esc(r.id)}")'>Remove</button>
-    </div></td></tr>`).join('');
+function renderAPapers() {
+  const q = (document.getElementById('aPSearch').value || '').toLowerCase();
+  let data = [...adminPapers].reverse();
+  if (q) data = data.filter(r => r.title.toLowerCase().includes(q) || (r.category || '').toLowerCase().includes(q) || r.uploader.toLowerCase().includes(q) || (r.authors || '').toLowerCase().includes(q));
+  const tb = document.getElementById('aPapersTb');
+  if (!data.length) { tb.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:28px">No papers found. </div>`; return; }
+  tb.innerHTML = data.map(r => `<tr>
+    <td style="max-width:180px"><div style="font-size:12px;font-weight:500;cursor:pointer;color:#1a56db" onclick='openPaperDetail("${esc(r.id)}")'>${esc(r.title.substring(0, 60))}${r.title.length > 60 ? '...' : ''}</div></td>
+    <td style="font-size:11px">${esc((r.authors || '').substring(0, 40))}</div>`,
+    <td><span style="background:var(--gold-light);padding:2px 8px;border-radius:20px;font-size:10px">${esc(r.category || '—')}</span></td>
+    <td style="font-size:12px">${r.section || '—'}</td>
+    <td style="font-size:12px">${r.year || '—'}</td>
+    <td style="font-size:12px">${esc(r.uploader)}</div>`,
+    <td><button class="bsm d" onclick='adminDelPaper("${esc(r.id)}")'>Remove</button></td>
+  `).join('');
 }
-async function adminDelPaper(id){
-  confirmDo('🗑️','Remove Paper','Permanently delete this research paper?',async()=>{
-    try{await dbDeletePaper(id);adminPapers=adminPapers.filter(p=>p.id!==id);allPapers=adminPapers;renderAPapers();updateAdminStats();}
-    catch(e){alert('Failed: '+e.message);}
+async function adminDelPaper(id) {
+  confirmDo('🗑️', 'Remove Paper', 'Permanently delete this research paper?', async () => {
+    try { await dbDeletePaper(id); adminPapers = adminPapers.filter(p => p.id !== id); allPapers = adminPapers; renderAPapers(); updateAdminStats(); }
+    catch (e) { alert('Failed: ' + e.message); }
   });
 }
-function renderAStudents(){
-  const q=(document.getElementById('aSSearch').value||'').toLowerCase();
-  let data=[...adminUsers];
-  if(q) data=data.filter(u=>u.studentNum.toLowerCase().includes(q)||u.name.toLowerCase().includes(q)||(u.course||'').toLowerCase().includes(q)||(u.section||'').toLowerCase().includes(q));
-  const tb=document.getElementById('aStudentsTb');
-  if(!data.length){tb.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--muted)">No students registered yet.</td></tr>`;return;}
-  tb.innerHTML=data.map(u=>`<tr>
+function renderAStudents() {
+  const q = (document.getElementById('aSSearch').value || '').toLowerCase();
+  let data = [...adminUsers];
+  if (q) data = data.filter(u => u.studentNum.toLowerCase().includes(q) || u.name.toLowerCase().includes(q) || (u.course || '').toLowerCase().includes(q) || (u.section || '').toLowerCase().includes(q));
+  const tb = document.getElementById('aStudentsTb');
+  if (!data.length) { tb.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:28px">No students registered yet. </div>`; return; }
+  tb.innerHTML = data.map(u => `<tr>
     <td><span style="background:var(--bluebg);color:var(--blue);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600">${esc(u.studentNum)}</span></td>
-    <td style="font-size:12px;font-weight:500">${esc(u.name)}</td>
-    <td style="font-size:11px;color:var(--muted)">${esc(u.course||'—')}</td>
-    <td style="font-size:12px">${u.section?'Sec '+u.section:'—'}</td>
-    <td style="font-size:12px">${u.joined?new Date(u.joined).toLocaleDateString():'—'}</td>
-    <td style="font-size:12px">${adminPapers.filter(r=>r.uploader===u.studentNum).length}</td>
-    <td><button class="bsm d" onclick='adminRemoveStudent("${esc(u.studentNum)}")'>Remove</button></td></tr>`).join('');
+    <td style="font-size:12px;font-weight:500">${esc(u.name)}</div>`,
+    <td style="font-size:11px">${esc(u.course || '—')}</td>
+    <td style="font-size:12px">${u.section || '—'}</td>
+    <td style="font-size:12px">${u.joined ? new Date(u.joined).toLocaleDateString() : '—'}</td>
+    <td style="font-size:12px">${adminPapers.filter(r => r.uploader === u.studentNum).length}</td>
+    <td><button class="bsm d" onclick='adminRemoveStudent("${esc(u.studentNum)}")'>Remove</button></td>
+  `).join('');
 }
-async function adminRemoveStudent(sn){
-  confirmDo('👤','Remove Student',`Remove student ${sn}? Their account will be deleted.`,async()=>{
-    try{await dbDeleteUser(sn);adminUsers=adminUsers.filter(u=>u.studentNum!==sn);updateAdminStats();renderAStudents();}
-    catch(e){alert('Failed: '+e.message);}
+async function adminRemoveStudent(sn) {
+  confirmDo('👤', 'Remove Student', `Remove student ${sn}? Their account will be deleted.`, async () => {
+    try {
+      if (useFirebase) { await db.collection('users').doc(sn).delete(); }
+      else { const users = lGet(LK.users, []).filter(u => u.studentNum !== sn); lSet(LK.users, users); }
+      adminUsers = adminUsers.filter(u => u.studentNum !== sn);
+      updateAdminStats(); renderAStudents();
+    } catch (e) { alert('Failed: ' + e.message); }
   });
 }
-function aTab(name,btn){
-  document.querySelectorAll('.atab').forEach(t=>t.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  document.querySelectorAll('.asec').forEach(s=>s.classList.remove('active'));
-  document.getElementById('asec-'+name).classList.add('active');
-  if(name==='papers')renderAPapers();
-  if(name==='students')renderAStudents();
-  if(name==='overview')updateAdminStats();
+function aTab(name, btn) {
+  document.querySelectorAll('.atab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.querySelectorAll('.asec').forEach(s => s.classList.remove('active'));
+  document.getElementById('asec-' + name).classList.add('active');
+  if (name === 'papers') renderAPapers();
+  if (name === 'students') renderAStudents();
+  if (name === 'overview') updateAdminStats();
 }
-async function changeAdminPW(){
-  const cur=document.getElementById('setCur').value;
-  const nw=document.getElementById('setNew').value;
-  const nw2=document.getElementById('setNew2').value;
-  if(!cur||!nw||!nw2){showAl('aSettings','d','Please fill in all fields.');return;}
-  const creds=await dbGetAdmin();
-  if(cur!==creds.password){showAl('aSettings','d','Current password is incorrect.');return;}
-  if(nw.length<6){showAl('aSettings','d','New password must be at least 6 characters.');return;}
-  if(nw!==nw2){showAl('aSettings','d','New passwords do not match.');return;}
-  const ok=await dbSaveAdmin({...creds,password:nw});
-  if(ok){showAl('aSettings','s','✅ Password updated!');['setCur','setNew','setNew2'].forEach(id=>document.getElementById(id).value='');}
-  else showAl('aSettings','d','Failed. Try again.');
+async function changeAdminPW() {
+  const cur = document.getElementById('setCur').value;
+  const nw = document.getElementById('setNew').value;
+  const nw2 = document.getElementById('setNew2').value;
+  if (!cur || !nw || !nw2) { showAl('aSettings', 'd', 'Fill all fields'); return; }
+  const creds = await dbGetAdmin();
+  if (cur !== creds.password) { showAl('aSettings', 'd', 'Current password incorrect'); return; }
+  if (nw.length < 6) { showAl('aSettings', 'd', 'Password must be 6+ chars'); return; }
+  if (nw !== nw2) { showAl('aSettings', 'd', 'Passwords do not match'); return; }
+  await dbSaveAdmin({ ...creds, password: nw });
+  showAl('aSettings', 's', '✅ Password updated!');
+  ['setCur', 'setNew', 'setNew2'].forEach(id => document.getElementById(id).value = '');
 }
-async function changeAdminUser(){
-  const nu=document.getElementById('setUN').value.trim();
-  const pw=document.getElementById('setUNPW').value;
-  if(!nu||!pw){showAl('aSettings','d','Please fill in all fields.');return;}
-  const creds=await dbGetAdmin();
-  if(pw!==creds.password){showAl('aSettings','d','Current password is incorrect.');return;}
-  const ok=await dbSaveAdmin({...creds,username:nu});
-  if(ok){showAl('aSettings','s','✅ Username updated to: '+nu);['setUN','setUNPW'].forEach(id=>document.getElementById(id).value='');}
-  else showAl('aSettings','d','Failed. Try again.');
+async function changeAdminUser() {
+  const nu = document.getElementById('setUN').value.trim();
+  const pw = document.getElementById('setUNPW').value;
+  if (!nu || !pw) { showAl('aSettings', 'd', 'Fill all fields'); return; }
+  const creds = await dbGetAdmin();
+  if (pw !== creds.password) { showAl('aSettings', 'd', 'Incorrect password'); return; }
+  await dbSaveAdmin({ ...creds, username: nu });
+  showAl('aSettings', 's', '✅ Username updated to: ' + nu);
+  document.getElementById('setUN').value = '';
+  document.getElementById('setUNPW').value = '';
 }
-
-// ── CONFIRM ───────────────────────────────
-function confirmDo(icon,title,msg,cb){
-  document.getElementById('mConIcon').textContent=icon;
-  document.getElementById('mConTitle').textContent=title;
-  document.getElementById('mConMsg').textContent=msg;
-  document.getElementById('mConOK').onclick=()=>{closeM('mConfirm');cb();};
+function confirmDo(icon, title, msg, cb) {
+  document.getElementById('mConIcon').textContent = icon;
+  document.getElementById('mConTitle').textContent = title;
+  document.getElementById('mConMsg').textContent = msg;
+  document.getElementById('mConOK').onclick = () => { closeM('mConfirm'); cb(); };
   openM('mConfirm');
 }
+document.querySelectorAll('.modal-bg').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
 
-// ── MODAL BACKDROPS ───────────────────────
-document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
-
-// ── INIT ──────────────────────────────────
+// ==================== INIT ====================
 updateNav();
 loadAndRender();
 </script>
