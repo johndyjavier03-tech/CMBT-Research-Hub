@@ -353,19 +353,13 @@ footer span{color:var(--gold);}
       <div class="fg"><label>Year &amp; Section</label>
         <select id="sSection">
           <option value="">Select your section</option>
-          <option value="1B">1B</option>
-          <option value="1C">1C</option>
-          <option value="2B">2B</option>
-          <option value="2C">2C</option>
-          <option value="2D">2D</option>
-          <option value="3H">3H</option>
-          <option value="4H">4H</option>
-          <option value="MM-1A">MM-1A</option>
           <option value="MM-1B">MM-1B</option>
-          <option value="MM-2A">MM-2A</option>
+          <option value="MM-1C">MM-1C</option>
           <option value="MM-2B">MM-2B</option>
-          <option value="MM-3A">MM-3A</option>
-          <option value="MM-3B">MM-3B</option>
+          <option value="MM-2C">MM-2C</option>
+          <option value="MM-2D">MM-2D</option>
+          <option value="MM-3H">MM-3H</option>
+          <option value="MM-4H">MM-4H</option>
         </select>
       </div>
       <div class="fg"><label>Password</label><input id="sPW" type="password" placeholder="Min 6 characters"/></div>
@@ -454,12 +448,13 @@ footer span{color:var(--gold);}
         <div class="fg"><label>Section</label>
           <select id="subSection">
             <option value="">Select section</option>
-            <option value="MM-1A">MM-1A</option>
             <option value="MM-1B">MM-1B</option>
-            <option value="MM-2A">MM-2A</option>
+            <option value="MM-1C">MM-1C</option>
             <option value="MM-2B">MM-2B</option>
-            <option value="MM-3A">MM-3A</option>
-            <option value="MM-3B">MM-3B</option>
+            <option value="MM-2C">MM-2C</option>
+            <option value="MM-2D">MM-2D</option>
+            <option value="MM-3H">MM-3H</option>
+            <option value="MM-4H">MM-4H</option>
           </select>
         </div>
       </div>
@@ -673,23 +668,18 @@ async function dbSaveAdmin(c){
 
 // ── POPULATION DATA ───────────────────────
 const POPULATION = {
-  'BS Information Technology':   {sections:{'1B':43,'1C':39}},
-  'BS Business Administration':  {sections:{'2B':34,'2C':35,'2D':36}},
-  'BS Nursing':                  {sections:{'3H':41,'4H':30}},
-  'Marketing Management':        {sections:{'MM-1A':49,'MM-1B':49,'MM-2A':49,'MM-2B':49,'MM-3A':49,'MM-3B':49}},
+  'Marketing Management':        {sections:{'MM-1B':43,'MM-1C':39,'MM-2B':34,'MM-2C:35,'MM-2D':36,'MM-3H':41,'MM-4H':30}},
 };
 // Population page only shows Marketing Management
 const POPULATION_PAGE_COURSES = ['Marketing Management'];
-const ALL_SECTIONS = ['1B','1C','2B','2C','2D','3H','4H','MM-1A','MM-1B','MM-2A','MM-2B','MM-3A','MM-3B'];
+const ALL_SECTIONS = ['MM-1B','MM-1C','MM-2B','MM-2C','MM-2D','MM-3H', 'MM-4H'];
 const SECTION_COURSE = {
-  '1B':'BS Information Technology','1C':'BS Information Technology',
-  '2B':'BS Business Administration','2C':'BS Business Administration','2D':'BS Business Administration',
-  '3H':'BS Nursing','4H':'BS Nursing',
-  'MM-1A':'Marketing Management','MM-1B':'Marketing Management',
-  'MM-2A':'Marketing Management','MM-2B':'Marketing Management',
-  'MM-3A':'Marketing Management','MM-3B':'Marketing Management',
+  'MM-1B':'Marketing Management','MM-1C':'Marketing Management',
+  'MM-2B':'Marketing Management','MM-2C':'Marketing Management',
+  'MM-2D':'Marketing Management','MM-3H':'Marketing Management',
+  'MM-4H':'Marketing Management',
 };
-const SECTION_CAPACITY = {'1B':43,'1C':39,'2B':34,'2C':35,'2D':36,'3H':41,'4H':30,'MM-1A':49,'MM-1B':49,'MM-2A':49,'MM-2B':49,'MM-3A':49,'MM-3B':49};
+const SECTION_CAPACITY = {'MM-1B':43,'MM-1C':39,'MM-2B':34,'MM-2C':35,'MM-2D':36,'MM-3H':41,'MM-4H':30};
 
 // ── SESSION ───────────────────────────────
 const SESS='cmbt_session_v2';
@@ -771,15 +761,12 @@ async function doLogin(){
 
 // ── SECTION OPTIONS PER COURSE ────────────
 const COURSE_SECTIONS = {
-  'BS Information Technology':  ['1B','1C'],
-  'BS Business Administration': ['2B','2C','2D'],
-  'BS Nursing':                 ['3H','4H'],
-  'Marketing Management':       ['MM-1A','MM-1B','MM-2A','MM-2B','MM-3A','MM-3B'],
+  'Marketing Management':       ['MM-1B','MM-1C','MM-2B','MM-2C','MM-2D','MM-3H','MM-4H'],
 };
 function updateSectionOptions(){
   const course=document.getElementById('sCourse').value;
   const sel=document.getElementById('sSection');
-  const opts=COURSE_SECTIONS[course]||['1B','1C','2B','2C','2D','3H','4H','MM-1A','MM-1B','MM-2A','MM-2B','MM-3A','MM-3B'];
+  const opts=COURSE_SECTIONS[course]||['MM-1B','MM-1C','MM-2B','MM-2C','MM-2D','MM-3H','MM-4H'];
   sel.innerHTML='<option value="">Select your section</option>'+opts.map(s=>`<option value="${s}">${s}</option>`).join('');
 }
 
