@@ -526,6 +526,38 @@ footer span{color:var(--gold);}
         <div class="fg"><label>Current Password (to confirm)</label><input id="setUNPW" type="password" placeholder="Current password"/></div>
         <button class="btn gold" onclick="changeAdminUser()">Update Username</button>
       </div>
+      <div class="fsec" style="max-width:500px;margin-top:16px">
+        <h3>📧 EmailJS Setup (OTP Email Sending)</h3>
+        <div id="aEmailJS" class="al" style="display:none"></div>
+        <div class="al i" style="display:block;margin-bottom:14px;font-size:12px;line-height:1.7">
+          <strong>How to set up (free):</strong><br>
+          1. Go to <a href="https://www.emailjs.com" target="_blank" style="color:var(--blue)">emailjs.com</a> → Sign up free<br>
+          2. <strong>Email Services</strong> → Add New Service → choose <strong>Gmail</strong> → connect your Gmail → copy the <strong>Service ID</strong><br>
+          3. <strong>Email Templates</strong> → Create New Template → paste the template below → copy the <strong>Template ID</strong><br>
+          4. <strong>Account → General</strong> → copy your <strong>Public Key</strong><br>
+          5. Paste all 3 keys below and click Save.
+        </div>
+        <div style="background:var(--cream);border:1px solid var(--border);border-radius:7px;padding:12px 14px;font-size:11px;font-family:monospace;margin-bottom:14px;line-height:1.8;white-space:pre-wrap;word-break:break-all;">Subject: Your CMBT ResearchHub Verification Code
+
+Hello {{to_name}},
+
+Your verification code is:
+
+<span style="font-size:20px;font-weight:bold;letter-spacing:4px;">{{otp_code}}</span>
+
+This code expires in {{expiry_mins}} minutes.
+Do not share this code with anyone.
+
+— CMBT ResearchHub</div>
+        <div class="fg"><label>EmailJS Public Key</label><input id="ejsPublicKey" type="text" placeholder="e.g. aBcDeFgHiJkLmNoPq"/></div>
+        <div class="fg"><label>Service ID</label><input id="ejsServiceId" type="text" placeholder="e.g. service_xxxxxxx"/></div>
+        <div class="fg"><label>Template ID</label><input id="ejsTemplateId" type="text" placeholder="e.g. template_xxxxxxx"/></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn gold" onclick="saveEmailJSConfig()">Save EmailJS Config</button>
+          <button class="bsm o" onclick="testEmailJS()" style="padding:10px 16px">Send Test Email</button>
+        </div>
+        <div class="fg" style="margin-top:12px"><label>Test Email Address</label><input id="ejsTestEmail" type="email" placeholder="youremail@gmail.com"/></div>
+      </div>
     </div>
   </div>
 </div>
@@ -771,6 +803,14 @@ async function dbGetAdmin(){
 async function dbSaveAdmin(c){
   if(useFirebase){try{await db.collection('config').doc('admin').set(c);return true;}catch{useFirebase=false;}}
   return lSet(LK.admin,c);
+}
+async function dbGetEmailJS(){
+  if(useFirebase){try{const d=await db.collection('config').doc('emailjs').get();return d.exists?d.data():null;}catch{useFirebase=false;}}
+  return lGet('cmbt_emailjs',null);
+}
+async function dbSaveEmailJS(c){
+  if(useFirebase){try{await db.collection('config').doc('emailjs').set(c);return true;}catch{useFirebase=false;}}
+  return lSet('cmbt_emailjs',c);
 }
 
 // ── POPULATION DATA ───────────────────────
@@ -1147,7 +1187,7 @@ async function doSubmit(){
 // ── ADMIN ─────────────────────────────────
 let adminUsers=[],adminPapers=[];
 async function loadAdmin(){
-  try{adminUsers=await dbGetUsers();adminPapers=await dbGetPapers();allPapers=adminPapers;updateAdminStats();renderAPapers();renderAStudents();}
+  try{adminUsers=await dbGetUsers();adminPapers=await dbGetPapers();allPapers=adminPapers;updateAdminStats();renderAPapers();renderAStudents();loadEmailJSAdminPanel();}
   catch(e){console.error(e);}
 }
 function updateAdminStats(){
@@ -1239,40 +1279,84 @@ async function changeAdminUser(){
   else showAl('aSettings','d','Failed. Try again.');
 }
 
-// ════════════════════════════════════════════
-// EMAILJS CONFIG
-// 1. Sign up free at https://www.emailjs.com
-// 2. Create a service (Gmail) + email template
-// 3. Replace the values below
-// Template variables needed: {{to_email}}, {{to_name}}, {{otp_code}}, {{expiry_mins}}
-// ════════════════════════════════════════════
-const EMAILJS_PUBLIC_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY';
-const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
-let emailJSReady = false;
-try{emailjs.init({publicKey:EMAILJS_PUBLIC_KEY});emailJSReady=true;}catch(e){}
+// ── EMAILJS — loaded dynamically from DB ──
+let ejsCfg = null; // {publicKey, serviceId, templateId}
+let ejsInitialized = false;
+
+async function loadEmailJSConfig(){
+  try{ ejsCfg = await dbGetEmailJS(); }catch{}
+  if(ejsCfg && ejsCfg.publicKey && !ejsCfg.publicKey.startsWith('YOUR')){
+    try{ emailjs.init({publicKey: ejsCfg.publicKey}); ejsInitialized=true; }catch(e){ ejsInitialized=false; }
+  }
+}
 
 // ── OTP STORE (in-memory, expires 10 min) ─
-let otpStore = {}; // key -> {code, expires, email}
+let otpStore = {};
 let otpTimerIntervals = {};
 
-function genOTP(){return String(Math.floor(100000+Math.random()*900000));}
+function genOTP(){ return String(Math.floor(100000+Math.random()*900000)); }
 
 async function sendOTPEmail(toEmail, toName, code){
-  if(!emailJSReady||EMAILJS_PUBLIC_KEY==='YOUR_EMAILJS_PUBLIC_KEY'){
-    // Dev/local mode — show OTP on screen for testing
-    console.log('📧 OTP (dev mode):', code);
+  if(!ejsInitialized || !ejsCfg){
+    console.log('📧 OTP (dev/not configured):', code);
     return {devMode:true, code};
   }
   try{
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+    await emailjs.send(ejsCfg.serviceId, ejsCfg.templateId, {
       to_email: toEmail,
-      to_name: toName||toEmail,
+      to_name:  toName||toEmail,
       otp_code: code,
       expiry_mins: '10'
     });
     return {ok:true};
-  }catch(e){return {error:e.text||e.message||'Email send failed'};}
+  }catch(e){
+    console.error('EmailJS error:',e);
+    return {error: e.text||e.message||'Email send failed'};
+  }
+}
+
+// ── ADMIN EMAILJS SETTINGS ────────────────
+async function loadEmailJSAdminPanel(){
+  const cfg = await dbGetEmailJS();
+  if(cfg){
+    const el=id=>document.getElementById(id);
+    if(cfg.publicKey) el('ejsPublicKey').value=cfg.publicKey;
+    if(cfg.serviceId) el('ejsServiceId').value=cfg.serviceId;
+    if(cfg.templateId) el('ejsTemplateId').value=cfg.templateId;
+    if(cfg.publicKey && !cfg.publicKey.startsWith('YOUR')){
+      showAl('aEmailJS','s','✅ EmailJS is configured and active.');
+    }
+  }
+}
+
+async function saveEmailJSConfig(){
+  hideAl('aEmailJS');
+  const publicKey  = document.getElementById('ejsPublicKey').value.trim();
+  const serviceId  = document.getElementById('ejsServiceId').value.trim();
+  const templateId = document.getElementById('ejsTemplateId').value.trim();
+  if(!publicKey||!serviceId||!templateId){showAl('aEmailJS','d','Please fill in all 3 fields.');return;}
+  const cfg={publicKey,serviceId,templateId};
+  const ok=await dbSaveEmailJS(cfg);
+  if(ok){
+    ejsCfg=cfg;
+    try{emailjs.init({publicKey});ejsInitialized=true;}catch(e){ejsInitialized=false;}
+    showAl('aEmailJS','s','✅ EmailJS config saved! Send a test email to verify.');
+  } else {
+    showAl('aEmailJS','d','Failed to save. Try again.');
+  }
+}
+
+async function testEmailJS(){
+  hideAl('aEmailJS');
+  const testEmail=document.getElementById('ejsTestEmail').value.trim();
+  if(!testEmail){showAl('aEmailJS','d','Enter a test email address first.');return;}
+  if(!ejsInitialized||!ejsCfg){showAl('aEmailJS','d','Save your EmailJS config first.');return;}
+  const code=genOTP();
+  showAl('aEmailJS','i','Sending test email...');
+  const result=await sendOTPEmail(testEmail,'Test User',code);
+  if(result.ok) showAl('aEmailJS','s','✅ Test email sent to '+testEmail+'! Check inbox. Code: '+code);
+  else if(result.devMode) showAl('aEmailJS','w','Dev mode — not sent. Code would be: '+code);
+  else showAl('aEmailJS','d','❌ Failed: '+result.error+' — Check your Service ID, Template ID, and Public Key.');
 }
 
 function startOTPTimer(timerElId, key, onExpire){
@@ -1483,6 +1567,7 @@ document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>
 // ── INIT ──────────────────────────────────
 updateNav();
 loadAndRender();
+loadEmailJSConfig();
 </script>
 </body>
 </html>
