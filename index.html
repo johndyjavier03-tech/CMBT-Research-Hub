@@ -247,6 +247,7 @@ footer span{color:var(--gold);}
 .statpill{background:var(--white);border:1px solid var(--border);border-radius:7px;padding:6px 13px;font-size:12px;color:var(--muted);}
 .statpill strong{color:var(--navy);}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 <div id="app">
@@ -622,7 +623,7 @@ footer span{color:var(--gold);}
       <div id="gmailInputBox">
         <div class="fg"><label>Gmail Address</label><input id="stgGmail" type="email" placeholder="yourname@gmail.com"/><div class="fhint">Must be a valid @gmail.com address</div></div>
         <div class="fg"><label>Confirm Password (to save)</label><input id="stgGmailPW" type="password" placeholder="Your current password"/></div>
-        <button class="btn gold" onclick="connectGmail()">Connect Gmail</button>
+        <button class="btn gold" onclick="connectGmail()">Send Verification Code</button>
       </div>
     </div>
 
@@ -636,26 +637,64 @@ footer span{color:var(--gold);}
 <div class="modal-bg" id="mForgotPW">
   <div class="modal" style="max-width:440px">
     <h3>Forgot Password</h3>
-    <div class="ms">Enter your student number and recovery Gmail to reset your password.</div>
+    <div class="ms" id="frgSubtitle">Enter your student number and recovery Gmail to reset your password.</div>
     <div id="aForgot" class="al" style="display:none"></div>
-    <!-- Step 1: lookup -->
+
+    <!-- Step 1: Identity lookup -->
     <div id="forgotStep1">
       <div class="fg"><label>Student Number</label><input id="frgSN" type="text" placeholder="e.g. SUM2023-02430"/></div>
       <div class="fg"><label>Recovery Gmail</label><input id="frgGmail" type="email" placeholder="yourname@gmail.com"/></div>
       <div class="mact">
         <button class="bsm o" onclick="closeM('mForgotPW')">Cancel</button>
-        <button class="bsm n" onclick="forgotVerify()">Verify Identity</button>
+        <button class="bsm n" id="frgVerifyBtn" onclick="forgotVerify()">Send Code</button>
       </div>
     </div>
-    <!-- Step 2: reset -->
+
+    <!-- Step 2: OTP verification -->
     <div id="forgotStep2" style="display:none">
-      <div class="al s" style="display:block;margin-bottom:12px;">✅ Identity verified! Set your new password below.</div>
+      <div class="al i" style="display:block;margin-bottom:14px;">📧 A 6-digit code was sent to your Gmail. Enter it below. <strong>Expires in 10 minutes.</strong></div>
+      <div class="fg">
+        <label>Verification Code</label>
+        <input id="frgOTP" type="text" maxlength="6" placeholder="Enter 6-digit code" style="letter-spacing:6px;font-size:20px;font-weight:700;text-align:center;" onkeydown="if(event.key==='Enter')forgotOTPVerify()"/>
+        <div class="fhint">Check your Gmail inbox (and spam folder)</div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;" id="frgOTPTimer"></div>
+      <div class="mact">
+        <button class="bsm o" onclick="forgotBackToStep1()">← Back</button>
+        <button class="bsm o" onclick="forgotVerify(true)" style="color:var(--blue)">Resend Code</button>
+        <button class="bsm n" onclick="forgotOTPVerify()">Verify Code</button>
+      </div>
+    </div>
+
+    <!-- Step 3: New password -->
+    <div id="forgotStep3" style="display:none">
+      <div class="al s" style="display:block;margin-bottom:12px;">✅ Code verified! Set your new password below.</div>
       <div class="fg"><label>New Password</label><input id="frgNewPW" type="password" placeholder="Min 6 characters"/></div>
       <div class="fg"><label>Confirm New Password</label><input id="frgNewPW2" type="password" placeholder="Repeat new password"/></div>
       <div class="mact">
         <button class="bsm o" onclick="closeM('mForgotPW')">Cancel</button>
         <button class="bsm g" onclick="forgotReset()">Reset Password</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- GMAIL OTP MODAL (for Settings - Connect Gmail) -->
+<div class="modal-bg" id="mGmailOTP">
+  <div class="modal" style="max-width:400px">
+    <h3>Verify Your Gmail</h3>
+    <div class="ms">A 6-digit code was sent to <strong id="gmailOTPAddr"></strong>. Enter it to confirm.</div>
+    <div id="aGmailOTP" class="al" style="display:none"></div>
+    <div class="fg" style="margin-top:14px">
+      <label>Verification Code</label>
+      <input id="gmailOTPInput" type="text" maxlength="6" placeholder="Enter 6-digit code" style="letter-spacing:6px;font-size:20px;font-weight:700;text-align:center;" onkeydown="if(event.key==='Enter')verifyGmailOTP()"/>
+      <div class="fhint">Check your Gmail inbox (and spam folder)</div>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px;" id="gmailOTPTimer"></div>
+    <div class="mact">
+      <button class="bsm o" onclick="closeM('mGmailOTP')">Cancel</button>
+      <button class="bsm o" onclick="resendGmailOTP()" style="color:var(--blue)">Resend Code</button>
+      <button class="bsm n" onclick="verifyGmailOTP()">Confirm</button>
     </div>
   </div>
 </div>
@@ -1200,6 +1239,52 @@ async function changeAdminUser(){
   else showAl('aSettings','d','Failed. Try again.');
 }
 
+// ════════════════════════════════════════════
+// EMAILJS CONFIG
+// 1. Sign up free at https://www.emailjs.com
+// 2. Create a service (Gmail) + email template
+// 3. Replace the values below
+// Template variables needed: {{to_email}}, {{to_name}}, {{otp_code}}, {{expiry_mins}}
+// ════════════════════════════════════════════
+const EMAILJS_PUBLIC_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY';
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+let emailJSReady = false;
+try{emailjs.init({publicKey:EMAILJS_PUBLIC_KEY});emailJSReady=true;}catch(e){}
+
+// ── OTP STORE (in-memory, expires 10 min) ─
+let otpStore = {}; // key -> {code, expires, email}
+let otpTimerIntervals = {};
+
+function genOTP(){return String(Math.floor(100000+Math.random()*900000));}
+
+async function sendOTPEmail(toEmail, toName, code){
+  if(!emailJSReady||EMAILJS_PUBLIC_KEY==='YOUR_EMAILJS_PUBLIC_KEY'){
+    // Dev/local mode — show OTP on screen for testing
+    console.log('📧 OTP (dev mode):', code);
+    return {devMode:true, code};
+  }
+  try{
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email: toEmail,
+      to_name: toName||toEmail,
+      otp_code: code,
+      expiry_mins: '10'
+    });
+    return {ok:true};
+  }catch(e){return {error:e.text||e.message||'Email send failed'};}
+}
+
+function startOTPTimer(timerElId, key, onExpire){
+  if(otpTimerIntervals[key]) clearInterval(otpTimerIntervals[key]);
+  const el=document.getElementById(timerElId);
+  otpTimerIntervals[key]=setInterval(()=>{
+    const rem=Math.max(0,Math.round((otpStore[key]?.expires-Date.now())/1000));
+    if(el) el.textContent=rem>0?`Code expires in ${rem}s`:'Code expired. Please request a new one.';
+    if(rem<=0){clearInterval(otpTimerIntervals[key]);if(onExpire)onExpire();}
+  },1000);
+}
+
 // ── STUDENT SETTINGS ─────────────────────
 function loadStudentSettings(){
   hideAl('aStgPW');hideAl('aStgGmail');
@@ -1233,6 +1318,9 @@ async function studentChangePW(){
   else showAl('aStgPW','d','Failed to update. Please try again.');
 }
 
+// pending gmail connect state
+let pendingGmail='', pendingGmailPW='';
+
 async function connectGmail(){
   hideAl('aStgGmail');
   const gmail=document.getElementById('stgGmail').value.trim().toLowerCase();
@@ -1241,10 +1329,53 @@ async function connectGmail(){
   if(!/^[^\s@]+@gmail\.com$/.test(gmail)){showAl('aStgGmail','d','Please enter a valid @gmail.com address.');return;}
   const s=getSess();
   if(pw!==s.password){showAl('aStgGmail','d','Incorrect password.');return;}
-  const updated={...s,recoveryGmail:gmail};
+  // Send OTP
+  const code=genOTP();
+  otpStore['gmailConnect']={code,expires:Date.now()+600000,email:gmail};
+  pendingGmail=gmail; pendingGmailPW=pw;
+  const result=await sendOTPEmail(gmail, s.name, code);
+  if(result.error){showAl('aStgGmail','d','Failed to send email: '+result.error);return;}
+  // Open OTP modal
+  document.getElementById('gmailOTPAddr').textContent=gmail;
+  document.getElementById('gmailOTPInput').value='';
+  hideAl('aGmailOTP');
+  openM('mGmailOTP');
+  startOTPTimer('gmailOTPTimer','gmailConnect',null);
+  if(result.devMode) showAl('aGmailOTP','w','⚠️ Dev mode: EmailJS not configured. OTP logged to console: '+code);
+}
+
+async function resendGmailOTP(){
+  const s=getSess();
+  const code=genOTP();
+  otpStore['gmailConnect']={code,expires:Date.now()+600000,email:pendingGmail};
+  const result=await sendOTPEmail(pendingGmail, s.name, code);
+  if(result.error){showAl('aGmailOTP','d','Failed to resend: '+result.error);return;}
+  startOTPTimer('gmailOTPTimer','gmailConnect',null);
+  showAl('aGmailOTP','s','✅ New code sent!');
+  if(result.devMode) showAl('aGmailOTP','w','⚠️ Dev mode OTP: '+code);
+}
+
+async function verifyGmailOTP(){
+  hideAl('aGmailOTP');
+  const entered=document.getElementById('gmailOTPInput').value.trim();
+  const rec=otpStore['gmailConnect'];
+  if(!rec){showAl('aGmailOTP','d','No code found. Please request a new one.');return;}
+  if(Date.now()>rec.expires){showAl('aGmailOTP','d','Code has expired. Please request a new one.');return;}
+  if(entered!==rec.code){showAl('aGmailOTP','d','Incorrect code. Please try again.');return;}
+  // Save gmail
+  const s=getSess();
+  const updated={...s,recoveryGmail:pendingGmail};
   const ok=await dbSaveUser(updated);
-  if(ok){setSess(updated);showAl('aStgGmail','s','✅ Gmail connected successfully!');loadStudentSettings();}
-  else showAl('aStgGmail','d','Failed to save. Please try again.');
+  if(ok){
+    setSess(updated);
+    clearInterval(otpTimerIntervals['gmailConnect']);
+    delete otpStore['gmailConnect'];
+    closeM('mGmailOTP');
+    showAl('aStgGmail','s','✅ Gmail verified and connected!');
+    loadStudentSettings();
+  } else {
+    showAl('aGmailOTP','d','Failed to save. Please try again.');
+  }
 }
 
 async function disconnectGmail(){
@@ -1257,16 +1388,25 @@ async function disconnectGmail(){
 
 // ── FORGOT PASSWORD ───────────────────────
 let forgotVerifiedSN='';
+
 function openForgotPW(){
   forgotVerifiedSN='';
-  ['frgSN','frgGmail','frgNewPW','frgNewPW2'].forEach(id=>document.getElementById(id).value='');
+  ['frgSN','frgGmail','frgOTP','frgNewPW','frgNewPW2'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   hideAl('aForgot');
   document.getElementById('forgotStep1').style.display='block';
   document.getElementById('forgotStep2').style.display='none';
+  document.getElementById('forgotStep3').style.display='none';
   openM('mForgotPW');
 }
 
-async function forgotVerify(){
+function forgotBackToStep1(){
+  hideAl('aForgot');
+  document.getElementById('forgotStep1').style.display='block';
+  document.getElementById('forgotStep2').style.display='none';
+  document.getElementById('forgotStep3').style.display='none';
+}
+
+async function forgotVerify(isResend=false){
   hideAl('aForgot');
   const sn=document.getElementById('frgSN').value.trim().toUpperCase();
   const gmail=document.getElementById('frgGmail').value.trim().toLowerCase();
@@ -1276,10 +1416,40 @@ async function forgotVerify(){
   const users=await dbGetUsers();
   const user=users.find(u=>u.studentNum===sn);
   if(!user){showAl('aForgot','d','No account found with that student number.');return;}
-  if(!user.recoveryGmail||user.recoveryGmail!==gmail){showAl('aForgot','d','Recovery Gmail does not match our records. Make sure you connected it in Account Settings.');return;}
+  if(!user.recoveryGmail||user.recoveryGmail!==gmail){
+    showAl('aForgot','d','Recovery Gmail does not match our records. Please connect your Gmail in Account Settings first.');return;
+  }
+  // Send OTP
+  const code=genOTP();
+  otpStore['forgotPW']={code,expires:Date.now()+600000,email:gmail};
   forgotVerifiedSN=sn;
+  const btn=document.getElementById('frgVerifyBtn');
+  if(btn){btn.disabled=true;btn.textContent='Sending...';}
+  const result=await sendOTPEmail(gmail, user.name, code);
+  if(btn){btn.disabled=false;btn.textContent='Send Code';}
+  if(result.error){showAl('aForgot','d','Failed to send email: '+result.error);return;}
+  // Go to step 2
   document.getElementById('forgotStep1').style.display='none';
   document.getElementById('forgotStep2').style.display='block';
+  document.getElementById('frgOTP').value='';
+  hideAl('aForgot');
+  if(isResend) showAl('aForgot','s','✅ New code sent to '+gmail);
+  startOTPTimer('frgOTPTimer','forgotPW',null);
+  if(result.devMode) showAl('aForgot','w','⚠️ Dev mode: EmailJS not configured. OTP: '+code);
+}
+
+async function forgotOTPVerify(){
+  hideAl('aForgot');
+  const entered=document.getElementById('frgOTP').value.trim();
+  const rec=otpStore['forgotPW'];
+  if(!rec){showAl('aForgot','d','No code found. Please go back and request a new one.');return;}
+  if(Date.now()>rec.expires){showAl('aForgot','d','Code has expired. Please go back and request a new one.');return;}
+  if(entered!==rec.code){showAl('aForgot','d','Incorrect code. Please try again.');return;}
+  clearInterval(otpTimerIntervals['forgotPW']);
+  delete otpStore['forgotPW'];
+  document.getElementById('forgotStep2').style.display='none';
+  document.getElementById('forgotStep3').style.display='block';
+  hideAl('aForgot');
 }
 
 async function forgotReset(){
