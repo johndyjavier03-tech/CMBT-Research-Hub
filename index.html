@@ -70,7 +70,7 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
 .hero p{color:rgba(255,255,255,.6);font-size:16px;max-width:500px;margin:0 auto 30px;line-height:1.6;font-weight:300;}
 .hbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
 
-/* SEARCH BAR (Google Scholar style) */
+/* SEARCH BAR */
 .scholar-bar{max-width:680px;margin:0 auto;padding:36px 2rem 0;}
 .scholar-input-wrap{display:flex;gap:0;background:var(--white);border:2px solid var(--border);border-radius:30px;overflow:hidden;transition:border .2s;box-shadow:0 2px 12px rgba(0,0,0,.06);}
 .scholar-input-wrap:focus-within{border-color:var(--navy);}
@@ -107,7 +107,7 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
 .results-count{font-size:13px;color:var(--muted);}
 .results-sort{padding:7px 12px;border:1px solid var(--border);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;background:var(--white);outline:none;cursor:pointer;}
 
-/* PAPER CARD (Google Scholar style) */
+/* PAPER CARD */
 .paper-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:14px;transition:box-shadow .15s,border .15s;animation:fi .3s ease;}
 @keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 .paper-card:hover{border-color:#93c5fd;box-shadow:0 4px 16px rgba(13,27,62,.07);}
@@ -125,6 +125,14 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
 .paper-link{font-size:12px;color:#1a56db;text-decoration:none;display:inline-flex;align-items:center;gap:4px;}
 .paper-link:hover{text-decoration:underline;}
 .new-badge{background:var(--greenbg);color:var(--green);font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500;margin-left:6px;vertical-align:middle;}
+
+/* GDRIVE LINK BOX */
+.gdrive-box{background:linear-gradient(135deg,#f0f7ff,#e8f0fe);border:1.5px solid #bfdbfe;border-radius:10px;padding:16px 18px;display:flex;align-items:center;gap:12px;}
+.gdrive-icon{width:40px;height:40px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.08);}
+.gdrive-text{flex:1;}
+.gdrive-text .gt{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:3px;}
+.gdrive-text .gs{font-size:11px;color:var(--muted);line-height:1.5;}
+.gdrive-input-wrap{margin-top:10px;}
 
 /* POPULATION PAGE */
 .pop-header{background:var(--navy);padding:40px 2rem 36px;}
@@ -145,7 +153,6 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
 .sr-count{font-size:12px;color:var(--muted);}
 .sr-bar{height:6px;background:var(--gold-light);border-radius:3px;margin-top:4px;overflow:hidden;}
 .sr-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .5s ease;}
-.section-detail-modal{display:none;}
 
 /* AUTH */
 .auth-wrap{min-height:calc(100vh - 62px);display:flex;align-items:center;justify-content:center;padding:1.5rem;}
@@ -157,8 +164,8 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
 .auth-sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:22px;}
 .fg{margin-bottom:14px;}
 .fg label{display:block;font-size:12px;font-weight:500;margin-bottom:5px;color:var(--text);}
-.fg input,.fg select{width:100%;padding:9px 13px;border:1px solid var(--border);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--cream);outline:none;transition:border .15s;}
-.fg input:focus,.fg select:focus{border-color:var(--navy);background:var(--white);}
+.fg input,.fg select,.fg textarea{width:100%;padding:9px 13px;border:1px solid var(--border);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--cream);outline:none;transition:border .15s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--navy);background:var(--white);}
 .fhint{font-size:11px;color:var(--muted);margin-top:4px;}
 .tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:20px;}
 .tab{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:500;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;}
@@ -173,10 +180,6 @@ nav{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justif
 .shead p{color:var(--muted);font-size:13px;}
 .fsec{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px;}
 .fsec h3{font-size:11px;font-weight:600;color:var(--navy);margin-bottom:16px;padding-bottom:9px;border-bottom:1px solid var(--border);letter-spacing:.05em;text-transform:uppercase;}
-.uzone{border:2px dashed var(--border);border-radius:9px;padding:32px 16px;text-align:center;cursor:pointer;transition:border .15s;background:var(--cream);}
-.uzone:hover{border-color:var(--navy);}
-.uzone.has{border-color:var(--gold);background:var(--gold-light);}
-.uzone input{display:none;}
 .rfmt{display:flex;gap:6px;margin-bottom:10px;}
 .rfb{padding:4px 13px;border-radius:20px;border:1px solid var(--border);background:var(--white);font-size:11px;font-weight:500;cursor:pointer;color:var(--muted);font-family:'DM Sans',sans-serif;transition:all .12s;}
 .rfb.active{background:var(--navy);color:#fff;border-color:var(--navy);}
@@ -213,7 +216,6 @@ tr:hover td{background:rgba(13,27,62,.02);}
 .modal .ms{font-size:12px;color:var(--muted);margin-bottom:16px;}
 .mact{display:flex;gap:8px;margin-top:16px;justify-content:flex-end;flex-wrap:wrap;}
 .rdisp{background:var(--cream);border:1px solid var(--border);border-radius:7px;padding:12px 14px;font-size:12px;font-family:Georgia,serif;line-height:1.7;color:var(--text);word-break:break-word;user-select:all;}
-.pview{background:#f0f0f0;border-radius:7px;min-height:150px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:18px;text-align:center;font-size:13px;color:var(--muted);margin-top:10px;}
 .detail-field{margin-bottom:14px;}
 .detail-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;}
 .detail-value{font-size:13px;color:var(--text);line-height:1.6;}
@@ -246,6 +248,13 @@ footer span{color:var(--gold);}
 .statbar{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
 .statpill{background:var(--white);border:1px solid var(--border);border-radius:7px;padding:6px 13px;font-size:12px;color:var(--muted);}
 .statpill strong{color:var(--navy);}
+
+/* GDRIVE VALIDATION */
+.gdrive-valid{border-color:#16a34a !important;background:#f0fdf4 !important;}
+.gdrive-invalid{border-color:#dc2626 !important;background:#fef2f2 !important;}
+.gdrive-hint{display:flex;align-items:center;gap:5px;font-size:11px;margin-top:5px;}
+.gdrive-hint.ok{color:#16a34a;}
+.gdrive-hint.err{color:#dc2626;}
 </style>
 </head>
 <body>
@@ -365,7 +374,7 @@ footer span{color:var(--gold);}
   </div>
 </div>
 
-<!-- ════ BROWSE (Google Scholar style) ════ -->
+<!-- ════ BROWSE ════ -->
 <div class="page" id="page-browse">
   <div style="background:var(--navy);padding:28px 2rem;">
     <div style="max-width:700px;margin:0 auto;">
@@ -376,7 +385,6 @@ footer span{color:var(--gold);}
     </div>
   </div>
   <div class="main-layout">
-    <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="sidebar-card">
         <div class="sidebar-card-title">Filter by Course</div>
@@ -391,7 +399,6 @@ footer span{color:var(--gold);}
         <div id="yearFilterList"></div>
       </div>
     </div>
-    <!-- RESULTS -->
     <div>
       <div class="results-header">
         <div class="results-count" id="resultsCount"></div>
@@ -427,7 +434,7 @@ footer span{color:var(--gold);}
       <h3>Research Information</h3>
       <div class="fg"><label>Research Title *</label><input id="subTitle" type="text" placeholder="Full title of your research paper" oninput="updatePreview()"/></div>
       <div class="fg"><label>Authors / Researchers *</label><input id="subAuthors" type="text" placeholder="e.g. Juan Dela Cruz, Maria Santos"/><div class="fhint">Separate multiple authors with commas</div></div>
-      <div class="fg"><label>Abstract *</label><textarea id="subAbstract" rows="5" style="width:100%;padding:9px 13px;border:1px solid var(--border);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--cream);outline:none;resize:vertical;" placeholder="Write a brief summary of your research (100–300 words)..."></textarea></div>
+      <div class="fg"><label>Abstract *</label><textarea id="subAbstract" rows="5" style="resize:vertical;" placeholder="Write a brief summary of your research (100–300 words)..."></textarea></div>
       <div class="fg"><label>Category / Field of Study</label>
         <input id="subCat" type="text" list="catList" placeholder="e.g. Nursing, Information Technology..." oninput="updatePreview()"/>
         <datalist id="catList">
@@ -452,18 +459,37 @@ footer span{color:var(--gold);}
           </select>
         </div>
       </div>
-      <div class="fg"><label>External Link (optional)</label><input id="subLink" type="url" placeholder="https://drive.google.com/... or any accessible link"/><div class="fhint">Link to full paper (Google Drive, Google Docs, etc.)</div></div>
     </div>
+
+    <!-- ══ GOOGLE DRIVE LINK (replaces PDF upload) ══ -->
     <div class="fsec">
-      <h3>PDF Upload (optional)</h3>
-      <div class="uzone" id="uzone" onclick="document.getElementById('pdfFile').click()">
-        <input type="file" id="pdfFile" accept=".pdf" onchange="handlePDF(this)"/>
-        <div style="font-size:28px;margin-bottom:8px">📄</div>
-        <div style="font-size:13px;color:var(--muted)"><strong style="color:var(--navy)">Click to upload PDF</strong> or drag & drop</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">PDF only · No size limit</div>
-        <div id="pdfName" style="font-size:12px;color:#7a5c10;font-weight:500;margin-top:7px"></div>
+      <h3>📁 Google Drive Link</h3>
+      <div class="gdrive-box">
+        <div class="gdrive-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.5 20L9 12L6 7H18L21 12L16.5 20H4.5Z" fill="#4285F4" opacity="0.2"/>
+            <path d="M9 12L4.5 20H16.5" stroke="#4285F4" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M9 12L6 7H18" stroke="#34A853" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M18 7L21 12L16.5 20" stroke="#EA4335" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="gdrive-text">
+          <div class="gt">Link your paper from Google Drive</div>
+          <div class="gs">Upload your research to Google Drive first, set sharing to <strong>"Anyone with the link can view"</strong>, then paste the link below.</div>
+        </div>
+      </div>
+      <div class="gdrive-input-wrap">
+        <div class="fg" style="margin-bottom:4px;">
+          <label>Google Drive Link <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+          <input id="subGDrive" type="url" placeholder="https://drive.google.com/file/d/..." oninput="validateGDrive(this)" style="font-size:12px;"/>
+          <div id="gdriveHint" class="fhint">Paste your Google Drive sharing link here.</div>
+        </div>
+      </div>
+      <div class="al i" style="display:block;margin-top:8px;font-size:11px;">
+        💡 <strong>How to get your link:</strong> In Google Drive, right-click your file → <em>Share</em> → <em>Copy link</em>. Make sure access is set to <em>"Anyone with the link"</em>.
       </div>
     </div>
+
     <div class="fsec">
       <h3>Citation Preview</h3>
       <div class="rfmt">
@@ -541,8 +567,24 @@ footer span{color:var(--gold);}
       <div class="detail-field"><div class="detail-label">Year Published</div><div class="detail-value" id="mDYear"></div></div>
       <div class="detail-field"><div class="detail-label">Submitted By</div><div class="detail-value" id="mDUploader"></div></div>
     </div>
-    <div class="detail-field" id="mDLinkWrap"><div class="detail-label">External Link</div><a class="paper-link" id="mDLink" target="_blank" rel="noopener">🔗 Open Full Paper</a></div>
-    <div class="detail-field" id="mDPDFWrap" style="display:none"><div class="detail-label">PDF</div><div class="pview" id="mDPDF"></div></div>
+    <!-- Google Drive link display -->
+    <div class="detail-field" id="mDGDriveWrap" style="display:none">
+      <div class="detail-label">Full Paper</div>
+      <div style="display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#f0f7ff,#e8f0fe);border:1px solid #bfdbfe;border-radius:9px;padding:12px 14px;">
+        <div style="font-size:22px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 12L4.5 20H16.5" stroke="#4285F4" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M9 12L6 7H18" stroke="#34A853" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M18 7L21 12L16.5 20" stroke="#EA4335" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:2px;">Stored on Google Drive</div>
+          <div style="font-size:11px;color:var(--muted);">Click to open in a new tab</div>
+        </div>
+        <a id="mDGDriveLink" href="#" target="_blank" rel="noopener" class="bsm b" style="text-decoration:none;">🔗 Open Paper</a>
+      </div>
+    </div>
     <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:14px;">
       <div class="detail-label" style="margin-bottom:8px">Generate Citation</div>
       <div class="rfmt" id="mCiteFmt">
@@ -595,8 +637,6 @@ footer span{color:var(--gold);}
     </div>
   </div>
   <div style="max-width:700px;margin:0 auto;padding:32px 2rem;">
-
-    <!-- Change Password -->
     <div class="fsec">
       <h3>Change Password</h3>
       <div id="aStgPW" class="al" style="display:none"></div>
@@ -605,8 +645,6 @@ footer span{color:var(--gold);}
       <div class="fg"><label>Confirm New Password</label><input id="stgNewPW2" type="password" placeholder="Repeat new password"/></div>
       <button class="btn gold" onclick="studentChangePW()">Update Password</button>
     </div>
-
-    <!-- Secret Question -->
     <div class="fsec" style="margin-top:16px;">
       <h3>🔐 Security Question</h3>
       <div id="aStgSQ" class="al" style="display:none"></div>
@@ -641,7 +679,6 @@ footer span{color:var(--gold);}
         </div>
       </div>
     </div>
-
     <div style="margin-top:10px;">
       <button class="btn white-out" style="background:var(--navy);color:#fff" onclick="go('browse')">← Back to Research</button>
     </div>
@@ -654,8 +691,6 @@ footer span{color:var(--gold);}
     <h3>🔐 Forgot Password</h3>
     <div class="ms">Verify your identity using your student number and secret answer.</div>
     <div id="aForgot" class="al" style="display:none"></div>
-
-    <!-- Step 1: Student number lookup -->
     <div id="forgotStep1">
       <div class="fg"><label>Student Number</label><input id="frgSN" type="text" placeholder="e.g. SUM2023-02430" onkeydown="if(event.key==='Enter')forgotLookup()"/></div>
       <div class="mact">
@@ -663,8 +698,6 @@ footer span{color:var(--gold);}
         <button class="bsm n" onclick="forgotLookup()">Continue</button>
       </div>
     </div>
-
-    <!-- Step 2: Answer secret question -->
     <div id="forgotStep2" style="display:none">
       <div class="fg" style="margin-bottom:6px;">
         <label>Security Question</label>
@@ -676,8 +709,6 @@ footer span{color:var(--gold);}
         <button class="bsm n" onclick="forgotVerifyAnswer()">Verify Answer</button>
       </div>
     </div>
-
-    <!-- Step 3: New password -->
     <div id="forgotStep3" style="display:none">
       <div class="al s" style="display:block;margin-bottom:14px;">✅ Identity verified! Set your new password below.</div>
       <div class="fg"><label>New Password</label><input id="frgNewPW" type="password" placeholder="Min 6 characters"/></div>
@@ -694,8 +725,7 @@ footer span{color:var(--gold);}
 
 <script>
 // ════════════════════════════════════════════
-// FIREBASE CONFIG — Replace with yours from:
-// https://console.firebase.google.com
+// FIREBASE CONFIG
 // ════════════════════════════════════════════
 const firebaseConfig = {
   apiKey: "AIzaSyCxLBr97IFsdXsm9yIhQHbKvd14z49h5nY",
@@ -705,10 +735,6 @@ const firebaseConfig = {
   messagingSenderId: "602869628082",
   appId: "1:602869628082:web:175fd992e0dddbbbdc9dab"
 };
-// ════════════════════════════════════════════
-// If Firebase is not configured, app runs in
-// LOCAL MODE (your device only — for testing)
-// ════════════════════════════════════════════
 
 let db=null, useFirebase=false;
 try{
@@ -717,7 +743,7 @@ try{
     db=firebase.firestore();
     useFirebase=true;
     console.log('✅ Firebase connected — shared mode');
-  } else { console.log('ℹ️ Local mode — replace firebaseConfig to enable sharing'); }
+  } else { console.log('ℹ️ Local mode'); }
 } catch(e){ console.log('Local mode'); }
 
 // ── LOCAL STORAGE FALLBACK ────────────────
@@ -768,12 +794,6 @@ async function dbSaveAdmin(c){
 const POPULATION = {
   'Marketing Management': {sections:{'MM-1B':43,'MM-1C':39,'MM-2B':34,'MM-2C':35,'MM-2D':36,'MM-3H':41,'MM-4H':30}},
 };
-const ALL_SECTIONS = ['MM-1B','MM-1C','MM-2B','MM-2C','MM-2D','MM-3H','MM-4H'];
-const SECTION_COURSE = {
-  'MM-1B':'Marketing Management','MM-1C':'Marketing Management',
-  'MM-2B':'Marketing Management','MM-2C':'Marketing Management','MM-2D':'Marketing Management',
-  'MM-3H':'Marketing Management','MM-4H':'Marketing Management',
-};
 const SECTION_CAPACITY = {'MM-1B':43,'MM-1C':39,'MM-2B':34,'MM-2C':35,'MM-2D':36,'MM-3H':41,'MM-4H':30};
 
 // ── SESSION ───────────────────────────────
@@ -790,6 +810,36 @@ function hideAl(id){document.getElementById(id).style.display='none';}
 function openM(id){document.getElementById(id).classList.add('open');}
 function closeM(id){document.getElementById(id).classList.remove('open');}
 function vis(id,show,type='inline-block'){document.getElementById(id).style.display=show?type:'none';}
+
+// ── GOOGLE DRIVE LINK VALIDATION ──────────
+function isValidGDriveLink(url){
+  if(!url||!url.trim())return null; // empty = optional, OK
+  try{
+    const u=new URL(url.trim());
+    return (u.hostname==='drive.google.com'||u.hostname==='docs.google.com');
+  }catch{return false;}
+}
+
+function validateGDrive(input){
+  const val=input.value.trim();
+  const hint=document.getElementById('gdriveHint');
+  if(!val){
+    input.classList.remove('gdrive-valid','gdrive-invalid');
+    hint.className='fhint';
+    hint.textContent='Paste your Google Drive sharing link here.';
+    return;
+  }
+  const valid=isValidGDriveLink(val);
+  if(valid){
+    input.classList.add('gdrive-valid');input.classList.remove('gdrive-invalid');
+    hint.className='gdrive-hint ok';
+    hint.innerHTML='✅ Valid Google Drive link detected.';
+  } else {
+    input.classList.add('gdrive-invalid');input.classList.remove('gdrive-valid');
+    hint.className='gdrive-hint err';
+    hint.innerHTML='⚠️ Please paste a valid drive.google.com or docs.google.com link.';
+  }
+}
 
 // ── NAV ───────────────────────────────────
 function updateNav(){
@@ -857,7 +907,7 @@ async function doLogin(){
   }catch(e){showAl('aLogin','d','Error: '+e.message);btn.disabled=false;btn.textContent='Sign In';}
 }
 
-// ── SECTION OPTIONS PER COURSE ────────────
+// ── SECTION OPTIONS ────────────────────────
 const COURSE_SECTIONS = {
   'Marketing Management': ['MM-1B','MM-1C','MM-2B','MM-2C','MM-2D','MM-3H','MM-4H'],
 };
@@ -900,7 +950,7 @@ async function doSignup(){
 // ── BROWSE / PAPERS ───────────────────────
 let allPapers=[];
 let activeCourseFilt='',activeSectionFilt='',activeYearFilt='';
-let subFmt='APA',citeFmt='APA',modalPaper=null,pdfB64=null;
+let subFmt='APA',citeFmt='APA',modalPaper=null;
 
 async function loadAndRender(){
   document.getElementById('browseList').innerHTML='<div class="loading-box"><div class="spin"></div>Loading research papers...</div>';
@@ -909,19 +959,16 @@ async function loadAndRender(){
 }
 
 function buildSidebar(){
-  // Courses
   const courses=[...new Set(allPapers.map(p=>p.category).filter(Boolean))].sort();
   const cfl=document.getElementById('courseFilterList');
   cfl.innerHTML='<div class="course-item '+(activeCourseFilt===''?'active':'')+'" onclick="setCourseFilter(\'\')"><span class="course-name">All Courses</span><span class="course-count">'+allPapers.length+'</span></div>'+
     courses.map(c=>{const cnt=allPapers.filter(p=>p.category===c).length;return`<div class="course-item ${activeCourseFilt===c?'active':''}" onclick="setCourseFilter('${esc(c)}')"><span class="course-name">${esc(c)}</span><span class="course-count">${cnt}</span></div>`;}).join('');
-  // Sections
   const sections=[...new Set(allPapers.map(p=>p.section).filter(Boolean))].sort();
   if(sections.length){
     document.getElementById('sectionFilterCard').style.display='block';
     document.getElementById('sectionFilterList').innerHTML='<div class="section-item '+(activeSectionFilt===''?'active':'')+'" onclick="setSectionFilter(\'\')"><span class="section-dot"></span>All Sections</div>'+
       sections.map(s=>{const cnt=allPapers.filter(p=>p.section===s).length;return`<div class="section-item ${activeSectionFilt===s?'active':''}" onclick="setSectionFilter('${s}')"><span class="section-dot"></span>${s} <span style="margin-left:auto;font-size:11px;color:var(--muted)">${cnt}</span></div>`;}).join('');
   }
-  // Years
   const years=[...new Set(allPapers.map(p=>p.year).filter(Boolean))].sort((a,b)=>b-a);
   document.getElementById('yearFilterList').innerHTML='<div class="course-item '+(activeYearFilt===''?'active':'')+'" onclick="setYearFilter(\'\')"><span class="course-name">All Years</span><span class="course-count">'+allPapers.length+'</span></div>'+
     years.map(y=>{const cnt=allPapers.filter(p=>p.year==y).length;return`<div class="course-item ${activeYearFilt==y?'active':''}" onclick="setYearFilter(${y})"><span class="course-name">${y}</span><span class="course-count">${cnt}</span></div>`;}).join('');
@@ -935,7 +982,7 @@ function filterBrowse(){
   const q=(document.getElementById('bSearch').value||'').toLowerCase();
   const sort=document.getElementById('bSort').value;
   let data=[...allPapers];
-  if(q) data=data.filter(p=>p.title.toLowerCase().includes(q)||( p.authors||'').toLowerCase().includes(q)||(p.abstract||'').toLowerCase().includes(q)||(p.category||'').toLowerCase().includes(q));
+  if(q) data=data.filter(p=>p.title.toLowerCase().includes(q)||(p.authors||'').toLowerCase().includes(q)||(p.abstract||'').toLowerCase().includes(q)||(p.category||'').toLowerCase().includes(q));
   if(activeCourseFilt) data=data.filter(p=>(p.category||'')===activeCourseFilt);
   if(activeSectionFilt) data=data.filter(p=>(p.section||'')===activeSectionFilt);
   if(activeYearFilt) data=data.filter(p=>p.year==activeYearFilt);
@@ -944,7 +991,9 @@ function filterBrowse(){
   else if(sort==='title') data.sort((a,b)=>a.title.localeCompare(b.title));
   document.getElementById('resultsCount').textContent='About '+data.length+' result'+(data.length!==1?'s':'');
   const cats=[...new Set(data.map(p=>p.category).filter(Boolean))];
-  document.getElementById('bStatbar').innerHTML=`<div class="statpill">Papers: <strong>${data.length}</strong></div><div class="statpill">Categories: <strong>${cats.length}</strong></div><div class="statpill">With PDF: <strong>${data.filter(p=>p.hasPdf).length}</strong></div>`;
+  // Count papers with a GDrive link
+  const withLink=data.filter(p=>p.gdriveLink||p.link).length;
+  document.getElementById('bStatbar').innerHTML=`<div class="statpill">Papers: <strong>${data.length}</strong></div><div class="statpill">Categories: <strong>${cats.length}</strong></div><div class="statpill">With Drive Link: <strong>${withLink}</strong></div>`;
   renderPapers(data);
 }
 
@@ -962,11 +1011,10 @@ function renderPapers(data){
         ${p.section?`<span class="pm-tag sec">Section ${esc(p.section)}</span>`:''}
         <span class="pm-tag yr">${p.year||''}</span>
       </div>
-      ${p.abstract?`<div class="paper-abstract" id="abs-${esc(p.id)}">${esc(p.abstract)}</div>`:'' }
+      ${p.abstract?`<div class="paper-abstract" id="abs-${esc(p.id)}">${esc(p.abstract)}</div>`:''}
       <div class="paper-actions">
         <button class="bsm b" onclick='openPaperDetail("${esc(p.id)}")'>View Details & Cite</button>
-        ${p.link?`<a class="paper-link" href="${esc(p.link)}" target="_blank" rel="noopener">🔗 Full Paper</a>`:''}
-        ${p.hasPdf?`<button class="bsm g" onclick='openPaperDetail("${esc(p.id)}")'> PDF</button>`:''}
+        ${(p.gdriveLink||p.link)?`<a class="paper-link" href="${esc(p.gdriveLink||p.link)}" target="_blank" rel="noopener">📁 Open on Google Drive</a>`:''}
         ${s&&!s.isAdmin&&p.uploader===s.studentNum?`<button class="bsm d" onclick='delPaper("${esc(p.id)}",false)'>Delete</button>`:''}
       </div>
     </div>`).join('');
@@ -983,10 +1031,15 @@ function openPaperDetail(id){
   document.getElementById('mDSection').textContent=p.section?'Section '+p.section:'—';
   document.getElementById('mDYear').textContent=p.year||'—';
   document.getElementById('mDUploader').textContent=p.uploader||'—';
-  const lw=document.getElementById('mDLinkWrap');
-  if(p.link){lw.style.display='block';document.getElementById('mDLink').href=p.link;}else{lw.style.display='none';}
-  const pw=document.getElementById('mDPDFWrap');
-  if(p.hasPdf&&p.pdf){pw.style.display='block';document.getElementById('mDPDF').innerHTML=`<iframe src="${p.pdf}" style="width:100%;height:380px;border:none;border-radius:7px"></iframe>`;}else{pw.style.display='none';}
+  // Show Google Drive link (supports both new gdriveLink field and legacy link field)
+  const driveLink=p.gdriveLink||p.link||null;
+  const gdw=document.getElementById('mDGDriveWrap');
+  if(driveLink){
+    gdw.style.display='block';
+    document.getElementById('mDGDriveLink').href=driveLink;
+  } else {
+    gdw.style.display='none';
+  }
   document.getElementById('mCiteRef').innerHTML=genRef(p,citeFmt);
   document.querySelectorAll('#mCiteFmt .rfb').forEach(b=>b.classList.toggle('active',b.textContent===citeFmt));
   openM('mDetail');
@@ -997,9 +1050,10 @@ function genRef(p,fmt){
   const y=p.year||new Date().getFullYear();
   const t=p.title||'Untitled';
   const a=p.authors||p.uploader||'Unknown';
-  if(fmt==='APA') return `${esc(a)}. (${y}). <em>${esc(t)}</em>. CMBT ResearchHub.${p.link?' Retrieved from '+esc(p.link):''}`;
-  if(fmt==='MLA') return `${esc(a)}. "${esc(t)}." <em>CMBT ResearchHub</em>, ${y}.${p.link?' '+esc(p.link):''}`;
-  return `${esc(a)}. "${esc(t)}." CMBT ResearchHub, ${y}.${p.link?' '+esc(p.link):''}`;
+  const lnk=p.gdriveLink||p.link||null;
+  if(fmt==='APA') return `${esc(a)}. (${y}). <em>${esc(t)}</em>. CMBT ResearchHub.${lnk?' Retrieved from '+esc(lnk):''}`;
+  if(fmt==='MLA') return `${esc(a)}. "${esc(t)}." <em>CMBT ResearchHub</em>, ${y}.${lnk?' '+esc(lnk):''}`;
+  return `${esc(a)}. "${esc(t)}." CMBT ResearchHub, ${y}.${lnk?' '+esc(lnk):''}`;
 }
 function setMFmt(fmt,btn){
   citeFmt=fmt;
@@ -1070,7 +1124,7 @@ async function showSectionDetail(section,course,capacity){
     stuDiv.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">No students registered yet for this section.</div>';
   }else{
     stuDiv.innerHTML='<div style="font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:500">'+users.length+' registered student'+(users.length!==1?'s':'')+'</div>'+
-      users.map((u,i)=>`<div class="student-row">
+      users.map(u=>`<div class="student-row">
         <div class="student-avatar">${esc(u.name.charAt(0).toUpperCase())}</div>
         <div class="student-info"><div class="student-name">${esc(u.name)}</div><div class="student-sn">${esc(u.studentNum)}</div></div>
       </div>`).join('');
@@ -1080,17 +1134,17 @@ async function showSectionDetail(section,course,capacity){
 
 // ── SUBMIT ────────────────────────────────
 function resetSubmit(){
-  ['subTitle','subAuthors','subAbstract','subCat','subLink'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['subTitle','subAuthors','subAbstract','subCat','subGDrive'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('subYear').value=new Date().getFullYear();
   document.getElementById('subSection').value='';
   document.getElementById('citePreview').textContent='Fill in the title and authors above to preview the citation.';
-  document.getElementById('pdfName').textContent='';
-  document.getElementById('uzone').classList.remove('has');
-  document.getElementById('pdfFile').value='';
+  const hint=document.getElementById('gdriveHint');
+  if(hint){hint.className='fhint';hint.textContent='Paste your Google Drive sharing link here.';}
+  const gd=document.getElementById('subGDrive');
+  if(gd){gd.classList.remove('gdrive-valid','gdrive-invalid');}
   document.getElementById('aSubmit').style.display='none';
   document.getElementById('subBtn').disabled=false;
   document.getElementById('subBtn').textContent='Submit Research Paper';
-  pdfB64=null;
 }
 function setSubFmt(fmt,btn){
   subFmt=fmt;
@@ -1104,13 +1158,7 @@ function updatePreview(){
   if(!t){document.getElementById('citePreview').textContent='Fill in the title and authors above to preview the citation.';return;}
   document.getElementById('citePreview').innerHTML=genRef({title:t,authors:a||s&&s.studentNum||'Author',year:parseInt(document.getElementById('subYear').value)||new Date().getFullYear()},subFmt);
 }
-function handlePDF(input){
-  const f=input.files[0];if(!f)return;
-  if(!f.name.toLowerCase().endsWith('.pdf')){alert('Only PDF files accepted.');input.value='';return;}
-  document.getElementById('pdfName').textContent='✓ '+f.name+' ('+(f.size/1024/1024).toFixed(2)+' MB)';
-  document.getElementById('uzone').classList.add('has');
-  const rd=new FileReader();rd.onload=e=>{pdfB64=e.target.result;};rd.readAsDataURL(f);
-}
+
 async function doSubmit(){
   const s=getSess();if(!s){go('login');return;}
   const title=document.getElementById('subTitle').value.trim();
@@ -1119,15 +1167,32 @@ async function doSubmit(){
   const cat=document.getElementById('subCat').value.trim();
   const year=parseInt(document.getElementById('subYear').value)||new Date().getFullYear();
   const section=document.getElementById('subSection').value;
-  const link=document.getElementById('subLink').value.trim();
+  const gdriveLink=document.getElementById('subGDrive').value.trim();
   if(!title){showAl('aSubmit','d','Please enter the research title.');return;}
   if(!authors){showAl('aSubmit','d','Please enter the authors/researchers.');return;}
   if(!abstract){showAl('aSubmit','d','Please write an abstract for the research.');return;}
+  // Validate Google Drive link if provided
+  if(gdriveLink){
+    const valid=isValidGDriveLink(gdriveLink);
+    if(valid===false){showAl('aSubmit','d','Please enter a valid Google Drive link (drive.google.com or docs.google.com).');return;}
+  }
   const btn=document.getElementById('subBtn');
   btn.disabled=true;btn.textContent='Submitting...';
   showAl('aSubmit','i','Saving to shared database...');
   try{
-    const entry={id:'r'+Date.now(),title,authors,abstract,category:cat||'Uncategorized',year,section:section||s.section||'',date:new Date().toISOString().split('T')[0],uploader:s.studentNum,link:link||null,hasPdf:!!pdfB64,pdf:pdfB64};
+    const entry={
+      id:'r'+Date.now(),
+      title,authors,abstract,
+      category:cat||'Uncategorized',
+      year,
+      section:section||s.section||'',
+      date:new Date().toISOString().split('T')[0],
+      uploader:s.studentNum,
+      gdriveLink:gdriveLink||null,
+      // keep legacy 'link' field populated too for backwards compat
+      link:gdriveLink||null,
+      hasPdf:false
+    };
     const ok=await dbSavePaper(entry);
     if(ok){allPapers.push(entry);showAl('aSubmit','s','✅ Submitted! Your paper is now visible to all students.');setTimeout(()=>go('browse'),1200);}
     else{showAl('aSubmit','d','Save failed. Please try again.');btn.disabled=false;btn.textContent='Submit Research Paper';}
@@ -1146,7 +1211,7 @@ function updateAdminStats(){
     <div class="asc"><div class="n">${adminPapers.length}</div><div class="l">Research Papers</div></div>
     <div class="asc"><div class="n">${adminUsers.length}</div><div class="l">Students</div></div>
     <div class="asc"><div class="n">${cats.length}</div><div class="l">Categories</div></div>
-    <div class="asc r"><div class="n">${adminPapers.filter(r=>r.hasPdf).length}</div><div class="l">With PDF</div></div>`;
+    <div class="asc r"><div class="n">${adminPapers.filter(r=>r.gdriveLink||r.link).length}</div><div class="l">With Drive Link</div></div>`;
   const last=adminPapers.length?adminPapers[adminPapers.length-1]:null;
   document.getElementById('overviewTxt').innerHTML=
     `<strong>${adminPapers.length}</strong> papers · <strong>${adminUsers.length}</strong> students · <strong>${cats.length}</strong> categories<br><br>`+
@@ -1166,6 +1231,7 @@ function renderAPapers(){
     <td style="font-size:12px">${r.year||'—'}</td>
     <td style="font-size:12px">${esc(r.uploader)}</td>
     <td><div style="display:flex;gap:4px">
+      ${(r.gdriveLink||r.link)?`<a class="bsm b" href="${esc(r.gdriveLink||r.link)}" target="_blank" rel="noopener" style="text-decoration:none">Drive</a>`:''}
       <button class="bsm d" onclick='adminDelPaper("${esc(r.id)}")'>Remove</button>
     </div></td></tr>`).join('');
 }
@@ -1285,7 +1351,6 @@ async function clearSecretQuestion(){
 
 // ── FORGOT PASSWORD ───────────────────────
 let forgotVerifiedSN='';
-
 function openForgotPW(){
   forgotVerifiedSN='';
   ['frgSN','frgAnswer','frgNewPW','frgNewPW2'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -1295,14 +1360,12 @@ function openForgotPW(){
   document.getElementById('forgotStep3').style.display='none';
   openM('mForgotPW');
 }
-
 function forgotBackToStep1(){
   hideAl('aForgot');
   document.getElementById('forgotStep1').style.display='block';
   document.getElementById('forgotStep2').style.display='none';
   document.getElementById('forgotStep3').style.display='none';
 }
-
 async function forgotLookup(){
   hideAl('aForgot');
   const sn=document.getElementById('frgSN').value.trim().toUpperCase();
@@ -1311,15 +1374,12 @@ async function forgotLookup(){
   const users=await dbGetUsers();
   const user=users.find(u=>u.studentNum===sn);
   if(!user){showAl('aForgot','d','No account found with that student number.');return;}
-  if(!user.secretQuestion||!user.secretAnswer){
-    showAl('aForgot','d','No security question set for this account. Please contact your admin.');return;
-  }
+  if(!user.secretQuestion||!user.secretAnswer){showAl('aForgot','d','No security question set for this account. Please contact your admin.');return;}
   forgotVerifiedSN=sn;
   document.getElementById('frgQuestion').textContent=user.secretQuestion;
   document.getElementById('forgotStep1').style.display='none';
   document.getElementById('forgotStep2').style.display='block';
 }
-
 async function forgotVerifyAnswer(){
   hideAl('aForgot');
   const answer=document.getElementById('frgAnswer').value.trim().toLowerCase();
@@ -1327,14 +1387,11 @@ async function forgotVerifyAnswer(){
   const users=await dbGetUsers();
   const user=users.find(u=>u.studentNum===forgotVerifiedSN);
   if(!user){showAl('aForgot','d','Something went wrong. Please try again.');return;}
-  if(answer!==user.secretAnswer){
-    showAl('aForgot','d','Incorrect answer. Please try again.');return;
-  }
+  if(answer!==user.secretAnswer){showAl('aForgot','d','Incorrect answer. Please try again.');return;}
   document.getElementById('forgotStep2').style.display='none';
   document.getElementById('forgotStep3').style.display='block';
   hideAl('aForgot');
 }
-
 async function forgotReset(){
   hideAl('aForgot');
   const nw=document.getElementById('frgNewPW').value;
