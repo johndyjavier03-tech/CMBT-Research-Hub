@@ -460,7 +460,7 @@ footer span{color:var(--gold);}
         <input type="file" id="pdfFile" accept=".pdf" onchange="handlePDF(this)"/>
         <div style="font-size:28px;margin-bottom:8px">📄</div>
         <div style="font-size:13px;color:var(--muted)"><strong style="color:var(--navy)">Click to upload PDF</strong> or drag & drop</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">PDF only · Max 4MB</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">PDF only · No size limit</div>
         <div id="pdfName" style="font-size:12px;color:#7a5c10;font-weight:500;margin-top:7px"></div>
       </div>
     </div>
@@ -1107,8 +1107,7 @@ function updatePreview(){
 function handlePDF(input){
   const f=input.files[0];if(!f)return;
   if(!f.name.toLowerCase().endsWith('.pdf')){alert('Only PDF files accepted.');input.value='';return;}
-  pdfFileToUpload = f;
-  document.getElementById('pdfName').textContent='✓ '+f.name+' ('+(f.size/ 1024 / 1024).toFixed(2)+' MB)';
+  document.getElementById('pdfName').textContent='✓ '+f.name+' ('+(f.size/1024/1024).toFixed(2)+' MB)';
   document.getElementById('uzone').classList.add('has');
   const rd=new FileReader();rd.onload=e=>{pdfB64=e.target.result;};rd.readAsDataURL(f);
 }
@@ -1131,7 +1130,7 @@ async function doSubmit(){
     const entry={id:'r'+Date.now(),title,authors,abstract,category:cat||'Uncategorized',year,section:section||s.section||'',date:new Date().toISOString().split('T')[0],uploader:s.studentNum,link:link||null,hasPdf:!!pdfB64,pdf:pdfB64};
     const ok=await dbSavePaper(entry);
     if(ok){allPapers.push(entry);showAl('aSubmit','s','✅ Submitted! Your paper is now visible to all students.');setTimeout(()=>go('browse'),1200);}
-    else{showAl('aSubmit','d','Save failed. PDF may be too large. Try compressing it.');btn.disabled=false;btn.textContent='Submit Research Paper';}
+    else{showAl('aSubmit','d','Save failed. Please try again.');btn.disabled=false;btn.textContent='Submit Research Paper';}
   }catch(e){showAl('aSubmit','d','Error: '+e.message);btn.disabled=false;btn.textContent='Submit Research Paper';}
 }
 
